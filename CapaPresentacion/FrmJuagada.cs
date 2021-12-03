@@ -31,12 +31,10 @@ namespace Presentacion
         {
             this.Top = 20;
             this.Left = 10;
-            if (acceso != "Administrador")
-            {
-                Borrar_Temporal();
-                Habilitar(false);
-                Habilitar_Loterias();
-            }
+
+            Borrar_Temporal();
+            Habilitar(false);
+            Habilitar_Loterias();
         }
 
         public void Limpiar()
@@ -569,6 +567,34 @@ namespace Presentacion
             }
         }
 
+        private int Copiar_Numero_Jugada()
+        {
+            string numerojugada;
+            using (CapaDatos.ModeloLocal.Modelo_Local context = new CapaDatos.ModeloLocal.Modelo_Local())
+            {
+                var numero = (from a in context.Jugada
+                              where a.Fecha.Value.Day == fecha.Day && a.Fecha.Value.Month == fecha.Month && a.Fecha.Value.Year == fecha.Year && a.Banca == this.banca
+                              select a).ToList();
+
+                string ano = fecha.Year.ToString();
+
+                ano = ano.Substring(0, ano.Length).Remove(0, 2);
+
+                if (numero.Count != 0)
+                {
+                    var mayor = numero.Max(a => a.Sub_Numero + 1);
+                    this.sub_numero = Convert.ToInt32(mayor);
+                    numerojugada = fecha.Day.ToString() + ano + mayor.ToString() + fecha.Month.ToString();
+                }
+                else
+                {
+                    numerojugada = fecha.Day.ToString() + ano + (1).ToString() + fecha.Month.ToString();
+                    sub_numero = 1;
+                }
+            }
+            return Convert.ToInt32(numerojugada);
+        }
+
         private void btnGanamas_Click(object sender, EventArgs e)
         {
             Jugar();
@@ -707,6 +733,7 @@ namespace Presentacion
 
         private void btnSuperPale_Click(object sender, EventArgs e)
         {
+            this.txtQuiniela.Focus();
             if (btnSuperPale.BackColor == System.Drawing.Color.Green)
             {
                 _TipoJuagada = "";
@@ -745,6 +772,7 @@ namespace Presentacion
         {
             txtMonto.Enabled = true;
             this._TipoJuagada = "Quiniela";
+            this.txtQuiniela.Focus();
             if (btnQuiniela.BackColor == System.Drawing.Color.Orange)
             {
                 btnQuiniela.BackColor = System.Drawing.Color.Green;
@@ -771,6 +799,7 @@ namespace Presentacion
         {
             txtMonto.Enabled = true;
             this._TipoJuagada = "Pale";
+            this.txtQuiniela.Focus();
             if (btnPale.BackColor == System.Drawing.Color.Orange)
             {
                 btnQuiniela.BackColor = System.Drawing.Color.Orange;
@@ -794,6 +823,7 @@ namespace Presentacion
         {
             txtMonto.Enabled = true;
             this._TipoJuagada = "Tripleta";
+            this.txtQuiniela.Focus();
             if (btnTripleta.BackColor == System.Drawing.Color.Orange)
             {
                 btnQuiniela.BackColor = System.Drawing.Color.Orange;
@@ -860,7 +890,6 @@ namespace Presentacion
 
                         Borrar_Temporal();
                         Limpiar();
-                        //LimpiarColor(System.Drawing.Color.Orange);
                     }
                     else
                     {
@@ -873,7 +902,8 @@ namespace Presentacion
             {
 
             }
-            //LimpiarColor(System.Drawing.Color.Orange);
+            LimpiarColor(System.Drawing.Color.Orange);
+            Habilitar_Loterias();
         }
 
         public bool Validar()
@@ -1391,8 +1421,6 @@ namespace Presentacion
         {
             try
             {
-                int hora = 17;
-                int minuto = 45;
                 using (CapaDatos.ModeloLocal.Modelo_Local context = new CapaDatos.ModeloLocal.Modelo_Local())
                 {
                     var consulta = context.Horarios.ToList();
@@ -1410,9 +1438,9 @@ namespace Presentacion
                                         btnGanamas.Enabled = false;
                                         btnGanamas.BackColor = System.Drawing.Color.Gray;
                                     }
-                                    else if (DateTime.Now.Hour == hora || DateTime.Now.Hour == item.Hora)
+                                    else if (DateTime.Now.Hour == item.Hora)
                                     {
-                                        if (DateTime.Now.Minute >= minuto || DateTime.Now.Minute == item.Minutos)
+                                        if (DateTime.Now.Minute >= item.Minutos)
                                         {
                                             btnGanamas.Enabled = false;
                                             btnGanamas.BackColor = System.Drawing.Color.Gray;
@@ -1434,9 +1462,9 @@ namespace Presentacion
                                         btnLasuerte.Enabled = false;
                                         btnLasuerte.BackColor = System.Drawing.Color.Gray;
                                     }
-                                    else if (DateTime.Now.Hour == hora || DateTime.Now.Hour == item.Hora)
+                                    else if (DateTime.Now.Hour == item.Hora)
                                     {
-                                        if (DateTime.Now.Minute >= minuto || DateTime.Now.Minute == item.Minutos)
+                                        if (DateTime.Now.Minute >= item.Minutos)
                                         {
                                             btnLasuerte.Enabled = false;
                                             btnLasuerte.BackColor = System.Drawing.Color.Gray;
@@ -1458,9 +1486,9 @@ namespace Presentacion
                                         btnReal.Enabled = false;
                                         btnReal.BackColor = System.Drawing.Color.Gray;
                                     }
-                                    else if (fecha.Hour == hora || DateTime.Now.Hour == item.Hora)
+                                    else if (DateTime.Now.Hour == item.Hora)
                                     {
-                                        if (fecha.Minute >= minuto || DateTime.Now.Minute == item.Minutos)
+                                        if (DateTime.Now.Minute >= item.Minutos)
                                         {
                                             btnReal.Enabled = false;
                                             btnReal.BackColor = System.Drawing.Color.Gray;
@@ -1482,9 +1510,9 @@ namespace Presentacion
                                         btnQuinielaPale.Enabled = false;
                                         btnQuinielaPale.BackColor = System.Drawing.Color.Gray;
                                     }
-                                    else if (fecha.Hour == 15 || DateTime.Now.Hour == item.Hora)
+                                    else if (DateTime.Now.Hour == item.Hora)
                                     {
-                                        if (fecha.Minute >= 45 || DateTime.Now.Minute == item.Minutos)
+                                        if (DateTime.Now.Minute >= item.Minutos)
                                         {
                                             btnQuinielaPale.Enabled = false;
                                             btnQuinielaPale.BackColor = System.Drawing.Color.Gray;
@@ -1506,9 +1534,9 @@ namespace Presentacion
                                         btnLaPrimera.Enabled = false;
                                         btnLaPrimera.BackColor = System.Drawing.Color.Gray;
                                     }
-                                    else if (DateTime.Now.Hour == hora || DateTime.Now.Hour == item.Hora)
+                                    else if (DateTime.Now.Hour == item.Hora)
                                     {
-                                        if (DateTime.Now.Minute >= minuto || DateTime.Now.Minute == item.Minutos)
+                                        if (DateTime.Now.Minute >= item.Minutos)
                                         {
                                             btnLaPrimera.Enabled = false;
                                             btnLaPrimera.BackColor = System.Drawing.Color.Gray;
@@ -1530,9 +1558,9 @@ namespace Presentacion
                                         btnNewYork.Enabled = false;
                                         btnNewYork.BackColor = System.Drawing.Color.Gray;
                                     }
-                                    else if (fecha.Hour == hora || DateTime.Now.Hour == item.Hora)
+                                    else if (DateTime.Now.Hour == item.Hora)
                                     {
-                                        if (fecha.Minute >= minuto || DateTime.Now.Minute == item.Minutos)
+                                        if (DateTime.Now.Minute >= item.Minutos)
                                         {
                                             btnNewYork.Enabled = false;
                                             btnNewYork.BackColor = System.Drawing.Color.Gray;
@@ -1554,9 +1582,9 @@ namespace Presentacion
                                         btnNewYorkNoche.Enabled = false;
                                         btnNewYorkNoche.BackColor = System.Drawing.Color.Gray;
                                     }
-                                    else if (fecha.Hour == hora || DateTime.Now.Hour == item.Hora)
+                                    else if (DateTime.Now.Hour == item.Hora)
                                     {
-                                        if (fecha.Minute >= minuto || DateTime.Now.Minute == item.Minutos)
+                                        if (DateTime.Now.Minute >= item.Minutos)
                                         {
                                             btnNewYorkNoche.Enabled = false;
                                             btnNewYorkNoche.BackColor = System.Drawing.Color.Gray;
@@ -1578,9 +1606,9 @@ namespace Presentacion
                                         btnNacional.Enabled = false;
                                         btnNacional.BackColor = System.Drawing.Color.Gray;
                                     }
-                                    else if (fecha.Hour == hora || DateTime.Now.Hour == item.Hora)
+                                    else if (DateTime.Now.Hour == item.Hora)
                                     {
-                                        if (fecha.Minute >= minuto || DateTime.Now.Minute == item.Minutos)
+                                        if (DateTime.Now.Minute >= item.Minutos)
                                         {
                                             btnNacional.Enabled = false;
                                             btnNacional.BackColor = System.Drawing.Color.Gray;
@@ -1602,9 +1630,9 @@ namespace Presentacion
                                         btnLoteka.Enabled = false;
                                         btnLoteka.BackColor = System.Drawing.Color.Gray;
                                     }
-                                    else if (fecha.Hour == hora || DateTime.Now.Hour == item.Hora)
+                                    else if (DateTime.Now.Hour == item.Hora)
                                     {
-                                        if (fecha.Minute >= minuto || DateTime.Now.Minute == item.Minutos)
+                                        if (DateTime.Now.Minute >= item.Minutos)
                                         {
                                             btnLoteka.Enabled = false;
                                             btnLoteka.BackColor = System.Drawing.Color.Gray;
@@ -1626,9 +1654,9 @@ namespace Presentacion
                                         btnFlorida.Enabled = false;
                                         btnFlorida.BackColor = System.Drawing.Color.Gray;
                                     }
-                                    else if (fecha.Hour == hora || DateTime.Now.Hour == item.Hora)
+                                    else if (DateTime.Now.Hour == item.Hora)
                                     {
-                                        if (fecha.Minute >= minuto || DateTime.Now.Minute == item.Minutos)
+                                        if (DateTime.Now.Minute >= item.Minutos)
                                         {
                                             btnFlorida.Enabled = false;
                                             btnFlorida.BackColor = System.Drawing.Color.Gray;
@@ -1650,9 +1678,9 @@ namespace Presentacion
                                         btnFloridaNoche.Enabled = false;
                                         btnFloridaNoche.BackColor = System.Drawing.Color.Gray;
                                     }
-                                    else if (fecha.Hour == hora || DateTime.Now.Hour == item.Hora)
+                                    else if (DateTime.Now.Hour == item.Hora)
                                     {
-                                        if (fecha.Minute >= minuto || DateTime.Now.Minute == item.Minutos)
+                                        if (DateTime.Now.Minute >= item.Minutos)
                                         {
                                             btnFloridaNoche.Enabled = false;
                                             btnFloridaNoche.BackColor = System.Drawing.Color.Gray;
@@ -1674,9 +1702,9 @@ namespace Presentacion
                                         btnKingTarde.Enabled = false;
                                         btnKingTarde.BackColor = System.Drawing.Color.Gray;
                                     }
-                                    else if (fecha.Hour == hora || DateTime.Now.Hour == item.Hora)
+                                    else if (DateTime.Now.Hour == item.Hora)
                                     {
-                                        if (fecha.Minute >= minuto || DateTime.Now.Minute == item.Minutos)
+                                        if (DateTime.Now.Minute >= item.Minutos)
                                         {
                                             btnKingTarde.Enabled = false;
                                             btnKingTarde.BackColor = System.Drawing.Color.Gray;
@@ -1698,9 +1726,9 @@ namespace Presentacion
                                         btnKingNoche.Enabled = false;
                                         btnKingNoche.BackColor = System.Drawing.Color.Gray;
                                     }
-                                    else if (DateTime.Now.Hour == hora || DateTime.Now.Hour == item.Hora)
+                                    else if (DateTime.Now.Hour == item.Hora)
                                     {
-                                        if (DateTime.Now.Minute >= minuto || DateTime.Now.Minute == item.Minutos)
+                                        if (DateTime.Now.Minute >= item.Minutos)
                                         {
                                             btnKingNoche.Enabled = false;
                                             btnKingNoche.BackColor = System.Drawing.Color.Gray;
@@ -1722,9 +1750,9 @@ namespace Presentacion
                                         btnAng10.Enabled = false;
                                         btnAng10.BackColor = System.Drawing.Color.Gray;
                                     }
-                                    else if (DateTime.Now.Hour == hora || DateTime.Now.Hour == item.Hora)
+                                    else if (DateTime.Now.Hour == item.Hora)
                                     {
-                                        if (DateTime.Now.Minute >= minuto || DateTime.Now.Minute == item.Minutos)
+                                        if (DateTime.Now.Minute >= item.Minutos)
                                         {
                                             btnAng10.Enabled = false;
                                             btnAng10.BackColor = System.Drawing.Color.Gray;
@@ -1746,9 +1774,9 @@ namespace Presentacion
                                         btnAng1.Enabled = false;
                                         btnAng1.BackColor = System.Drawing.Color.Gray;
                                     }
-                                    else if (fecha.Hour == hora || DateTime.Now.Hour == item.Hora)
+                                    else if (DateTime.Now.Hour == item.Hora)
                                     {
-                                        if (fecha.Minute >= minuto || DateTime.Now.Minute == item.Minutos)
+                                        if (DateTime.Now.Minute >= item.Minutos)
                                         {
                                             btnAng1.Enabled = false;
                                             btnAng1.BackColor = System.Drawing.Color.Gray;
@@ -1770,9 +1798,9 @@ namespace Presentacion
                                         btnAng5.Enabled = false;
                                         btnAng5.BackColor = System.Drawing.Color.Gray;
                                     }
-                                    else if (fecha.Hour == hora || DateTime.Now.Hour == item.Hora)
+                                    else if (DateTime.Now.Hour == item.Hora)
                                     {
-                                        if (fecha.Minute >= minuto || DateTime.Now.Minute == item.Minutos)
+                                        if (DateTime.Now.Minute >= item.Minutos)
                                         {
                                             btnAng5.Enabled = false;
                                             btnAng5.BackColor = System.Drawing.Color.Gray;
@@ -1794,9 +1822,9 @@ namespace Presentacion
                                         btnAng9.Enabled = false;
                                         btnAng9.BackColor = System.Drawing.Color.Gray;
                                     }
-                                    else if (fecha.Hour == hora || DateTime.Now.Hour == item.Hora)
+                                    else if (DateTime.Now.Hour == item.Hora)
                                     {
-                                        if (fecha.Minute >= minuto || DateTime.Now.Minute == item.Minutos)
+                                        if (DateTime.Now.Minute >= item.Minutos)
                                         {
                                             btnAng9.Enabled = false;
                                             btnAng9.BackColor = System.Drawing.Color.Gray;
@@ -1819,14 +1847,14 @@ namespace Presentacion
                             {
                                 if (item.Estatus == "Activo")
                                 {
-                                    if (DateTime.Now.Hour > hora || DateTime.Now.Hour > item.Hora)
+                                    if (DateTime.Now.Hour > item.Hora)
                                     {
                                         btnGanamas.Enabled = false;
                                         btnGanamas.BackColor = System.Drawing.Color.Gray;
                                     }
-                                    else if (DateTime.Now.Hour == hora || DateTime.Now.Hour == item.Hora)
+                                    else if (DateTime.Now.Hour == item.Hora)
                                     {
-                                        if (DateTime.Now.Minute >= minuto || DateTime.Now.Minute == item.Minutos)
+                                        if (DateTime.Now.Minute >= item.Minutos)
                                         {
                                             btnGanamas.Enabled = false;
                                             btnGanamas.BackColor = System.Drawing.Color.Gray;
@@ -1843,14 +1871,14 @@ namespace Presentacion
                             {
                                 if (item.Estatus == "Activo")
                                 {
-                                    if (DateTime.Now.Hour > hora || DateTime.Now.Hour > item.Hora)
+                                    if (DateTime.Now.Hour > item.Hora)
                                     {
                                         btnLasuerte.Enabled = false;
                                         btnLasuerte.BackColor = System.Drawing.Color.Gray;
                                     }
-                                    else if (DateTime.Now.Hour == hora || DateTime.Now.Hour == item.Hora)
+                                    else if (DateTime.Now.Hour == item.Hora)
                                     {
-                                        if (DateTime.Now.Minute >= minuto || DateTime.Now.Minute == item.Minutos)
+                                        if (DateTime.Now.Minute >= item.Minutos)
                                         {
                                             btnLasuerte.Enabled = false;
                                             btnLasuerte.BackColor = System.Drawing.Color.Gray;
@@ -1867,14 +1895,14 @@ namespace Presentacion
                             {
                                 if (item.Estatus == "Activo")
                                 {
-                                    if (fecha.Hour > hora || DateTime.Now.Hour > item.Hora)
+                                    if (DateTime.Now.Hour > item.Hora)
                                     {
                                         btnReal.Enabled = false;
                                         btnReal.BackColor = System.Drawing.Color.Gray;
                                     }
-                                    else if (fecha.Hour == hora || DateTime.Now.Hour == item.Hora)
+                                    else if (DateTime.Now.Hour == item.Hora)
                                     {
-                                        if (fecha.Minute >= minuto || DateTime.Now.Minute == item.Minutos)
+                                        if (DateTime.Now.Minute >= item.Minutos)
                                         {
                                             btnReal.Enabled = false;
                                             btnReal.BackColor = System.Drawing.Color.Gray;
@@ -1896,9 +1924,9 @@ namespace Presentacion
                                         btnQuinielaPale.Enabled = false;
                                         btnQuinielaPale.BackColor = System.Drawing.Color.Gray;
                                     }
-                                    else if (fecha.Hour == 15 || DateTime.Now.Hour == item.Hora)
+                                    else if (fecha.Hour == 17)
                                     {
-                                        if (fecha.Minute >= 45 || DateTime.Now.Minute == item.Minutos)
+                                        if (fecha.Minute >= 45)
                                         {
                                             btnQuinielaPale.Enabled = false;
                                             btnQuinielaPale.BackColor = System.Drawing.Color.Gray;
@@ -1915,14 +1943,14 @@ namespace Presentacion
                             {
                                 if (item.Estatus == "Activo")
                                 {
-                                    if (DateTime.Now.Hour > hora || DateTime.Now.Hour > item.Hora)
+                                    if (DateTime.Now.Hour > item.Hora)
                                     {
                                         btnLaPrimera.Enabled = false;
                                         btnLaPrimera.BackColor = System.Drawing.Color.Gray;
                                     }
-                                    else if (DateTime.Now.Hour == hora || DateTime.Now.Hour == item.Hora)
+                                    else if (DateTime.Now.Hour == item.Hora)
                                     {
-                                        if (DateTime.Now.Minute >= minuto || DateTime.Now.Minute == item.Minutos)
+                                        if (DateTime.Now.Minute >= item.Minutos)
                                         {
                                             btnLaPrimera.Enabled = false;
                                             btnLaPrimera.BackColor = System.Drawing.Color.Gray;
@@ -1939,14 +1967,14 @@ namespace Presentacion
                             {
                                 if (item.Estatus == "Activo")
                                 {
-                                    if (fecha.Hour > hora || DateTime.Now.Hour > item.Hora)
+                                    if (DateTime.Now.Hour > item.Hora)
                                     {
                                         btnNewYork.Enabled = false;
                                         btnNewYork.BackColor = System.Drawing.Color.Gray;
                                     }
-                                    else if (fecha.Hour == hora || DateTime.Now.Hour == item.Hora)
+                                    else if (DateTime.Now.Hour == item.Hora)
                                     {
-                                        if (fecha.Minute >= minuto || DateTime.Now.Minute == item.Minutos)
+                                        if (DateTime.Now.Minute >= item.Minutos)
                                         {
                                             btnNewYork.Enabled = false;
                                             btnNewYork.BackColor = System.Drawing.Color.Gray;
@@ -1963,14 +1991,14 @@ namespace Presentacion
                             {
                                 if (item.Estatus == "Activo")
                                 {
-                                    if (fecha.Hour > hora || DateTime.Now.Hour > item.Hora)
+                                    if (fecha.Hour > 17)
                                     {
                                         btnNewYorkNoche.Enabled = false;
                                         btnNewYorkNoche.BackColor = System.Drawing.Color.Gray;
                                     }
-                                    else if (fecha.Hour == hora || DateTime.Now.Hour == item.Hora)
+                                    else if (fecha.Hour == 17)
                                     {
-                                        if (fecha.Minute >= minuto || DateTime.Now.Minute == item.Minutos)
+                                        if (fecha.Minute >= 45)
                                         {
                                             btnNewYorkNoche.Enabled = false;
                                             btnNewYorkNoche.BackColor = System.Drawing.Color.Gray;
@@ -1987,14 +2015,14 @@ namespace Presentacion
                             {
                                 if (item.Estatus == "Activo")
                                 {
-                                    if (fecha.Hour > hora || DateTime.Now.Hour > item.Hora)
+                                    if (fecha.Hour > 17)
                                     {
                                         btnNacional.Enabled = false;
                                         btnNacional.BackColor = System.Drawing.Color.Gray;
                                     }
-                                    else if (fecha.Hour == hora || DateTime.Now.Hour == item.Hora)
+                                    else if (fecha.Hour == 17)
                                     {
-                                        if (fecha.Minute >= minuto || DateTime.Now.Minute == item.Minutos)
+                                        if (fecha.Minute >= 45)
                                         {
                                             btnNacional.Enabled = false;
                                             btnNacional.BackColor = System.Drawing.Color.Gray;
@@ -2011,14 +2039,14 @@ namespace Presentacion
                             {
                                 if (item.Estatus == "Activo")
                                 {
-                                    if (fecha.Hour > hora || DateTime.Now.Hour > item.Hora)
+                                    if (fecha.Hour > 17)
                                     {
                                         btnLoteka.Enabled = false;
                                         btnLoteka.BackColor = System.Drawing.Color.Gray;
                                     }
-                                    else if (fecha.Hour == hora || DateTime.Now.Hour == item.Hora)
+                                    else if (fecha.Hour == 17)
                                     {
-                                        if (fecha.Minute >= minuto || DateTime.Now.Minute == item.Minutos)
+                                        if (fecha.Minute >= 45)
                                         {
                                             btnLoteka.Enabled = false;
                                             btnLoteka.BackColor = System.Drawing.Color.Gray;
@@ -2035,14 +2063,14 @@ namespace Presentacion
                             {
                                 if (item.Estatus == "Activo")
                                 {
-                                    if (fecha.Hour > hora || DateTime.Now.Hour > item.Hora)
+                                    if (DateTime.Now.Hour > item.Hora)
                                     {
                                         btnFlorida.Enabled = false;
                                         btnFlorida.BackColor = System.Drawing.Color.Gray;
                                     }
-                                    else if (fecha.Hour == hora || DateTime.Now.Hour == item.Hora)
+                                    else if (DateTime.Now.Hour == item.Hora)
                                     {
-                                        if (fecha.Minute >= minuto || DateTime.Now.Minute == item.Minutos)
+                                        if (DateTime.Now.Minute >= item.Minutos)
                                         {
                                             btnFlorida.Enabled = false;
                                             btnFlorida.BackColor = System.Drawing.Color.Gray;
@@ -2059,14 +2087,14 @@ namespace Presentacion
                             {
                                 if (item.Estatus == "Activo")
                                 {
-                                    if (fecha.Hour > hora || DateTime.Now.Hour > item.Hora)
+                                    if (fecha.Hour > 17 || DateTime.Now.Hour > item.Hora)
                                     {
                                         btnFloridaNoche.Enabled = false;
                                         btnFloridaNoche.BackColor = System.Drawing.Color.Gray;
                                     }
-                                    else if (fecha.Hour == hora || DateTime.Now.Hour == item.Hora)
+                                    else if (fecha.Hour == 17)
                                     {
-                                        if (fecha.Minute >= minuto || DateTime.Now.Minute == item.Minutos)
+                                        if (fecha.Minute >= 45)
                                         {
                                             btnFloridaNoche.Enabled = false;
                                             btnFloridaNoche.BackColor = System.Drawing.Color.Gray;
@@ -2083,14 +2111,14 @@ namespace Presentacion
                             {
                                 if (item.Estatus == "Activo")
                                 {
-                                    if (fecha.Hour > hora || DateTime.Now.Hour > item.Hora)
+                                    if (DateTime.Now.Hour > item.Hora)
                                     {
                                         btnKingTarde.Enabled = false;
                                         btnKingTarde.BackColor = System.Drawing.Color.Gray;
                                     }
-                                    else if (fecha.Hour == hora || DateTime.Now.Hour == item.Hora)
+                                    else if (DateTime.Now.Hour == item.Hora)
                                     {
-                                        if (fecha.Minute >= minuto || DateTime.Now.Minute == item.Minutos)
+                                        if (DateTime.Now.Minute >= item.Minutos)
                                         {
                                             btnKingTarde.Enabled = false;
                                             btnKingTarde.BackColor = System.Drawing.Color.Gray;
@@ -2107,14 +2135,14 @@ namespace Presentacion
                             {
                                 if (item.Estatus == "Activo")
                                 {
-                                    if (DateTime.Now.Hour > hora || DateTime.Now.Hour > item.Hora)
+                                    if (DateTime.Now.Hour > 17)
                                     {
                                         btnKingNoche.Enabled = false;
                                         btnKingNoche.BackColor = System.Drawing.Color.Gray;
                                     }
-                                    else if (DateTime.Now.Hour == hora || DateTime.Now.Hour == item.Hora)
+                                    else if (DateTime.Now.Hour == 17)
                                     {
-                                        if (DateTime.Now.Minute >= minuto || DateTime.Now.Minute == item.Minutos)
+                                        if (DateTime.Now.Minute >= item.Minutos)
                                         {
                                             btnKingNoche.Enabled = false;
                                             btnKingNoche.BackColor = System.Drawing.Color.Gray;
@@ -2131,14 +2159,14 @@ namespace Presentacion
                             {
                                 if (item.Estatus == "Activo")
                                 {
-                                    if (DateTime.Now.Hour > hora || DateTime.Now.Hour > item.Hora)
+                                    if (DateTime.Now.Hour > item.Hora)
                                     {
                                         btnAng10.Enabled = false;
                                         btnAng10.BackColor = System.Drawing.Color.Gray;
                                     }
-                                    else if (DateTime.Now.Hour == hora || DateTime.Now.Hour == item.Hora)
+                                    else if (DateTime.Now.Hour == item.Hora)
                                     {
-                                        if (DateTime.Now.Minute >= minuto || DateTime.Now.Minute == item.Minutos)
+                                        if (DateTime.Now.Minute >= item.Minutos)
                                         {
                                             btnAng10.Enabled = false;
                                             btnAng10.BackColor = System.Drawing.Color.Gray;
@@ -2155,14 +2183,14 @@ namespace Presentacion
                             {
                                 if (item.Estatus == "Activo")
                                 {
-                                    if (fecha.Hour > hora || DateTime.Now.Hour > item.Hora)
+                                    if (DateTime.Now.Hour > item.Hora)
                                     {
                                         btnAng1.Enabled = false;
                                         btnAng1.BackColor = System.Drawing.Color.Gray;
                                     }
-                                    else if (fecha.Hour == hora || DateTime.Now.Hour == item.Hora)
+                                    else if (DateTime.Now.Hour == item.Hora)
                                     {
-                                        if (fecha.Minute >= minuto || DateTime.Now.Minute == item.Minutos)
+                                        if (DateTime.Now.Minute >= item.Minutos)
                                         {
                                             btnAng1.Enabled = false;
                                             btnAng1.BackColor = System.Drawing.Color.Gray;
@@ -2179,14 +2207,14 @@ namespace Presentacion
                             {
                                 if (item.Estatus == "Activo")
                                 {
-                                    if (fecha.Hour > hora || DateTime.Now.Hour > item.Hora)
+                                    if (DateTime.Now.Hour > item.Hora)
                                     {
                                         btnAng5.Enabled = false;
                                         btnAng5.BackColor = System.Drawing.Color.Gray;
                                     }
-                                    else if (fecha.Hour == hora || DateTime.Now.Hour == item.Hora)
+                                    else if (DateTime.Now.Hour == item.Hora)
                                     {
-                                        if (fecha.Minute >= minuto || DateTime.Now.Minute == item.Minutos)
+                                        if (DateTime.Now.Minute >= item.Minutos)
                                         {
                                             btnAng5.Enabled = false;
                                             btnAng5.BackColor = System.Drawing.Color.Gray;
@@ -2203,14 +2231,14 @@ namespace Presentacion
                             {
                                 if (item.Estatus == "Activo")
                                 {
-                                    if (fecha.Hour > hora || DateTime.Now.Hour > item.Hora)
+                                    if (fecha.Hour > 17)
                                     {
                                         btnAng9.Enabled = false;
                                         btnAng9.BackColor = System.Drawing.Color.Gray;
                                     }
-                                    else if (fecha.Hour == hora || DateTime.Now.Hour == item.Hora)
+                                    else if (fecha.Hour == 17)
                                     {
-                                        if (fecha.Minute >= minuto || DateTime.Now.Minute == item.Minutos)
+                                        if (fecha.Minute >= 45)
                                         {
                                             btnAng9.Enabled = false;
                                             btnAng9.BackColor = System.Drawing.Color.Gray;
@@ -2459,6 +2487,97 @@ namespace Presentacion
                 this.btnAng9.BackColor = System.Drawing.Color.Orange;
                 Loterias.Remove("AN");
             }
+        }
+
+        private void btnMostrarJugadas_Click(object sender, EventArgs e)
+        {
+            FrmMostrar_Jugadas frmMostrar_Jugadas = new FrmMostrar_Jugadas();
+            frmMostrar_Jugadas.Show();
+        }
+
+        private void Copiar_Jugada(object sender, PrintPageEventArgs e)
+        {
+            using (CapaDatos.ModeloLocal.Modelo_Local context = new CapaDatos.ModeloLocal.Modelo_Local())
+            {
+                int numero_jugada = Convert.ToInt32(this.txtBuscar.Text);
+
+                var quiniela = context.Jugada.Where(x => x.Tipo_Jugada == "Quiniela" && x.Numero_Jugada == numero_jugada).ToList();
+                var pale = context.Jugada.Where(x => x.Tipo_Jugada == "Pale" && x.Numero_Jugada == numero_jugada).ToList();
+                var tripleta = context.Jugada.Where(x => x.Tipo_Jugada == "Tripleta" && x.Numero_Jugada == numero_jugada).ToList();
+                var super = context.Jugada.Where(x => x.Tipo_Jugada == "Super" && x.Numero_Jugada == numero_jugada).ToList();
+
+
+                Font cabeza = new Font("Arial", 12, FontStyle.Regular, GraphicsUnit.Point);
+                Font fuente = new Font("Arial", 12, FontStyle.Regular, GraphicsUnit.Point);
+                Font eslogan1 = new Font("Arial", 9, FontStyle.Regular, GraphicsUnit.Point);
+
+                int anchohasta = 250;
+                int anchodesde = 0;
+                int lineado = 20;
+                int largo = 50;
+                decimal suma = 0;
+
+                e.Graphics.DrawString("Consorcio de Bancas", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                e.Graphics.DrawString("            SOL20", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                e.Graphics.DrawString("Donde Garantizamos tu Dinero", eslogan1, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                e.Graphics.DrawString(DateTime.Now.ToString(), fuente, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                e.Graphics.DrawString(Crear_Ticket(), cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                e.Graphics.DrawString("NO. Jugada: " + Copiar_Numero_Jugada(), cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+
+                if (quiniela.Count != 0)
+                {
+                    e.Graphics.DrawString("----------Quiniela-------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+
+                    foreach (var item in quiniela)
+                    {
+                        e.Graphics.DrawString(item.Loteria + " " + item.Jugada1 + "      " + item.Monto, cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                        suma = suma + Convert.ToDecimal(item.Monto);
+                    }
+                }
+                if (pale.Count != 0)
+                {
+                    e.Graphics.DrawString("----------Palé------------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+
+                    foreach (var item in pale)
+                    {
+                        e.Graphics.DrawString(item.Loteria + " " + item.Jugada1 + "      " + item.Monto, cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                        suma = suma + Convert.ToDecimal(item.Monto);
+                    }
+                }
+                if (tripleta.Count != 0)
+                {
+                    e.Graphics.DrawString("----------Tripleta--------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+
+                    foreach (var item in tripleta)
+                    {
+                        e.Graphics.DrawString(item.Loteria + " " + item.Jugada1 + "      " + item.Monto, cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                        suma = suma + Convert.ToDecimal(item.Monto);
+                    }
+                }
+                if (super.Count != 0)
+                {
+                    e.Graphics.DrawString("----------Super----------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+
+                    foreach (var item in super)
+                    {
+                        e.Graphics.DrawString(item.Loteria + " " + item.Jugada1 + "      " + item.Monto, cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                        suma = suma + Convert.ToDecimal(item.Monto);
+                    }
+                }
+
+                e.Graphics.DrawString("----------------------------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                e.Graphics.DrawString("Total RD$: " + suma.ToString(), cabeza, Brushes.Black, new RectangleF(0, lineado += 20, anchohasta, largo));
+                e.Graphics.DrawString(" REVISE SU JUGADA", cabeza, Brushes.Black, new RectangleF(0, lineado += 20, anchohasta, largo));
+            }
+        }
+
+        private void btnCopiarJugada_Click(object sender, EventArgs e)
+        {
+            printTicket = new PrintDocument();
+            PrinterSettings ps = new PrinterSettings();
+            printTicket.PrinterSettings = ps;
+            printTicket.PrintPage += Copiar_Jugada;
+            printTicket.Print();
         }
     }
 }
