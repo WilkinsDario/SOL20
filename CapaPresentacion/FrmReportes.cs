@@ -25,6 +25,7 @@ namespace CapaPresentacion
 
         private void btnConsultar_Click(object sender, EventArgs e)
         {
+            string banca = this.cbBanca.Text;
             if (acceso == "Administrador")
             {
                 using (CapaDatos.Modelo.ModelDB context = new CapaDatos.Modelo.ModelDB())
@@ -39,18 +40,37 @@ namespace CapaPresentacion
                     else if (ckbFacturado.Checked)
                     {
                         decimal suma = 0;
-                        var consulta = context.Jugada.Where(x => x.Estatus != "Cancelado" &&  x.Fecha.Value.Day >= dtpDesde.Value.Day && x.Fecha.Value.Day <= dtpHasta.Value.Day
+                        if (cbBanca.Text != "Todas")
+                        {
+
+
+                            var consulta = context.Jugada.Where(x => x.Estatus != "Cancelado" && x.Banca == banca && x.Fecha.Value.Day >= dtpDesde.Value.Day && x.Fecha.Value.Day <= dtpHasta.Value.Day
+                                                                                                                        && x.Fecha.Value.Month >= dtpDesde.Value.Month && x.Fecha.Value.Month <= dtpHasta.Value.Month
+                                                                                                                        && x.Fecha.Value.Year >= dtpDesde.Value.Year && x.Fecha.Value.Year <= dtpHasta.Value.Year).ToList();
+                            foreach (var item in consulta)
+                            {
+                                suma = suma + Convert.ToDecimal(item.Monto);
+                            }
+
+                            lblTotalFacturado.Text = "Total Facturado: " + suma.ToString();
+                            lblTotalFacturado.Visible = true;
+                            datalistado.DataSource = consulta;
+                        }
+                        else
+                        {
+                            var consulta = context.Jugada.Where(x => x.Estatus != "Cancelado" && x.Fecha.Value.Day >= dtpDesde.Value.Day && x.Fecha.Value.Day <= dtpHasta.Value.Day
                                                                                                                     && x.Fecha.Value.Month >= dtpDesde.Value.Month && x.Fecha.Value.Month <= dtpHasta.Value.Month
                                                                                                                     && x.Fecha.Value.Year >= dtpDesde.Value.Year && x.Fecha.Value.Year <= dtpHasta.Value.Year).ToList();
 
-                        foreach (var item in consulta)
-                        {
-                            suma = suma + Convert.ToDecimal(item.Monto);
-                        }
+                            foreach (var item in consulta)
+                            {
+                                suma = suma + Convert.ToDecimal(item.Monto);
+                            }
 
-                        lblTotalFacturado.Text = "Total Facturado: " + suma.ToString();
-                        lblTotalFacturado.Visible = true;
-                        datalistado.DataSource = consulta;
+                            lblTotalFacturado.Text = "Total Facturado: " + suma.ToString();
+                            lblTotalFacturado.Visible = true;
+                            datalistado.DataSource = consulta;
+                        }
 
                         if (ckbImprimir.Checked)
                         {
@@ -64,7 +84,7 @@ namespace CapaPresentacion
                     else if (ckbPagado.Checked)
                     {
                         decimal suma = 0;
-                        var consulta = context.Jugada.Where(x => x.Estatus == "Pagado" && x.Fecha.Value.Day >= dtpDesde.Value.Day && x.Fecha.Value.Day <= dtpHasta.Value.Day
+                        var consulta = context.Jugada.Where(x => x.Estatus == "Pagado" && x.Banca == banca && x.Fecha.Value.Day >= dtpDesde.Value.Day && x.Fecha.Value.Day <= dtpHasta.Value.Day
                                                                                                                     && x.Fecha.Value.Month >= dtpDesde.Value.Month && x.Fecha.Value.Month <= dtpHasta.Value.Month
                                                                                                                     && x.Fecha.Value.Year >= dtpDesde.Value.Year && x.Fecha.Value.Year <= dtpHasta.Value.Year).ToList();
                         if (consulta.Count != 0)
@@ -321,8 +341,8 @@ namespace CapaPresentacion
                     }
                 }
             }
-        }           
-        
+        }
+
 
         private void FrmReportes_Load(object sender, EventArgs e)
         {
@@ -330,6 +350,30 @@ namespace CapaPresentacion
             this.Left = 10;
             lblTotalFacturado.Visible = false;
             lblTotalPagado.Visible = false;
+            Llenar_Banca();
+        }
+
+        private void Llenar_Banca()
+        {
+            try
+            {
+                if (acceso == "Administrador")
+                {
+                    using (CapaDatos.Modelo.ModelDB context = new CapaDatos.Modelo.ModelDB())
+                    {
+                        var consulta = context.Usuarios.ToList();
+                        foreach (var item in consulta)
+                        {
+                            cbBanca.Items.Add(item.Banca);
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
         private void OcultarColumnas()

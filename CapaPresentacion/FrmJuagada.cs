@@ -1110,7 +1110,7 @@ namespace Presentacion
         private void btnEliminar_Click(object sender, EventArgs e)
         {
             using (CapaDatos.ModeloLocal.Modelo_Local context = new CapaDatos.ModeloLocal.Modelo_Local())
-            {
+            {                
                 try
                 {
                     int numero = Convert.ToInt32(txtNumeroJugada.Text);
@@ -1203,6 +1203,7 @@ namespace Presentacion
                         mensajeError("Revise el número de jugada");
                     }
                 }
+                this.txtNumeroJugada.Text = string.Empty;
             }
             catch (Exception)
             {
@@ -1213,7 +1214,7 @@ namespace Presentacion
         private void btnImprimir_Click(object sender, EventArgs e)
         {
             try
-            {
+            {                
                 using (CapaDatos.ModeloLocal.Modelo_Local context = new CapaDatos.ModeloLocal.Modelo_Local())
                 {
                     #region
@@ -1239,6 +1240,7 @@ namespace Presentacion
                     }
                     #endregion
                 }
+                this.txtNumeroJugada.Text = string.Empty;
             }
             catch (Exception)
             {
@@ -2569,6 +2571,7 @@ namespace Presentacion
                 e.Graphics.DrawString("Total RD$: " + suma.ToString(), cabeza, Brushes.Black, new RectangleF(0, lineado += 20, anchohasta, largo));
                 e.Graphics.DrawString(" REVISE SU JUGADA", cabeza, Brushes.Black, new RectangleF(0, lineado += 20, anchohasta, largo));
             }
+            this.txtNumeroJugada.Text = string.Empty;
         }
 
         private void btnCopiarJugada_Click(object sender, EventArgs e)

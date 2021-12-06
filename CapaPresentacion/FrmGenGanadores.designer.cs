@@ -38,6 +38,7 @@ namespace CapaPresentacion
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.dtgListado = new System.Windows.Forms.DataGridView();
             this.ckbImprimir = new System.Windows.Forms.CheckBox();
+            this.cbBanca = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtgListado)).BeginInit();
             this.SuspendLayout();
@@ -46,7 +47,7 @@ namespace CapaPresentacion
             // 
             this.dtpFiltro.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dtpFiltro.Location = new System.Drawing.Point(328, 122);
-            this.dtpFiltro.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dtpFiltro.Margin = new System.Windows.Forms.Padding(4);
             this.dtpFiltro.Name = "dtpFiltro";
             this.dtpFiltro.Size = new System.Drawing.Size(331, 30);
             this.dtpFiltro.TabIndex = 72;
@@ -55,7 +56,7 @@ namespace CapaPresentacion
             // 
             this.btnGanadores.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnGanadores.Location = new System.Drawing.Point(683, 113);
-            this.btnGanadores.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnGanadores.Margin = new System.Windows.Forms.Padding(4);
             this.btnGanadores.Name = "btnGanadores";
             this.btnGanadores.Size = new System.Drawing.Size(116, 41);
             this.btnGanadores.TabIndex = 71;
@@ -88,7 +89,7 @@ namespace CapaPresentacion
             this.pictureBox1.BackgroundImage = global::CapaPresentacion.Properties.Resources.sol;
             this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBox1.Location = new System.Drawing.Point(63, 15);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(180, 89);
             this.pictureBox1.TabIndex = 74;
@@ -101,7 +102,7 @@ namespace CapaPresentacion
             this.dtgListado.AllowUserToOrderColumns = true;
             this.dtgListado.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dtgListado.Location = new System.Drawing.Point(16, 219);
-            this.dtgListado.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dtgListado.Margin = new System.Windows.Forms.Padding(4);
             this.dtgListado.Name = "dtgListado";
             this.dtgListado.ReadOnly = true;
             this.dtgListado.RowHeadersWidth = 51;
@@ -113,7 +114,7 @@ namespace CapaPresentacion
             this.ckbImprimir.AutoSize = true;
             this.ckbImprimir.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ckbImprimir.Location = new System.Drawing.Point(16, 183);
-            this.ckbImprimir.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.ckbImprimir.Margin = new System.Windows.Forms.Padding(4);
             this.ckbImprimir.Name = "ckbImprimir";
             this.ckbImprimir.Size = new System.Drawing.Size(102, 26);
             this.ckbImprimir.TabIndex = 78;
@@ -121,12 +122,22 @@ namespace CapaPresentacion
             this.ckbImprimir.UseVisualStyleBackColor = true;
             this.ckbImprimir.CheckedChanged += new System.EventHandler(this.ckbImprimir_CheckedChanged);
             // 
+            // cbBanca
+            // 
+            this.cbBanca.Font = new System.Drawing.Font("Times New Roman", 12F);
+            this.cbBanca.FormattingEnabled = true;
+            this.cbBanca.Location = new System.Drawing.Point(328, 159);
+            this.cbBanca.Name = "cbBanca";
+            this.cbBanca.Size = new System.Drawing.Size(164, 30);
+            this.cbBanca.TabIndex = 79;
+            // 
             // FrmGenGanadores
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(816, 491);
+            this.Controls.Add(this.cbBanca);
             this.Controls.Add(this.ckbImprimir);
             this.Controls.Add(this.dtgListado);
             this.Controls.Add(this.label17);
@@ -135,7 +146,7 @@ namespace CapaPresentacion
             this.Controls.Add(this.dtpFiltro);
             this.Controls.Add(this.btnGanadores);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FrmGenGanadores";
             this.Text = ".:. Generar Ganadores .:.";
             this.Load += new System.EventHandler(this.FrmGenGanadores_Load);
@@ -156,5 +167,6 @@ namespace CapaPresentacion
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.DataGridView dtgListado;
         private System.Windows.Forms.CheckBox ckbImprimir;
+        private System.Windows.Forms.ComboBox cbBanca;
     }
 }

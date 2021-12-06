@@ -28,6 +28,7 @@ namespace CapaPresentacion
             try
             {
                 bool contiene = false;
+                string banca = cbBanca.Text;
                 if (acceso == "Administrador")
                 {
                     using (CapaDatos.Modelo.ModelDB contextlocal = new CapaDatos.Modelo.ModelDB())
@@ -52,7 +53,7 @@ namespace CapaPresentacion
 
                         var valor = contextlocal.Valor_Premios.FirstOrDefault();
 
-                        var listajugada = contextlocal.Jugada.Where(x => x.Estatus != "Cancelado" && x.Fecha.Value.Day == dtpFiltro.Value.Day && x.Fecha.Value.Month == dtpFiltro.Value.Month && x.Fecha.Value.Year == dtpFiltro.Value.Year).ToList();
+                        var listajugada = contextlocal.Jugada.Where(x => x.Estatus != "Cancelado" && x.Banca == banca && x.Fecha.Value.Day == dtpFiltro.Value.Day && x.Fecha.Value.Month == dtpFiltro.Value.Month && x.Fecha.Value.Year == dtpFiltro.Value.Year).ToList();
 
                         decimal premio = 0;
                         int cont = 0;
@@ -246,7 +247,7 @@ namespace CapaPresentacion
 
                         var valor = contextlocal.Valor_Premios.FirstOrDefault();
 
-                        var listajugada = contextlocal.Jugada.Where(x => x.Estatus != "Cancelado" && x.Fecha.Value.Day == dtpFiltro.Value.Day && x.Fecha.Value.Month == dtpFiltro.Value.Month && x.Fecha.Value.Year == dtpFiltro.Value.Year).ToList();
+                        var listajugada = contextlocal.Jugada.Where(x => x.Estatus != "Cancelado" && x.Banca == banca && x.Fecha.Value.Day == dtpFiltro.Value.Day && x.Fecha.Value.Month == dtpFiltro.Value.Month && x.Fecha.Value.Year == dtpFiltro.Value.Year).ToList();
 
                         decimal premio = 0;
                         int cont = 0;
@@ -524,6 +525,42 @@ namespace CapaPresentacion
         {
             this.Top = 20;
             this.Left = 10;
+            Llenar_Banca();
+        }
+
+        private void Llenar_Banca()
+        {
+            try
+            {
+                if (acceso == "Administrador")
+                {
+                    using (CapaDatos.Modelo.ModelDB context = new CapaDatos.Modelo.ModelDB())
+                    {
+                        var consulta = context.Usuarios.ToList();
+                        foreach (var item in consulta)
+                        {
+                            cbBanca.Items.Add(item.Banca);
+                        }
+                        cbBanca.Text = "Todas";
+                    }
+                }
+                else
+                {
+                    using (CapaDatos.ModeloLocal.Modelo_Local context = new CapaDatos.ModeloLocal.Modelo_Local())
+                    {
+                        var consulta = context.Usuarios.Where(x => x.Usuario == usuario).FirstOrDefault();
+
+                        cbBanca.Text = consulta.Banca;
+                        cbBanca.Enabled = false;
+
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
         private void Ocultar_Columnas()

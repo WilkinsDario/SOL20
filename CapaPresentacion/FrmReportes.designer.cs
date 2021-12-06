@@ -43,15 +43,17 @@ namespace CapaPresentacion
             this.printReporte = new System.Drawing.Printing.PrintDocument();
             this.ckbPagado = new System.Windows.Forms.CheckBox();
             this.lblTotalPagado = new System.Windows.Forms.Label();
+            this.cbBanca = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.datalistado)).BeginInit();
             this.SuspendLayout();
             // 
             // btnConsultar
             // 
             this.btnConsultar.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnConsultar.Location = new System.Drawing.Point(483, 164);
+            this.btnConsultar.Location = new System.Drawing.Point(644, 202);
+            this.btnConsultar.Margin = new System.Windows.Forms.Padding(4);
             this.btnConsultar.Name = "btnConsultar";
-            this.btnConsultar.Size = new System.Drawing.Size(83, 34);
+            this.btnConsultar.Size = new System.Drawing.Size(111, 42);
             this.btnConsultar.TabIndex = 0;
             this.btnConsultar.Text = "Consultar";
             this.btnConsultar.UseVisualStyleBackColor = true;
@@ -60,26 +62,29 @@ namespace CapaPresentacion
             // dtpDesde
             // 
             this.dtpDesde.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dtpDesde.Location = new System.Drawing.Point(53, 78);
+            this.dtpDesde.Location = new System.Drawing.Point(71, 96);
+            this.dtpDesde.Margin = new System.Windows.Forms.Padding(4);
             this.dtpDesde.Name = "dtpDesde";
-            this.dtpDesde.Size = new System.Drawing.Size(261, 26);
+            this.dtpDesde.Size = new System.Drawing.Size(347, 30);
             this.dtpDesde.TabIndex = 1;
             // 
             // dtpHasta
             // 
             this.dtpHasta.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dtpHasta.Location = new System.Drawing.Point(399, 78);
+            this.dtpHasta.Location = new System.Drawing.Point(532, 96);
+            this.dtpHasta.Margin = new System.Windows.Forms.Padding(4);
             this.dtpHasta.Name = "dtpHasta";
-            this.dtpHasta.Size = new System.Drawing.Size(261, 26);
+            this.dtpHasta.Size = new System.Drawing.Size(347, 30);
             this.dtpHasta.TabIndex = 2;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(156, 56);
+            this.label1.Location = new System.Drawing.Point(208, 69);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(48, 19);
+            this.label1.Size = new System.Drawing.Size(60, 22);
             this.label1.TabIndex = 3;
             this.label1.Text = "Desde";
             // 
@@ -87,27 +92,31 @@ namespace CapaPresentacion
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(507, 56);
+            this.label2.Location = new System.Drawing.Point(676, 69);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(44, 19);
+            this.label2.Size = new System.Drawing.Size(55, 22);
             this.label2.TabIndex = 4;
             this.label2.Text = "Hasta";
             // 
             // datalistado
             // 
             this.datalistado.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.datalistado.Location = new System.Drawing.Point(53, 200);
+            this.datalistado.Location = new System.Drawing.Point(71, 246);
+            this.datalistado.Margin = new System.Windows.Forms.Padding(4);
             this.datalistado.Name = "datalistado";
-            this.datalistado.Size = new System.Drawing.Size(607, 150);
+            this.datalistado.RowHeadersWidth = 51;
+            this.datalistado.Size = new System.Drawing.Size(809, 185);
             this.datalistado.TabIndex = 5;
             // 
             // ckbTodo
             // 
             this.ckbTodo.AutoSize = true;
             this.ckbTodo.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ckbTodo.Location = new System.Drawing.Point(93, 137);
+            this.ckbTodo.Location = new System.Drawing.Point(71, 210);
+            this.ckbTodo.Margin = new System.Windows.Forms.Padding(4);
             this.ckbTodo.Name = "ckbTodo";
-            this.ckbTodo.Size = new System.Drawing.Size(60, 23);
+            this.ckbTodo.Size = new System.Drawing.Size(73, 26);
             this.ckbTodo.TabIndex = 6;
             this.ckbTodo.Text = "Todo";
             this.ckbTodo.UseVisualStyleBackColor = true;
@@ -117,9 +126,10 @@ namespace CapaPresentacion
             // 
             this.ckbFacturado.AutoSize = true;
             this.ckbFacturado.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ckbFacturado.Location = new System.Drawing.Point(187, 137);
+            this.ckbFacturado.Location = new System.Drawing.Point(196, 210);
+            this.ckbFacturado.Margin = new System.Windows.Forms.Padding(4);
             this.ckbFacturado.Name = "ckbFacturado";
-            this.ckbFacturado.Size = new System.Drawing.Size(90, 23);
+            this.ckbFacturado.Size = new System.Drawing.Size(111, 26);
             this.ckbFacturado.TabIndex = 8;
             this.ckbFacturado.Text = "Facturado";
             this.ckbFacturado.UseVisualStyleBackColor = true;
@@ -129,9 +139,10 @@ namespace CapaPresentacion
             // 
             this.lblTotalFacturado.AutoSize = true;
             this.lblTotalFacturado.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTotalFacturado.Location = new System.Drawing.Point(228, 353);
+            this.lblTotalFacturado.Location = new System.Drawing.Point(304, 434);
+            this.lblTotalFacturado.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblTotalFacturado.Name = "lblTotalFacturado";
-            this.lblTotalFacturado.Size = new System.Drawing.Size(49, 19);
+            this.lblTotalFacturado.Size = new System.Drawing.Size(60, 23);
             this.lblTotalFacturado.TabIndex = 9;
             this.lblTotalFacturado.Text = "label3";
             // 
@@ -139,9 +150,10 @@ namespace CapaPresentacion
             // 
             this.ckbImprimir.AutoSize = true;
             this.ckbImprimir.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ckbImprimir.Location = new System.Drawing.Point(581, 171);
+            this.ckbImprimir.Location = new System.Drawing.Point(775, 210);
+            this.ckbImprimir.Margin = new System.Windows.Forms.Padding(4);
             this.ckbImprimir.Name = "ckbImprimir";
-            this.ckbImprimir.Size = new System.Drawing.Size(79, 23);
+            this.ckbImprimir.Size = new System.Drawing.Size(102, 26);
             this.ckbImprimir.TabIndex = 10;
             this.ckbImprimir.Text = "Imprimir";
             this.ckbImprimir.UseVisualStyleBackColor = true;
@@ -151,9 +163,10 @@ namespace CapaPresentacion
             // 
             this.ckbPagado.AutoSize = true;
             this.ckbPagado.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ckbPagado.Location = new System.Drawing.Point(300, 137);
+            this.ckbPagado.Location = new System.Drawing.Point(347, 210);
+            this.ckbPagado.Margin = new System.Windows.Forms.Padding(4);
             this.ckbPagado.Name = "ckbPagado";
-            this.ckbPagado.Size = new System.Drawing.Size(74, 23);
+            this.ckbPagado.Size = new System.Drawing.Size(90, 26);
             this.ckbPagado.TabIndex = 11;
             this.ckbPagado.Text = "Pagado";
             this.ckbPagado.UseVisualStyleBackColor = true;
@@ -163,18 +176,30 @@ namespace CapaPresentacion
             // 
             this.lblTotalPagado.AutoSize = true;
             this.lblTotalPagado.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTotalPagado.Location = new System.Drawing.Point(410, 353);
+            this.lblTotalPagado.Location = new System.Drawing.Point(547, 434);
+            this.lblTotalPagado.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblTotalPagado.Name = "lblTotalPagado";
-            this.lblTotalPagado.Size = new System.Drawing.Size(49, 19);
+            this.lblTotalPagado.Size = new System.Drawing.Size(60, 23);
             this.lblTotalPagado.TabIndex = 12;
             this.lblTotalPagado.Text = "label3";
             // 
+            // cbBanca
+            // 
+            this.cbBanca.Font = new System.Drawing.Font("Times New Roman", 12F);
+            this.cbBanca.FormattingEnabled = true;
+            this.cbBanca.Location = new System.Drawing.Point(456, 208);
+            this.cbBanca.Name = "cbBanca";
+            this.cbBanca.Size = new System.Drawing.Size(164, 30);
+            this.cbBanca.TabIndex = 80;
+            this.cbBanca.Text = "Todas";
+            // 
             // FrmReportes
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(745, 450);
+            this.ClientSize = new System.Drawing.Size(961, 501);
+            this.Controls.Add(this.cbBanca);
             this.Controls.Add(this.lblTotalPagado);
             this.Controls.Add(this.ckbPagado);
             this.Controls.Add(this.ckbImprimir);
@@ -188,6 +213,7 @@ namespace CapaPresentacion
             this.Controls.Add(this.dtpDesde);
             this.Controls.Add(this.btnConsultar);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FrmReportes";
             this.Text = ".:. Reportes .:.";
             this.Load += new System.EventHandler(this.FrmReportes_Load);
@@ -212,5 +238,6 @@ namespace CapaPresentacion
         private System.Drawing.Printing.PrintDocument printReporte;
         private System.Windows.Forms.CheckBox ckbPagado;
         private System.Windows.Forms.Label lblTotalPagado;
+        private System.Windows.Forms.ComboBox cbBanca;
     }
 }
