@@ -24,7 +24,6 @@ namespace Presentacion
         {
             if (true)
             {
-
                 try
                 {
                     using (CapaDatos.ModeloLocal.Modelo_Local context = new CapaDatos.ModeloLocal.Modelo_Local())
@@ -131,7 +130,6 @@ namespace Presentacion
             }
             if(false)
             {
-
                 try
                 {
                     using (CapaDatos.Modelo.ModelDB context = new CapaDatos.Modelo.ModelDB())

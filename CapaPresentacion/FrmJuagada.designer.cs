@@ -513,6 +513,7 @@ namespace Presentacion
             this.lbQJugada.Name = "lbQJugada";
             this.lbQJugada.Size = new System.Drawing.Size(452, 212);
             this.lbQJugada.TabIndex = 31;
+            this.lbQJugada.Click += new System.EventHandler(this.lbQJugada_Click);
             // 
             // label7
             // 
@@ -743,7 +744,7 @@ namespace Presentacion
             this.groupBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.groupBox1.Size = new System.Drawing.Size(1572, 137);
+            this.groupBox1.Size = new System.Drawing.Size(1569, 137);
             this.groupBox1.TabIndex = 42;
             this.groupBox1.TabStop = false;
             // 
@@ -877,6 +878,7 @@ namespace Presentacion
             // 
             // btnCopiarJugada
             // 
+            this.btnCopiarJugada.Enabled = false;
             this.btnCopiarJugada.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCopiarJugada.Location = new System.Drawing.Point(1423, 587);
             this.btnCopiarJugada.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);

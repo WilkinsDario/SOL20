@@ -72,11 +72,11 @@ namespace CapaPresentacion
                                         {
                                             premio = premio + Convert.ToDecimal(item.Monto * valor.Primera);
                                         }
-                                        else if (item.Quiniela == loteria.Segunda)
+                                        if (item.Quiniela == loteria.Segunda)
                                         {
                                             premio = premio + Convert.ToDecimal(item.Monto * valor.Segunda);
                                         }
-                                        else if (item.Quiniela == loteria.Tercera)
+                                        if (item.Quiniela == loteria.Tercera)
                                         {
                                             premio = premio + Convert.ToDecimal(item.Monto * valor.Tercera);
                                         }
@@ -254,23 +254,23 @@ namespace CapaPresentacion
 
                         foreach (var item in listajugada)
                         {
-                            var loteria = contextlocal.Ganadores.Where(x => x.Loteria == item.Loteria && x.Fecha.Value.Day == item.Fecha.Value.Day && x.Fecha.Value.Month == item.Fecha.Value.Month && x.Fecha.Value.Year == item.Fecha.Value.Year).FirstOrDefault();
+                            var loterias = contextlocal.Ganadores.Where(x => x.Loteria == item.Loteria && x.Fecha.Value.Day == item.Fecha.Value.Day && x.Fecha.Value.Month == item.Fecha.Value.Month && x.Fecha.Value.Year == item.Fecha.Value.Year).FirstOrDefault();
 
-                            if (loteria != null)
+                            if (loterias != null)
                             {
                                 if (item.Tipo_Jugada == "Quiniela")
                                 {
-                                    if (item.Loteria == loteria.Loteria)
+                                    if (item.Loteria == loterias.Loteria)
                                     {
-                                        if (item.Quiniela == loteria.Primera)
+                                        if (item.Quiniela == loterias.Primera)
                                         {
                                             premio = premio + Convert.ToDecimal(item.Monto * valor.Primera);
                                         }
-                                        else if (item.Quiniela == loteria.Segunda)
+                                        if (item.Quiniela == loterias.Segunda)
                                         {
                                             premio = premio + Convert.ToDecimal(item.Monto * valor.Segunda);
                                         }
-                                        else if (item.Quiniela == loteria.Tercera)
+                                        if (item.Quiniela == loterias.Tercera)
                                         {
                                             premio = premio + Convert.ToDecimal(item.Monto * valor.Tercera);
                                         }
@@ -279,20 +279,20 @@ namespace CapaPresentacion
                                 if (item.Tipo_Jugada == "Pale")  // Pale1
                                 {
                                     bool pale1 = false;
-                                    if (item.Loteria == loteria.Loteria)
+                                    if (item.Loteria == loterias.Loteria)
                                     {
-                                        if (item.Quiniela == loteria.Primera || item.Pale == loteria.Primera)
+                                        if (item.Quiniela == loterias.Primera || item.Pale == loterias.Primera)
                                         {
-                                            if (item.Quiniela == loteria.Segunda || item.Pale == loteria.Segunda)
+                                            if (item.Quiniela == loterias.Segunda || item.Pale == loterias.Segunda)
                                             {
                                                 premio = premio + Convert.ToDecimal(item.Monto * valor.Pale_Uno);
                                             }
                                         }
                                         if (!pale1)
                                         {
-                                            if (item.Quiniela == loteria.Segunda || item.Quiniela == loteria.Tercera)
+                                            if (item.Quiniela == loterias.Segunda || item.Quiniela == loterias.Tercera)
                                             {
-                                                if (item.Pale == loteria.Segunda || item.Pale == loteria.Tercera)
+                                                if (item.Pale == loterias.Segunda || item.Pale == loterias.Tercera)
                                                 {
                                                     premio = premio + Convert.ToDecimal(item.Monto * valor.Pale_Dos);
                                                 }
@@ -303,13 +303,13 @@ namespace CapaPresentacion
                                 if (item.Tipo_Jugada == "Tripleta") // Tripleta
                                 {
                                     bool tripleta1 = false;
-                                    if (item.Loteria == loteria.Loteria)
+                                    if (item.Loteria == loterias.Loteria)
                                     {
-                                        if (item.Quiniela == loteria.Primera || item.Quiniela == loteria.Segunda || item.Quiniela == loteria.Tercera)
+                                        if (item.Quiniela == loterias.Primera || item.Quiniela == loterias.Segunda || item.Quiniela == loterias.Tercera)
                                         {
-                                            if (item.Pale == loteria.Primera || item.Pale == loteria.Segunda || item.Pale == loteria.Tercera)
+                                            if (item.Pale == loterias.Primera || item.Pale == loterias.Segunda || item.Pale == loterias.Tercera)
                                             {
-                                                if (item.Tripleta == loteria.Primera || item.Tripleta == loteria.Segunda || item.Tripleta == loteria.Tercera)
+                                                if (item.Tripleta == loterias.Primera || item.Tripleta == loterias.Segunda || item.Tripleta == loterias.Tercera)
                                                 {
                                                     premio = premio + Convert.ToDecimal(item.Monto * valor.Tripleta);
                                                     tripleta1 = true;
@@ -319,15 +319,15 @@ namespace CapaPresentacion
                                         if (!tripleta1)
                                         {
                                             int con = 0;
-                                            if (item.Quiniela == loteria.Primera || item.Quiniela == loteria.Segunda || item.Quiniela == loteria.Tercera)
+                                            if (item.Quiniela == loterias.Primera || item.Quiniela == loterias.Segunda || item.Quiniela == loterias.Tercera)
                                             {
                                                 con = con + 1;
                                             }
-                                            if (item.Pale == loteria.Primera && item.Pale == loteria.Segunda && item.Pale == loteria.Tercera)
+                                            if (item.Pale == loterias.Primera && item.Pale == loterias.Segunda && item.Pale == loterias.Tercera)
                                             {
                                                 con = con + 1;
                                             }
-                                            if (item.Tripleta == loteria.Primera && item.Tripleta == loteria.Segunda && item.Tripleta == loteria.Tercera)
+                                            if (item.Tripleta == loterias.Primera && item.Tripleta == loterias.Segunda && item.Tripleta == loterias.Tercera)
                                             {
                                                 con = con + 1;
                                             }
@@ -525,43 +525,18 @@ namespace CapaPresentacion
         {
             this.Top = 20;
             this.Left = 10;
-            Llenar_Banca();
-        }
-
-        private void Llenar_Banca()
-        {
-            try
+            if (acceso == "Colaborador")
             {
-                if (acceso == "Administrador")
-                {
-                    using (CapaDatos.Modelo.ModelDB context = new CapaDatos.Modelo.ModelDB())
-                    {
-                        var consulta = context.Usuarios.ToList();
-                        foreach (var item in consulta)
-                        {
-                            cbBanca.Items.Add(item.Banca);
-                        }
-                        cbBanca.Text = "Todas";
-                    }
-                }
-                else
-                {
-                    using (CapaDatos.ModeloLocal.Modelo_Local context = new CapaDatos.ModeloLocal.Modelo_Local())
-                    {
-                        var consulta = context.Usuarios.Where(x => x.Usuario == usuario).FirstOrDefault();
-
-                        cbBanca.Text = consulta.Banca;
-                        cbBanca.Enabled = false;
-
-                    }
-                }
+                this.cbBanca.Enabled = false;
+                this.cbBanca.Text = "EL BONITO";
             }
-            catch (Exception)
+            else
             {
-
-                throw;
+                cbBanca.Enabled = true;
+                cbBanca.Text = "Seleccione";
             }
         }
+
 
         private void Ocultar_Columnas()
         {
@@ -596,6 +571,11 @@ namespace CapaPresentacion
 
                 throw;
             }
+        }
+
+        private void cbBanca_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

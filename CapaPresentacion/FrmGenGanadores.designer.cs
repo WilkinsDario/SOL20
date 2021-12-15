@@ -126,10 +126,13 @@ namespace CapaPresentacion
             // 
             this.cbBanca.Font = new System.Drawing.Font("Times New Roman", 12F);
             this.cbBanca.FormattingEnabled = true;
+            this.cbBanca.Items.AddRange(new object[] {
+            "EL BONITO"});
             this.cbBanca.Location = new System.Drawing.Point(328, 159);
             this.cbBanca.Name = "cbBanca";
             this.cbBanca.Size = new System.Drawing.Size(164, 30);
             this.cbBanca.TabIndex = 79;
+            this.cbBanca.SelectedIndexChanged += new System.EventHandler(this.cbBanca_SelectedIndexChanged);
             // 
             // FrmGenGanadores
             // 

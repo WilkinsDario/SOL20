@@ -2576,11 +2576,72 @@ namespace Presentacion
 
         private void btnCopiarJugada_Click(object sender, EventArgs e)
         {
+            try
+            {
+                using (CapaDatos.ModeloLocal.Modelo_Local context = new CapaDatos.ModeloLocal.Modelo_Local())
+                {
+                    if (this.txtBuscar.Text != string.Empty)
+                    {
+                        int numero = Convert.ToInt32(txtBuscar.Text);
+
+                        var consulta = context.Jugada.ToList();
+
+                        Numero_Jugada();
+
+                        decimal suma = 0;
+
+                        foreach (var item in consulta)
+                        {
+                            if (item.Tipo_Jugada == "Quiniela")
+                            {
+                                this.lbQJugada.Items.Add(item.Jugada1);
+                            }
+                            if (item.Tipo_Jugada == "Pale" || item.Tipo_Jugada == "Super")
+                            {
+                                this.lbPJugada.Items.Add(item.Jugada1);
+                            }
+                            if (item.Tipo_Jugada == "Tripleta")
+                            {
+                                this.lbTJugada.Items.Add(item.Jugada1);
+                            }
+                            suma = Convert.ToDecimal(suma + item.Monto);
+                        }
+                        txtTotalJugada.Text = suma.ToString();
+                    }
+                    else
+                    {
+                        mensajeError("Digite un número de jugada");
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+
+
+
             printTicket = new PrintDocument();
             PrinterSettings ps = new PrinterSettings();
             printTicket.PrinterSettings = ps;
             printTicket.PrintPage += Copiar_Jugada;
             printTicket.Print();
+        }
+
+        private void lbQJugada_Click(object sender, EventArgs e)
+        {
+            if (this.lbQJugada.SelectedIndex != -1)
+            {
+                using (CapaDatos.Modelo.ModelDB context = new CapaDatos.Modelo.ModelDB())
+                {
+                    if (this.txtBuscar.Text != string.Empty)
+                    {
+                        int numerojugada = Convert.ToInt32(this.txtBuscar.Text);
+
+                        var consulta = context.Jugada.Where(x => x.Numero_Jugada == numerojugada);
+                    }
+                }
+            }
         }
     }
 }
