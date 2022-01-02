@@ -42,8 +42,6 @@ namespace CapaPresentacion
                         decimal suma = 0;
                         if (cbBanca.Text != "Todas")
                         {
-
-
                             var consulta = context.Jugada.Where(x => x.Estatus != "Cancelado" && x.Banca == banca && x.Fecha.Value.Day >= dtpDesde.Value.Day && x.Fecha.Value.Day <= dtpHasta.Value.Day
                                                                                                                         && x.Fecha.Value.Month >= dtpDesde.Value.Month && x.Fecha.Value.Month <= dtpHasta.Value.Month
                                                                                                                         && x.Fecha.Value.Year >= dtpDesde.Value.Year && x.Fecha.Value.Year <= dtpHasta.Value.Year).ToList();
@@ -114,6 +112,7 @@ namespace CapaPresentacion
                         }
                     }
                 }
+                OcultarColumnas();
             }
             else
             {

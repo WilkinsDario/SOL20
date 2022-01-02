@@ -258,6 +258,9 @@ namespace Presentacion
 
                                         context.Jugada_Temporal.Add(_temporal_Jugada);
                                         context.SaveChanges();
+
+                                        int cantidad = this.lbQJugada.Items.Count;
+                                        this.lbQJugada.SelectedIndex = cantidad -1;
                                     }
                                 }
                                 else
@@ -305,6 +308,9 @@ namespace Presentacion
                                         double total = Convert.ToDouble(txtTotalJugada.Text);
 
                                         txtTotalJugada.Text = (monto + total).ToString();
+
+                                        int cantidad = this.lbPJugada.Items.Count;
+                                        this.lbPJugada.SelectedIndex = cantidad - 1;
                                     }
 
                                 }
@@ -346,7 +352,6 @@ namespace Presentacion
 
                                             if (Validar_Monto(txtQuiniela.Text + " - " + txtPale.Text + " - " + txtTripleta.Text, _TipoJuagada))
                                             {
-
                                                 context.Jugada_Temporal.Add(_temporal_Jugada);
                                                 context.SaveChanges();
 
@@ -357,6 +362,9 @@ namespace Presentacion
                                                 double total = Convert.ToDouble(txtTotalJugada.Text);
 
                                                 txtTotalJugada.Text = (monto + total).ToString();
+
+                                                int cantidad = this.lbTJugada.Items.Count;
+                                                this.lbTJugada.SelectedIndex = cantidad - 1;
                                             }
                                         }
                                     }
@@ -418,6 +426,9 @@ namespace Presentacion
                                             txtQuiniela.Text = string.Empty;
                                             txtPale.Text = string.Empty;
                                             txtMonto.Text = string.Empty;
+
+                                            int cantidad = this.lbPJugada.Items.Count;
+                                            this.lbPJugada.SelectedIndex = cantidad - 1;
                                         }
                                     }
                                     else
@@ -440,12 +451,14 @@ namespace Presentacion
                     txtPale.Text = string.Empty;
                     txtTripleta.Text = string.Empty;
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
 
                 }
             }
         }
+
+
 
         private void btnQuinielaA_Click(object sender, EventArgs e)
         {
@@ -1110,7 +1123,7 @@ namespace Presentacion
         private void btnEliminar_Click(object sender, EventArgs e)
         {
             using (CapaDatos.ModeloLocal.Modelo_Local context = new CapaDatos.ModeloLocal.Modelo_Local())
-            {                
+            {
                 try
                 {
                     int numero = Convert.ToInt32(txtNumeroJugada.Text);
@@ -1209,12 +1222,13 @@ namespace Presentacion
             {
 
             }
+            Habilitar_Loterias();
         }
 
         private void btnImprimir_Click(object sender, EventArgs e)
         {
             try
-            {                
+            {
                 using (CapaDatos.ModeloLocal.Modelo_Local context = new CapaDatos.ModeloLocal.Modelo_Local())
                 {
                     #region
@@ -2024,7 +2038,7 @@ namespace Presentacion
                                     }
                                     else if (fecha.Hour == 17)
                                     {
-                                        if (fecha.Minute >= 45)
+                                        if (fecha.Minute >= 55)
                                         {
                                             btnNacional.Enabled = false;
                                             btnNacional.BackColor = System.Drawing.Color.Gray;

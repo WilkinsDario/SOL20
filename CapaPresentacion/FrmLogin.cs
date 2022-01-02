@@ -22,15 +22,14 @@ namespace Presentacion
 
         private void Login()
         {
-            if (true)
+            if (false)
             {
                 try
                 {
                     using (CapaDatos.ModeloLocal.Modelo_Local context = new CapaDatos.ModeloLocal.Modelo_Local())
                     {
-                        //var ConsulUltJug = context.Jugada.Max(x => x.Fecha);
                         DateTime fecha = DateTime.Now;
-                        if (fecha.Hour >= 9) // fecha.Hour >= 9   ConsulUltJug.Value.Day == ConsulUltJug.Value.Day + 1 &&
+                        if (fecha.Hour >= 9)
                         {
                             if (this.txtUsuario.Text == "admin" && this.txtContraseña.Text == "221219860831")
                             {
@@ -128,7 +127,7 @@ namespace Presentacion
 
                 } //local
             }
-            if(false)
+            if(true)
             {
                 try
                 {
