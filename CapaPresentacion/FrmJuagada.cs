@@ -261,6 +261,9 @@ namespace Presentacion
 
                                         int cantidad = this.lbQJugada.Items.Count;
                                         this.lbQJugada.SelectedIndex = cantidad -1;
+
+                                        this.lbQJugada.ClearSelected();
+                                            
                                     }
                                 }
                                 else
@@ -311,6 +314,8 @@ namespace Presentacion
 
                                         int cantidad = this.lbPJugada.Items.Count;
                                         this.lbPJugada.SelectedIndex = cantidad - 1;
+
+                                        this.lbPJugada.ClearSelected();
                                     }
 
                                 }
@@ -365,6 +370,8 @@ namespace Presentacion
 
                                                 int cantidad = this.lbTJugada.Items.Count;
                                                 this.lbTJugada.SelectedIndex = cantidad - 1;
+
+                                                this.lbTJugada.ClearSelected();
                                             }
                                         }
                                     }
@@ -429,6 +436,8 @@ namespace Presentacion
 
                                             int cantidad = this.lbPJugada.Items.Count;
                                             this.lbPJugada.SelectedIndex = cantidad - 1;
+
+                                            this.lbPJugada.ClearSelected();
                                         }
                                     }
                                     else
@@ -2632,8 +2641,6 @@ namespace Presentacion
             {
 
             }
-
-
 
             printTicket = new PrintDocument();
             PrinterSettings ps = new PrinterSettings();

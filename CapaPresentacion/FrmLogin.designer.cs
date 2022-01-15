@@ -94,6 +94,7 @@ namespace Presentacion
             this.txtUsuario.Name = "txtUsuario";
             this.txtUsuario.Size = new System.Drawing.Size(247, 27);
             this.txtUsuario.TabIndex = 16;
+            this.txtUsuario.Text = "Elbonito";
             // 
             // label2
             // 

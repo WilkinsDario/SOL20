@@ -371,49 +371,161 @@ namespace CapaPresentacion
 
         private void btnCerrar_Click(object sender, EventArgs e)
         {
-            using (CapaDatos.ModeloLocal.Modelo_Local context = new CapaDatos.ModeloLocal.Modelo_Local())
+            try
             {
-                var faltante = context.Jugada.Where(x => x.Estatus == "Activo" && x.Fecha.Value.Day == dtpFiltroFecha.Value.Day && x.Fecha.Value.Month == dtpFiltroFecha.Value.Month && x.Fecha.Value.Year == dtpFiltroFecha.Value.Year && x.Banca == banca
-                ).ToList();
-
-                if (faltante != null)
+                using (CapaDatos.ModeloLocal.Modelo_Local context = new CapaDatos.ModeloLocal.Modelo_Local())
                 {
-                    Cerrar();
+                    var faltante = context.Jugada.Where(x => x.Estatus == "Activo" && x.Fecha.Value.Day == dtpFiltroFecha.Value.Day && x.Fecha.Value.Month == dtpFiltroFecha.Value.Month && x.Fecha.Value.Year == dtpFiltroFecha.Value.Year && x.Banca == banca
+                    ).ToList();
 
-
-                    printDocument = new PrintDocument();
-                    PrinterSettings ps = new PrinterSettings();
-                    printDocument.PrinterSettings = ps;
-                    printDocument.PrintPage += Imprimir;
-                    printDocument.Print();
-
-                    if (acceso == "Colaborador")
+                    if (faltante != null)
                     {
+                        Cerrar();
+
+
                         printDocument = new PrintDocument();
-                        PrinterSettings psc = new PrinterSettings();
-                        printDocument.PrinterSettings = psc;
-                        printDocument.PrintPage += ImprimirCopia;
+                        PrinterSettings ps = new PrinterSettings();
+                        printDocument.PrinterSettings = ps;
+                        printDocument.PrintPage += Imprimir;
                         printDocument.Print();
-                    }
 
-
-                    foreach (var item in faltante)
-                    {
-                        if (item.Estatus == "Activo")
+                        if (acceso == "Colaborador")
                         {
-                            item.Estatus = "Cerrado";
-                            context.SaveChanges();
+                            printDocument = new PrintDocument();
+                            PrinterSettings psc = new PrinterSettings();
+                            printDocument.PrinterSettings = psc;
+                            printDocument.PrintPage += ImprimirCopia;
+                            printDocument.Print();
                         }
+
+
+                        foreach (var item in faltante)
+                        {
+                            if (item.Estatus == "Activo")
+                            {
+                                item.Estatus = "Cerrado";
+                                context.SaveChanges();
+                            }
+                        }
+                        Limpiar();
+
+                        mensajeOk("Espere un momento migrando....");
                     }
-                    Limpiar();
+                    else
+                    {
+                        mensajeError("No se realizó cierre");
+                    }
+                    Faltante();
                 }
-                else
-                {
-                    mensajeError("No se realizó cierre");
-                }
-                Faltante();
             }
-        }    
+            catch (Exception)
+            {
+
+            }
+
+            Migrar_Jugadas_Diarias();
+
+            Migrar_Resultados_Serv();
+
+            mensajeOk("Finalizado Puede Cerrar");
+        }
+
+        private void Migrar_Jugadas_Diarias()
+        {
+            try
+            {
+                int cont = 0;
+
+                using (CapaDatos.Modelo.ModelDB contextserver = new CapaDatos.Modelo.ModelDB())
+                {
+                    CapaDatos.ModeloLocal.Modelo_Local contextlocal = new CapaDatos.ModeloLocal.Modelo_Local();
+
+                    CapaDatos.Modelo.Jugada _jugada = new CapaDatos.Modelo.Jugada();
+                    var consultalocal = contextlocal.Jugada.Where(x => x.Fecha.Value.Day == dtpFiltroFecha.Value.Day &&
+                                                                       x.Fecha.Value.Month == dtpFiltroFecha.Value.Month &&
+                                                                       x.Fecha.Value.Year == dtpFiltroFecha.Value.Year).ToList();
+
+                    foreach (var item in consultalocal)
+                    {
+                        _jugada.Total = item.Total;
+                        _jugada.Numero_Jugada = item.Numero_Jugada;
+                        _jugada.Numero_Ticket = item.Numero_Ticket;
+                        _jugada.Fecha = item.Fecha;
+                        _jugada.Estatus = item.Estatus;
+                        _jugada.Loteria = item.Loteria;
+                        _jugada.Tipo_Jugada = item.Tipo_Jugada;
+                        _jugada.Jugada1 = item.Jugada1;
+                        _jugada.Monto = item.Monto;
+                        _jugada.Quiniela = item.Quiniela;
+                        _jugada.Pale = item.Pale;
+                        _jugada.Tripleta = item.Tripleta;
+                        _jugada.Banca = item.Banca;
+                        _jugada.Usuario = item.Usuario;
+
+                        contextserver.Jugada.Add(_jugada);
+                        contextserver.SaveChanges();
+                        cont = cont + 1;
+                    }
+                    if (cont != 0)
+                    {
+                        mensajeOk("Se migraron " + cont.ToString() + " Jugadas");
+                        cont = 0;
+                    }
+                    else
+                    {
+                        mensajeOk("No se migraron jugadas");
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+            }            
+        }
+
+        private void Migrar_Resultados_Serv()
+        {
+            try
+            {
+                int cont = 0;
+
+                using (CapaDatos.Modelo.ModelDB contextserver = new CapaDatos.Modelo.ModelDB())
+                {
+                    CapaDatos.ModeloLocal.Modelo_Local contextlocal = new CapaDatos.ModeloLocal.Modelo_Local();
+
+                    CapaDatos.Modelo.Ganadores _jugada = new CapaDatos.Modelo.Ganadores();
+                    var consultalocal = contextlocal.Ganadores.Where(x => x.Fecha.Value.Day == dtpFiltroFecha.Value.Day &&
+                                                                       x.Fecha.Value.Month == dtpFiltroFecha.Value.Month &&
+                                                                       x.Fecha.Value.Year == dtpFiltroFecha.Value.Year).ToList();
+
+                    foreach (var item in consultalocal)
+                    {
+                        _jugada.Loteria = item.Loteria;
+                        _jugada.Primera = item.Primera;
+                        _jugada.Segunda = item.Segunda;
+                        _jugada.Tercera = item.Tercera;
+                        _jugada.Fecha = item.Fecha;
+
+                        contextserver.Ganadores.Add(_jugada);
+                        contextserver.SaveChanges();
+                        cont = cont + 1;
+                    }
+                    if (cont != 0)
+                    {
+                        mensajeOk("Se migraron " + cont.ToString() + " Loterias");
+                        cont = 0;
+                    }
+                    else
+                    {
+                        mensajeOk("No se migraron jugadas");
+                    }
+                }
+            }
+            catch (Exception)
+            {
+
+            }            
+        }
 
         private void Imprimir(object sender, PrintPageEventArgs e)
         {

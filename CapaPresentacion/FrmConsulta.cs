@@ -56,11 +56,11 @@ namespace CapaPresentacion
                                                 {
                                                     premio = premio + Convert.ToDecimal(item.Monto * valor.Primera);
                                                 }
-                                                else if (item.Quiniela == loteria.Segunda)
+                                                if (item.Quiniela == loteria.Segunda)
                                                 {
                                                     premio = premio + Convert.ToDecimal(item.Monto * valor.Segunda);
                                                 }
-                                                else if (item.Quiniela == loteria.Tercera)
+                                                if (item.Quiniela == loteria.Tercera)
                                                 {
                                                     premio = premio + Convert.ToDecimal(item.Monto * valor.Tercera);
                                                 }
@@ -206,11 +206,11 @@ namespace CapaPresentacion
                                                 {
                                                     premio = premio + Convert.ToDecimal(item.Monto * valor.Primera);
                                                 }
-                                                else if (item.Quiniela == loteria.Segunda)
+                                                if (item.Quiniela == loteria.Segunda)
                                                 {
                                                     premio = premio + Convert.ToDecimal(item.Monto * valor.Segunda);
                                                 }
-                                                else if (item.Quiniela == loteria.Tercera)
+                                                if (item.Quiniela == loteria.Tercera)
                                                 {
                                                     premio = premio + Convert.ToDecimal(item.Monto * valor.Tercera);
                                                 }

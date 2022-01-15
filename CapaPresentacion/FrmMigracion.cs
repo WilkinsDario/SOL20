@@ -21,11 +21,6 @@ namespace CapaPresentacion
             InitializeComponent();
         }
 
-        private void btnMigrar_Click(object sender, EventArgs e)
-        {
-            
-        }
-
         private void Migrar_Diario()
         {
             int cont = 0;
@@ -110,10 +105,6 @@ namespace CapaPresentacion
             }
         }
 
-        private void btnMigrarALocal_Click(object sender, EventArgs e)
-        {
-            
-        }
 
         private void MigrarALocal()
         {

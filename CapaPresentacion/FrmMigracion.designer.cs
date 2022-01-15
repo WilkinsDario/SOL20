@@ -64,29 +64,7 @@ namespace CapaPresentacion
             this.dtpDesde.Size = new System.Drawing.Size(127, 22);
             this.dtpDesde.TabIndex = 45;
             // 
-            // btnMigrarALocal
             // 
-            this.btnMigrarALocal.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnMigrarALocal.Location = new System.Drawing.Point(627, 76);
-            this.btnMigrarALocal.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.btnMigrarALocal.Name = "btnMigrarALocal";
-            this.btnMigrarALocal.Size = new System.Drawing.Size(77, 44);
-            this.btnMigrarALocal.TabIndex = 44;
-            this.btnMigrarALocal.Text = "Hasta";
-            this.btnMigrarALocal.UseVisualStyleBackColor = true;
-            this.btnMigrarALocal.Click += new System.EventHandler(this.btnMigrarALocal_Click);
-            // 
-            // btnMigrar
-            // 
-            this.btnMigrar.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnMigrar.Location = new System.Drawing.Point(352, 76);
-            this.btnMigrar.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.btnMigrar.Name = "btnMigrar";
-            this.btnMigrar.Size = new System.Drawing.Size(81, 44);
-            this.btnMigrar.TabIndex = 43;
-            this.btnMigrar.Text = "Desde";
-            this.btnMigrar.UseVisualStyleBackColor = true;
-            this.btnMigrar.Click += new System.EventHandler(this.btnMigrar_Click);
             // 
             // label17
             // 
