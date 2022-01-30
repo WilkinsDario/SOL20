@@ -438,6 +438,19 @@ namespace CapaPresentacion
 
                 using (CapaDatos.Modelo.ModelDB contextserver = new CapaDatos.Modelo.ModelDB())
                 {
+                    var consultaserver = contextserver.Jugada.Where(x => x.Fecha.Value.Day == dtpFiltroFecha.Value.Day &&
+                                                                       x.Fecha.Value.Month == dtpFiltroFecha.Value.Month &&
+                                                                       x.Fecha.Value.Year == dtpFiltroFecha.Value.Year).ToList();
+
+                    if (consultaserver.Count != 0)
+                    {
+                        foreach (var item in consultaserver)
+                        {
+                            consultaserver.Remove(item);
+                            contextserver.SaveChanges();
+                        }
+                    }
+
                     CapaDatos.ModeloLocal.Modelo_Local contextlocal = new CapaDatos.ModeloLocal.Modelo_Local();
 
                     CapaDatos.Modelo.Jugada _jugada = new CapaDatos.Modelo.Jugada();
@@ -491,6 +504,20 @@ namespace CapaPresentacion
 
                 using (CapaDatos.Modelo.ModelDB contextserver = new CapaDatos.Modelo.ModelDB())
                 {
+
+                    var consultaserver = contextserver.Ganadores.Where(x => x.Fecha.Value.Day == dtpFiltroFecha.Value.Day &&
+                                                                       x.Fecha.Value.Month == dtpFiltroFecha.Value.Month &&
+                                                                       x.Fecha.Value.Year == dtpFiltroFecha.Value.Year).ToList();
+
+                    if (consultaserver.Count != 0)
+                    {
+                        foreach (var item in consultaserver)
+                        {
+                            consultaserver.Remove(item);
+                            contextserver.SaveChanges();
+                        }
+                    }
+
                     CapaDatos.ModeloLocal.Modelo_Local contextlocal = new CapaDatos.ModeloLocal.Modelo_Local();
 
                     CapaDatos.Modelo.Ganadores _jugada = new CapaDatos.Modelo.Ganadores();

@@ -878,7 +878,6 @@ namespace Presentacion
             // 
             // btnCopiarJugada
             // 
-            this.btnCopiarJugada.Enabled = false;
             this.btnCopiarJugada.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnCopiarJugada.Location = new System.Drawing.Point(1423, 587);
             this.btnCopiarJugada.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -921,6 +920,7 @@ namespace Presentacion
             this.Name = "FrmJuagada";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = ".:. Jugada .:.";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.FrmJuagada_Load);
             this.gbAutomaticas.ResumeLayout(false);
             this.gbJugada.ResumeLayout(false);

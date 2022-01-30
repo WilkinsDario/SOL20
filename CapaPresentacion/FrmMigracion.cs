@@ -27,6 +27,7 @@ namespace CapaPresentacion
 
             using (CapaDatos.Modelo.ModelDB contextserver = new CapaDatos.Modelo.ModelDB())
             {
+
                 CapaDatos.ModeloLocal.Modelo_Local contextlocal = new CapaDatos.ModeloLocal.Modelo_Local();
 
                 CapaDatos.Modelo.Jugada _jugada = new CapaDatos.Modelo.Jugada();

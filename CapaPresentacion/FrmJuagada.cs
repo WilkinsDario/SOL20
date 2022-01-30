@@ -20,6 +20,7 @@ namespace Presentacion
         public string banca;
         public string acceso;
         DateTime fecha = DateTime.Now;
+        public bool copiarjugada = false;
 
         public FrmJuagada()
         {
@@ -239,8 +240,7 @@ namespace Presentacion
                                     _temporal_Jugada.Numero_Jugada = jugada;
                                     _temporal_Jugada.Loteria = item;
                                     _temporal_Jugada.Tipo_Jugada = _TipoJuagada;
-                                    _temporal_Jugada.Jugada = txtQuiniela.Text;
-                                    _temporal_Jugada.Sub_Jugada = item + " " + txtQuiniela.Text + "                          " + "RD$" + txtMonto.Text;
+                                    _temporal_Jugada.Jugada = item + " " + txtQuiniela.Text + "                          " + "RD$" + txtMonto.Text;
 
                                     _temporal_Jugada.Monto = Convert.ToDecimal(txtMonto.Text);
                                     _temporal_Jugada.Quiniela = Convert.ToInt32(txtQuiniela.Text);
@@ -260,10 +260,10 @@ namespace Presentacion
                                         context.SaveChanges();
 
                                         int cantidad = this.lbQJugada.Items.Count;
-                                        this.lbQJugada.SelectedIndex = cantidad -1;
+                                        this.lbQJugada.SelectedIndex = cantidad - 1;
 
                                         this.lbQJugada.ClearSelected();
-                                            
+
                                     }
                                 }
                                 else
@@ -290,10 +290,9 @@ namespace Presentacion
                                 {
                                     _temporal_Jugada.Loteria = item;
                                     _temporal_Jugada.Tipo_Jugada = _TipoJuagada;
-                                    _temporal_Jugada.Jugada = txtQuiniela.Text + " - " + txtPale.Text;
                                     _temporal_Jugada.Monto = Convert.ToDecimal(txtMonto.Text);
                                     _temporal_Jugada.Numero_Jugada = jugada;
-                                    _temporal_Jugada.Sub_Jugada = item + " " + txtQuiniela.Text + " - " + txtPale.Text + "                    " + "RD$" + txtMonto.Text;
+                                    _temporal_Jugada.Jugada = item + " " + txtQuiniela.Text + " - " + txtPale.Text + "                    " + "RD$" + txtMonto.Text;
                                     _temporal_Jugada.Quiniela = Convert.ToInt32(txtQuiniela.Text);
                                     _temporal_Jugada.Pale = Convert.ToInt32(txtPale.Text);
 
@@ -347,10 +346,9 @@ namespace Presentacion
                                         {
                                             _temporal_Jugada.Loteria = item;
                                             _temporal_Jugada.Tipo_Jugada = _TipoJuagada;
-                                            _temporal_Jugada.Jugada = txtQuiniela.Text + " - " + txtPale.Text + " - " + txtTripleta.Text;
                                             _temporal_Jugada.Monto = Convert.ToDecimal(txtMonto.Text);
                                             _temporal_Jugada.Numero_Jugada = jugada;
-                                            _temporal_Jugada.Sub_Jugada = item + " " + txtQuiniela.Text + " - " + txtPale.Text + " - " + txtTripleta.Text + "             " + "RD$" + txtMonto.Text;
+                                            _temporal_Jugada.Jugada = item + " " + txtQuiniela.Text + " - " + txtPale.Text + " - " + txtTripleta.Text + "             " + "RD$" + txtMonto.Text;
                                             _temporal_Jugada.Quiniela = Convert.ToInt32(txtQuiniela.Text);
                                             _temporal_Jugada.Pale = Convert.ToInt32(txtPale.Text);
                                             _temporal_Jugada.Tripleta = Convert.ToInt32(txtTripleta.Text);
@@ -412,10 +410,9 @@ namespace Presentacion
                                     {
                                         _temporal_Jugada.Loteria = l1 + "" + l2;
                                         _temporal_Jugada.Tipo_Jugada = _TipoJuagada;
-                                        _temporal_Jugada.Jugada = txtQuiniela.Text + " - " + txtPale.Text;
                                         _temporal_Jugada.Monto = Convert.ToDecimal(txtMonto.Text);
                                         _temporal_Jugada.Numero_Jugada = jugada;
-                                        _temporal_Jugada.Sub_Jugada = l1 + " " + l2 + "      " + txtQuiniela.Text + " - " + txtPale.Text + "                    " + "RD$" + txtMonto.Text;
+                                        _temporal_Jugada.Jugada = l1 + " " + l2 + "      " + txtQuiniela.Text + " - " + txtPale.Text + "                    " + "RD$" + txtMonto.Text;
                                         _temporal_Jugada.Quiniela = Convert.ToInt32(txtQuiniela.Text);
                                         _temporal_Jugada.Pale = Convert.ToInt32(txtPale.Text);
 
@@ -466,7 +463,6 @@ namespace Presentacion
                 }
             }
         }
-
 
 
         private void btnQuinielaA_Click(object sender, EventArgs e)
@@ -792,9 +788,10 @@ namespace Presentacion
 
         private void btnQuiniela_Click(object sender, EventArgs e)
         {
+            this.txtQuiniela.Focus();
             txtMonto.Enabled = true;
             this._TipoJuagada = "Quiniela";
-            this.txtQuiniela.Focus();
+
             if (btnQuiniela.BackColor == System.Drawing.Color.Orange)
             {
                 btnQuiniela.BackColor = System.Drawing.Color.Green;
@@ -919,6 +916,7 @@ namespace Presentacion
                     }
                     this.sub_numero = 0;
                 }
+
             }
             catch (Exception)
             {
@@ -1264,6 +1262,7 @@ namespace Presentacion
                     #endregion
                 }
                 this.txtNumeroJugada.Text = string.Empty;
+                this.txtBuscar.Text = string.Empty;
             }
             catch (Exception)
             {
@@ -1303,46 +1302,46 @@ namespace Presentacion
 
                 if (quiniela.Count != 0)
                 {
-                    e.Graphics.DrawString("----------Quiniela-------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                    e.Graphics.DrawString("----------Quiniela-------------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
 
                     foreach (var item in quiniela)
                     {
-                        e.Graphics.DrawString(item.Loteria + " " + item.Jugada1 + "      " + item.Monto, cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                        e.Graphics.DrawString(item.Jugada1, cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
                         suma = suma + Convert.ToDecimal(item.Monto);
                     }
                 }
                 if (pale.Count != 0)
                 {
-                    e.Graphics.DrawString("----------Palé------------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                    e.Graphics.DrawString("----------Palé------------------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
 
                     foreach (var item in pale)
                     {
-                        e.Graphics.DrawString(item.Loteria + " " + item.Jugada1 + "      " + item.Monto, cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                        e.Graphics.DrawString(item.Jugada1, cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
                         suma = suma + Convert.ToDecimal(item.Monto);
                     }
                 }
                 if (tripleta.Count != 0)
                 {
-                    e.Graphics.DrawString("----------Tripleta--------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                    e.Graphics.DrawString("----------Tripleta--------------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
 
                     foreach (var item in tripleta)
                     {
-                        e.Graphics.DrawString(item.Loteria + " " + item.Jugada1 + "      " + item.Monto, cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                        e.Graphics.DrawString(item.Jugada1, cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
                         suma = suma + Convert.ToDecimal(item.Monto);
                     }
                 }
                 if (super.Count != 0)
                 {
-                    e.Graphics.DrawString("----------Super----------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                    e.Graphics.DrawString("----------Super----------------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
 
                     foreach (var item in super)
                     {
-                        e.Graphics.DrawString(item.Loteria + " " + item.Jugada1 + "      " + item.Monto, cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                        e.Graphics.DrawString(item.Jugada1, cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
                         suma = suma + Convert.ToDecimal(item.Monto);
                     }
                 }
 
-                e.Graphics.DrawString("----------------------------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                e.Graphics.DrawString("----------------------------------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
                 e.Graphics.DrawString("Total RD$: " + suma.ToString(), cabeza, Brushes.Black, new RectangleF(0, lineado += 20, anchohasta, largo));
                 e.Graphics.DrawString(" REVISE SU JUGADA", cabeza, Brushes.Black, new RectangleF(0, lineado += 20, anchohasta, largo));
             }
@@ -1386,46 +1385,46 @@ namespace Presentacion
 
                         if (quiniela.Count != 0)
                         {
-                            e.Graphics.DrawString("----------Quiniela-------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                            e.Graphics.DrawString("----------Quiniela-------------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
 
                             foreach (var item in quiniela)
                             {
-                                e.Graphics.DrawString(item.Loteria + " " + item.Jugada1 + "      " + item.Monto, cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                                e.Graphics.DrawString(item.Jugada1, cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
                                 suma = suma + Convert.ToDecimal(item.Monto);
                             }
                         }
                         if (pale.Count != 0)
                         {
-                            e.Graphics.DrawString("----------Palé------------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                            e.Graphics.DrawString("----------Palé------------------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
 
                             foreach (var item in pale)
                             {
-                                e.Graphics.DrawString(item.Loteria + " " + item.Jugada1 + "      " + item.Monto, cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                                e.Graphics.DrawString(item.Jugada1, cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
                                 suma = suma + Convert.ToDecimal(item.Monto);
                             }
                         }
                         if (tripleta.Count != 0)
                         {
-                            e.Graphics.DrawString("----------Tripleta--------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                            e.Graphics.DrawString("----------Tripleta--------------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
 
                             foreach (var item in tripleta)
                             {
-                                e.Graphics.DrawString(item.Loteria + " " + item.Jugada1 + "      " + item.Monto, cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                                e.Graphics.DrawString(item.Jugada1, cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
                                 suma = suma + Convert.ToDecimal(item.Monto);
                             }
                         }
                         if (super.Count != 0)
                         {
-                            e.Graphics.DrawString("----------Super----------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                            e.Graphics.DrawString("----------Super----------------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
 
                             foreach (var item in super)
                             {
-                                e.Graphics.DrawString(item.Loteria + " " + item.Jugada1 + "      " + item.Monto, cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                                e.Graphics.DrawString(item.Jugada1, cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
                                 suma = suma + Convert.ToDecimal(item.Monto);
                             }
                         }
 
-                        e.Graphics.DrawString("----------------------------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                        e.Graphics.DrawString("----------------------------------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
                         e.Graphics.DrawString("Total RD$: " + suma.ToString(), cabeza, Brushes.Black, new RectangleF(0, lineado += 20, anchohasta, largo));
                         e.Graphics.DrawString(" REVISE SU JUGADA", cabeza, Brushes.Black, new RectangleF(0, lineado += 20, anchohasta, largo));
                         e.Graphics.DrawString("    *REIMPRESO*", cabeza, Brushes.Black, new RectangleF(0, lineado += 20, anchohasta, largo));
@@ -2551,46 +2550,46 @@ namespace Presentacion
 
                 if (quiniela.Count != 0)
                 {
-                    e.Graphics.DrawString("----------Quiniela-------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                    e.Graphics.DrawString("----------Quiniela-------------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
 
                     foreach (var item in quiniela)
                     {
-                        e.Graphics.DrawString(item.Loteria + " " + item.Jugada1 + "      " + item.Monto, cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                        e.Graphics.DrawString(item.Jugada1, cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
                         suma = suma + Convert.ToDecimal(item.Monto);
                     }
                 }
                 if (pale.Count != 0)
                 {
-                    e.Graphics.DrawString("----------Palé------------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                    e.Graphics.DrawString("----------Palé------------------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
 
                     foreach (var item in pale)
                     {
-                        e.Graphics.DrawString(item.Loteria + " " + item.Jugada1 + "      " + item.Monto, cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                        e.Graphics.DrawString(item.Jugada1, cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
                         suma = suma + Convert.ToDecimal(item.Monto);
                     }
                 }
                 if (tripleta.Count != 0)
                 {
-                    e.Graphics.DrawString("----------Tripleta--------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                    e.Graphics.DrawString("----------Tripleta--------------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
 
                     foreach (var item in tripleta)
                     {
-                        e.Graphics.DrawString(item.Loteria + " " + item.Jugada1 + "      " + item.Monto, cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                        e.Graphics.DrawString(item.Jugada1, cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
                         suma = suma + Convert.ToDecimal(item.Monto);
                     }
                 }
                 if (super.Count != 0)
                 {
-                    e.Graphics.DrawString("----------Super----------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                    e.Graphics.DrawString("----------Super----------------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
 
                     foreach (var item in super)
                     {
-                        e.Graphics.DrawString(item.Loteria + " " + item.Jugada1 + "      " + item.Monto, cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                        e.Graphics.DrawString(item.Jugada1, cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
                         suma = suma + Convert.ToDecimal(item.Monto);
                     }
                 }
 
-                e.Graphics.DrawString("----------------------------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                e.Graphics.DrawString("----------------------------------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
                 e.Graphics.DrawString("Total RD$: " + suma.ToString(), cabeza, Brushes.Black, new RectangleF(0, lineado += 20, anchohasta, largo));
                 e.Graphics.DrawString(" REVISE SU JUGADA", cabeza, Brushes.Black, new RectangleF(0, lineado += 20, anchohasta, largo));
             }
@@ -2607,29 +2606,60 @@ namespace Presentacion
                     {
                         int numero = Convert.ToInt32(txtBuscar.Text);
 
-                        var consulta = context.Jugada.ToList();
+                        var consulta = context.Jugada.Where(x => x.Numero_Jugada == numero).ToList();
 
-                        Numero_Jugada();
-
-                        decimal suma = 0;
-
-                        foreach (var item in consulta)
+                        if (consulta.Count != 0)
                         {
-                            if (item.Tipo_Jugada == "Quiniela")
+                            this.copiarjugada = true;
+
+                            Numero_Jugada();
+
+                            decimal suma = 0;
+
+                            foreach (var item in consulta)
                             {
-                                this.lbQJugada.Items.Add(item.Jugada1);
+                                if (item.Tipo_Jugada == "Quiniela")
+                                {
+                                    this.lbQJugada.Items.Add(item.Jugada1);
+                                }
+                                if (item.Tipo_Jugada == "Pale" || item.Tipo_Jugada == "Super")
+                                {
+                                    this.lbPJugada.Items.Add(item.Jugada1);
+                                }
+                                if (item.Tipo_Jugada == "Tripleta")
+                                {
+                                    this.lbTJugada.Items.Add(item.Jugada1);
+                                }
+                                suma = Convert.ToDecimal(suma + item.Monto);
                             }
-                            if (item.Tipo_Jugada == "Pale" || item.Tipo_Jugada == "Super")
+                            txtTotalJugada.Text = suma.ToString();
+
+                            #region Pasar a temporal
+
+                            CapaDatos.ModeloLocal.Jugada_Temporal _temporal = new CapaDatos.ModeloLocal.Jugada_Temporal();
+
+                            foreach (var item in consulta)
                             {
-                                this.lbPJugada.Items.Add(item.Jugada1);
+                                _temporal.Loteria = item.Loteria;
+                                _temporal.Quiniela = item.Quiniela;
+                                _temporal.Pale = item.Pale;
+                                _temporal.Tripleta = item.Tripleta;
+                                _temporal.Monto = item.Monto;
+                                _temporal.Numero_Jugada = Convert.ToInt32(this.txtNumeroJugada.Text);
+                                _temporal.Tipo_Jugada = item.Tipo_Jugada;
+                                _temporal.Jugada = item.Jugada1;
+
+                                context.Jugada_Temporal.Add(_temporal);
+                                context.SaveChanges();
                             }
-                            if (item.Tipo_Jugada == "Tripleta")
-                            {
-                                this.lbTJugada.Items.Add(item.Jugada1);
-                            }
-                            suma = Convert.ToDecimal(suma + item.Monto);
+
+                            #endregion
+
                         }
-                        txtTotalJugada.Text = suma.ToString();
+                        else
+                        {
+                            mensajeError("Verifique el número de jugada");
+                        }
                     }
                     else
                     {
@@ -2642,27 +2672,32 @@ namespace Presentacion
 
             }
 
-            printTicket = new PrintDocument();
-            PrinterSettings ps = new PrinterSettings();
-            printTicket.PrinterSettings = ps;
-            printTicket.PrintPage += Copiar_Jugada;
-            printTicket.Print();
         }
 
         private void lbQJugada_Click(object sender, EventArgs e)
         {
-            if (this.lbQJugada.SelectedIndex != -1)
+            using (CapaDatos.ModeloLocal.Modelo_Local context = new CapaDatos.ModeloLocal.Modelo_Local())
             {
-                using (CapaDatos.Modelo.ModelDB context = new CapaDatos.Modelo.ModelDB())
+                if (this.lbQJugada.SelectedIndex != -1)
                 {
-                    if (this.txtBuscar.Text != string.Empty)
+                    if (this.copiarjugada)
                     {
-                        int numerojugada = Convert.ToInt32(this.txtBuscar.Text);
+                        string jugada = this.lbQJugada.SelectedItem.ToString();
+                        //var consulta = context.
+                    }
+                    else
+                    {
+                        if (this.txtBuscar.Text != string.Empty)
+                        {
+                            int numerojugada = Convert.ToInt32(this.txtBuscar.Text);
 
-                        var consulta = context.Jugada.Where(x => x.Numero_Jugada == numerojugada);
+                            var consulta = context.Jugada.Where(x => x.Numero_Jugada == numerojugada);
+                        }
+
                     }
                 }
             }
+
         }
     }
 }
