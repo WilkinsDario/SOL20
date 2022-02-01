@@ -240,14 +240,14 @@ namespace Presentacion
                                     _temporal_Jugada.Numero_Jugada = jugada;
                                     _temporal_Jugada.Loteria = item;
                                     _temporal_Jugada.Tipo_Jugada = _TipoJuagada;
-                                    _temporal_Jugada.Jugada = item + " " + txtQuiniela.Text + "                          " + "RD$" + txtMonto.Text;
+                                    _temporal_Jugada.Jugada = item + " " + txtQuiniela.Text + "                     " + "RD$" + txtMonto.Text;
 
                                     _temporal_Jugada.Monto = Convert.ToDecimal(txtMonto.Text);
                                     _temporal_Jugada.Quiniela = Convert.ToInt32(txtQuiniela.Text);
 
                                     if (Validar_Monto(txtQuiniela.Text, _TipoJuagada))
                                     {
-                                        lbQJugada.Items.Add(item + " " + txtQuiniela.Text + "                          " + "RD$" + txtMonto.Text);
+                                        lbQJugada.Items.Add(item + " " + txtQuiniela.Text + "                     " + "RD$" + txtMonto.Text);
 
 
                                         double monto = Convert.ToDouble(txtMonto.Text);
@@ -292,7 +292,7 @@ namespace Presentacion
                                     _temporal_Jugada.Tipo_Jugada = _TipoJuagada;
                                     _temporal_Jugada.Monto = Convert.ToDecimal(txtMonto.Text);
                                     _temporal_Jugada.Numero_Jugada = jugada;
-                                    _temporal_Jugada.Jugada = item + " " + txtQuiniela.Text + " - " + txtPale.Text + "                    " + "RD$" + txtMonto.Text;
+                                    _temporal_Jugada.Jugada = item + " " + txtQuiniela.Text + " - " + txtPale.Text + "             " + "RD$" + txtMonto.Text;
                                     _temporal_Jugada.Quiniela = Convert.ToInt32(txtQuiniela.Text);
                                     _temporal_Jugada.Pale = Convert.ToInt32(txtPale.Text);
 
@@ -303,7 +303,7 @@ namespace Presentacion
                                         context.Jugada_Temporal.Add(_temporal_Jugada);
                                         context.SaveChanges();
 
-                                        lbPJugada.Items.Add(item + " " + txtQuiniela.Text + " - " + txtPale.Text + "                    " + "RD$" + txtMonto.Text);
+                                        lbPJugada.Items.Add(item + " " + txtQuiniela.Text + " - " + txtPale.Text + "             " + "RD$" + txtMonto.Text);
 
 
                                         double monto = Convert.ToDouble(txtMonto.Text);
@@ -348,7 +348,7 @@ namespace Presentacion
                                             _temporal_Jugada.Tipo_Jugada = _TipoJuagada;
                                             _temporal_Jugada.Monto = Convert.ToDecimal(txtMonto.Text);
                                             _temporal_Jugada.Numero_Jugada = jugada;
-                                            _temporal_Jugada.Jugada = item + " " + txtQuiniela.Text + " - " + txtPale.Text + " - " + txtTripleta.Text + "             " + "RD$" + txtMonto.Text;
+                                            _temporal_Jugada.Jugada = item + " " + txtQuiniela.Text + " - " + txtPale.Text + " - " + txtTripleta.Text + "      " + "RD$" + txtMonto.Text;
                                             _temporal_Jugada.Quiniela = Convert.ToInt32(txtQuiniela.Text);
                                             _temporal_Jugada.Pale = Convert.ToInt32(txtPale.Text);
                                             _temporal_Jugada.Tripleta = Convert.ToInt32(txtTripleta.Text);
@@ -358,7 +358,7 @@ namespace Presentacion
                                                 context.Jugada_Temporal.Add(_temporal_Jugada);
                                                 context.SaveChanges();
 
-                                                lbTJugada.Items.Add(item + " " + txtQuiniela.Text + " - " + txtPale.Text + " - " + txtTripleta.Text + "             " + "RD$" + txtMonto.Text);
+                                                lbTJugada.Items.Add(item + " " + txtQuiniela.Text + " - " + txtPale.Text + " - " + txtTripleta.Text + "      " + "RD$" + txtMonto.Text);
 
 
                                                 double monto = Convert.ToDouble(txtMonto.Text);
@@ -412,7 +412,7 @@ namespace Presentacion
                                         _temporal_Jugada.Tipo_Jugada = _TipoJuagada;
                                         _temporal_Jugada.Monto = Convert.ToDecimal(txtMonto.Text);
                                         _temporal_Jugada.Numero_Jugada = jugada;
-                                        _temporal_Jugada.Jugada = l1 + " " + l2 + "      " + txtQuiniela.Text + " - " + txtPale.Text + "                    " + "RD$" + txtMonto.Text;
+                                        _temporal_Jugada.Jugada = l1 + " " + l2 + "      " + txtQuiniela.Text + " - " + txtPale.Text + "             " + "RD$" + txtMonto.Text;
                                         _temporal_Jugada.Quiniela = Convert.ToInt32(txtQuiniela.Text);
                                         _temporal_Jugada.Pale = Convert.ToInt32(txtPale.Text);
 
@@ -421,7 +421,7 @@ namespace Presentacion
                                             context.Jugada_Temporal.Add(_temporal_Jugada);
                                             context.SaveChanges();
 
-                                            lbPJugada.Items.Add(l1 + " " + l2 + "      " + txtQuiniela.Text + " - " + txtPale.Text + "                    " + "RD$" + txtMonto.Text);
+                                            lbPJugada.Items.Add(l1 + " " + l2 + "      " + txtQuiniela.Text + " - " + txtPale.Text + "             " + "RD$" + txtMonto.Text);
 
                                             double monto = Convert.ToDouble(txtMonto.Text);
                                             double total = Convert.ToDouble(txtTotalJugada.Text);
@@ -1143,7 +1143,7 @@ namespace Presentacion
                     {
                         sub = lbQJugada.SelectedItem.ToString();
 
-                        var consulta = context.Jugada_Temporal.Where(x => x.Sub_Jugada == sub && x.Numero_Jugada == numero).FirstOrDefault();
+                        var consulta = context.Jugada_Temporal.Where(x => x.Jugada == sub && x.Numero_Jugada == numero).FirstOrDefault();
 
                         txtTotalJugada.Text = (total - consulta.Monto).ToString();
 
@@ -1156,7 +1156,7 @@ namespace Presentacion
                     {
                         sub = lbPJugada.SelectedItem.ToString();
 
-                        var consulta = context.Jugada_Temporal.Where(x => x.Sub_Jugada == sub && x.Numero_Jugada == numero).FirstOrDefault();
+                        var consulta = context.Jugada_Temporal.Where(x => x.Jugada == sub && x.Numero_Jugada == numero).FirstOrDefault();
 
                         txtTotalJugada.Text = (total - consulta.Monto).ToString();
 
@@ -1168,7 +1168,7 @@ namespace Presentacion
                     {
                         sub = lbTJugada.SelectedItem.ToString();
 
-                        var consulta = context.Jugada_Temporal.Where(x => x.Sub_Jugada == sub && x.Numero_Jugada == numero).FirstOrDefault();
+                        var consulta = context.Jugada_Temporal.Where(x => x.Jugada == sub && x.Numero_Jugada == numero).FirstOrDefault();
 
                         txtTotalJugada.Text = (total - consulta.Monto).ToString();
 
@@ -1302,7 +1302,7 @@ namespace Presentacion
 
                 if (quiniela.Count != 0)
                 {
-                    e.Graphics.DrawString("----------Quiniela-------------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                    e.Graphics.DrawString("----------Quiniela--------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
 
                     foreach (var item in quiniela)
                     {
@@ -1312,7 +1312,7 @@ namespace Presentacion
                 }
                 if (pale.Count != 0)
                 {
-                    e.Graphics.DrawString("----------Palé------------------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                    e.Graphics.DrawString("----------Palé-------------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
 
                     foreach (var item in pale)
                     {
@@ -1322,7 +1322,7 @@ namespace Presentacion
                 }
                 if (tripleta.Count != 0)
                 {
-                    e.Graphics.DrawString("----------Tripleta--------------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                    e.Graphics.DrawString("----------Tripleta---------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
 
                     foreach (var item in tripleta)
                     {
@@ -1332,7 +1332,7 @@ namespace Presentacion
                 }
                 if (super.Count != 0)
                 {
-                    e.Graphics.DrawString("----------Super----------------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                    e.Graphics.DrawString("----------Super-----------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
 
                     foreach (var item in super)
                     {
@@ -1341,7 +1341,7 @@ namespace Presentacion
                     }
                 }
 
-                e.Graphics.DrawString("----------------------------------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                e.Graphics.DrawString("-----------------------------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
                 e.Graphics.DrawString("Total RD$: " + suma.ToString(), cabeza, Brushes.Black, new RectangleF(0, lineado += 20, anchohasta, largo));
                 e.Graphics.DrawString(" REVISE SU JUGADA", cabeza, Brushes.Black, new RectangleF(0, lineado += 20, anchohasta, largo));
             }
@@ -1385,7 +1385,7 @@ namespace Presentacion
 
                         if (quiniela.Count != 0)
                         {
-                            e.Graphics.DrawString("----------Quiniela-------------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                            e.Graphics.DrawString("----------Quiniela--------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
 
                             foreach (var item in quiniela)
                             {
@@ -1395,7 +1395,7 @@ namespace Presentacion
                         }
                         if (pale.Count != 0)
                         {
-                            e.Graphics.DrawString("----------Palé------------------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                            e.Graphics.DrawString("----------Palé-------------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
 
                             foreach (var item in pale)
                             {
@@ -1405,7 +1405,7 @@ namespace Presentacion
                         }
                         if (tripleta.Count != 0)
                         {
-                            e.Graphics.DrawString("----------Tripleta--------------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                            e.Graphics.DrawString("----------Tripleta---------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
 
                             foreach (var item in tripleta)
                             {
@@ -1415,7 +1415,7 @@ namespace Presentacion
                         }
                         if (super.Count != 0)
                         {
-                            e.Graphics.DrawString("----------Super----------------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                            e.Graphics.DrawString("----------Super-----------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
 
                             foreach (var item in super)
                             {
@@ -1424,7 +1424,7 @@ namespace Presentacion
                             }
                         }
 
-                        e.Graphics.DrawString("----------------------------------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                        e.Graphics.DrawString("-----------------------------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
                         e.Graphics.DrawString("Total RD$: " + suma.ToString(), cabeza, Brushes.Black, new RectangleF(0, lineado += 20, anchohasta, largo));
                         e.Graphics.DrawString(" REVISE SU JUGADA", cabeza, Brushes.Black, new RectangleF(0, lineado += 20, anchohasta, largo));
                         e.Graphics.DrawString("    *REIMPRESO*", cabeza, Brushes.Black, new RectangleF(0, lineado += 20, anchohasta, largo));
@@ -2550,7 +2550,7 @@ namespace Presentacion
 
                 if (quiniela.Count != 0)
                 {
-                    e.Graphics.DrawString("----------Quiniela-------------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                    e.Graphics.DrawString("----------Quiniela--------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
 
                     foreach (var item in quiniela)
                     {
@@ -2560,7 +2560,7 @@ namespace Presentacion
                 }
                 if (pale.Count != 0)
                 {
-                    e.Graphics.DrawString("----------Palé------------------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                    e.Graphics.DrawString("----------Palé-------------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
 
                     foreach (var item in pale)
                     {
@@ -2570,7 +2570,7 @@ namespace Presentacion
                 }
                 if (tripleta.Count != 0)
                 {
-                    e.Graphics.DrawString("----------Tripleta--------------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                    e.Graphics.DrawString("----------Tripleta---------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
 
                     foreach (var item in tripleta)
                     {
@@ -2580,7 +2580,7 @@ namespace Presentacion
                 }
                 if (super.Count != 0)
                 {
-                    e.Graphics.DrawString("----------Super----------------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                    e.Graphics.DrawString("----------Super-----------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
 
                     foreach (var item in super)
                     {
@@ -2589,7 +2589,7 @@ namespace Presentacion
                     }
                 }
 
-                e.Graphics.DrawString("----------------------------------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                e.Graphics.DrawString("-----------------------------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
                 e.Graphics.DrawString("Total RD$: " + suma.ToString(), cabeza, Brushes.Black, new RectangleF(0, lineado += 20, anchohasta, largo));
                 e.Graphics.DrawString(" REVISE SU JUGADA", cabeza, Brushes.Black, new RectangleF(0, lineado += 20, anchohasta, largo));
             }

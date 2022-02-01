@@ -67,7 +67,7 @@ namespace Presentacion
                         }
                         else
                         {
-                            if (fecha.Hour >= 9)
+                            if (fecha.Hour >= 9) //fecha.Hour >= 9
                             {
                                 if (this.txtUsuario.Text == "admin" && this.txtContraseña.Text == "221219860831")
                                 {
