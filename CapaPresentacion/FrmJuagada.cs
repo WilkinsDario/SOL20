@@ -225,7 +225,9 @@ namespace Presentacion
             {
                 CapaDatos.ModeloLocal.Jugada_Temporal _temporal_Jugada = new CapaDatos.ModeloLocal.Jugada_Temporal();
                 var limite = context.Limite.FirstOrDefault();
-
+                string entrelineaQ = "                  ";
+                string entrelineaP = "          ";
+                string entrelineaT = "     ";
                 try
                 {
                     if (_TipoJuagada == "Quiniela")
@@ -240,14 +242,14 @@ namespace Presentacion
                                     _temporal_Jugada.Numero_Jugada = jugada;
                                     _temporal_Jugada.Loteria = item;
                                     _temporal_Jugada.Tipo_Jugada = _TipoJuagada;
-                                    _temporal_Jugada.Jugada = item + " " + txtQuiniela.Text + "                     " + "RD$" + txtMonto.Text;
+                                    _temporal_Jugada.Jugada = item + " " + txtQuiniela.Text + entrelineaQ + "RD$" + txtMonto.Text;
 
                                     _temporal_Jugada.Monto = Convert.ToDecimal(txtMonto.Text);
                                     _temporal_Jugada.Quiniela = Convert.ToInt32(txtQuiniela.Text);
 
                                     if (Validar_Monto(txtQuiniela.Text, _TipoJuagada))
                                     {
-                                        lbQJugada.Items.Add(item + " " + txtQuiniela.Text + "                     " + "RD$" + txtMonto.Text);
+                                        lbQJugada.Items.Add(item + " " + txtQuiniela.Text + entrelineaQ + "RD$" + txtMonto.Text);
 
 
                                         double monto = Convert.ToDouble(txtMonto.Text);
@@ -292,7 +294,7 @@ namespace Presentacion
                                     _temporal_Jugada.Tipo_Jugada = _TipoJuagada;
                                     _temporal_Jugada.Monto = Convert.ToDecimal(txtMonto.Text);
                                     _temporal_Jugada.Numero_Jugada = jugada;
-                                    _temporal_Jugada.Jugada = item + " " + txtQuiniela.Text + " - " + txtPale.Text + "             " + "RD$" + txtMonto.Text;
+                                    _temporal_Jugada.Jugada = item + " " + txtQuiniela.Text + " - " + txtPale.Text + entrelineaP + "RD$" + txtMonto.Text;
                                     _temporal_Jugada.Quiniela = Convert.ToInt32(txtQuiniela.Text);
                                     _temporal_Jugada.Pale = Convert.ToInt32(txtPale.Text);
 
@@ -303,7 +305,7 @@ namespace Presentacion
                                         context.Jugada_Temporal.Add(_temporal_Jugada);
                                         context.SaveChanges();
 
-                                        lbPJugada.Items.Add(item + " " + txtQuiniela.Text + " - " + txtPale.Text + "             " + "RD$" + txtMonto.Text);
+                                        lbPJugada.Items.Add(item + " " + txtQuiniela.Text + " - " + txtPale.Text + entrelineaP + "RD$" + txtMonto.Text);
 
 
                                         double monto = Convert.ToDouble(txtMonto.Text);
@@ -348,7 +350,7 @@ namespace Presentacion
                                             _temporal_Jugada.Tipo_Jugada = _TipoJuagada;
                                             _temporal_Jugada.Monto = Convert.ToDecimal(txtMonto.Text);
                                             _temporal_Jugada.Numero_Jugada = jugada;
-                                            _temporal_Jugada.Jugada = item + " " + txtQuiniela.Text + " - " + txtPale.Text + " - " + txtTripleta.Text + "      " + "RD$" + txtMonto.Text;
+                                            _temporal_Jugada.Jugada = item + " " + txtQuiniela.Text + " - " + txtPale.Text + " - " + txtTripleta.Text + entrelineaT + "RD$" + txtMonto.Text;
                                             _temporal_Jugada.Quiniela = Convert.ToInt32(txtQuiniela.Text);
                                             _temporal_Jugada.Pale = Convert.ToInt32(txtPale.Text);
                                             _temporal_Jugada.Tripleta = Convert.ToInt32(txtTripleta.Text);
@@ -358,7 +360,7 @@ namespace Presentacion
                                                 context.Jugada_Temporal.Add(_temporal_Jugada);
                                                 context.SaveChanges();
 
-                                                lbTJugada.Items.Add(item + " " + txtQuiniela.Text + " - " + txtPale.Text + " - " + txtTripleta.Text + "      " + "RD$" + txtMonto.Text);
+                                                lbTJugada.Items.Add(item + " " + txtQuiniela.Text + " - " + txtPale.Text + " - " + txtTripleta.Text + entrelineaT + "RD$" + txtMonto.Text);
 
 
                                                 double monto = Convert.ToDouble(txtMonto.Text);
@@ -412,7 +414,7 @@ namespace Presentacion
                                         _temporal_Jugada.Tipo_Jugada = _TipoJuagada;
                                         _temporal_Jugada.Monto = Convert.ToDecimal(txtMonto.Text);
                                         _temporal_Jugada.Numero_Jugada = jugada;
-                                        _temporal_Jugada.Jugada = l1 + " " + l2 + "      " + txtQuiniela.Text + " - " + txtPale.Text + "             " + "RD$" + txtMonto.Text;
+                                        _temporal_Jugada.Jugada = l1 + " " + l2 + "      " + txtQuiniela.Text + " - " + txtPale.Text + entrelineaP + "RD$" + txtMonto.Text;
                                         _temporal_Jugada.Quiniela = Convert.ToInt32(txtQuiniela.Text);
                                         _temporal_Jugada.Pale = Convert.ToInt32(txtPale.Text);
 
@@ -421,7 +423,7 @@ namespace Presentacion
                                             context.Jugada_Temporal.Add(_temporal_Jugada);
                                             context.SaveChanges();
 
-                                            lbPJugada.Items.Add(l1 + " " + l2 + "      " + txtQuiniela.Text + " - " + txtPale.Text + "             " + "RD$" + txtMonto.Text);
+                                            lbPJugada.Items.Add(l1 + " " + l2 + "      " + txtQuiniela.Text + " - " + txtPale.Text + entrelineaP + "RD$" + txtMonto.Text);
 
                                             double monto = Convert.ToDouble(txtMonto.Text);
                                             double total = Convert.ToDouble(txtTotalJugada.Text);
@@ -1204,15 +1206,20 @@ namespace Presentacion
                     {
                         int numero = Convert.ToInt32(txtBuscar.Text);
 
-                        var consulta = context.Jugada.Where(x => x.Numero_Jugada == numero && x.Estatus == "Activo").FirstOrDefault();
-                        consulta.Estatus = "Cancelado";
-                        context.SaveChanges();
-                        mensajeOk("Ticket Cancelado");
-                        this.txtBuscar.Text = string.Empty;
-                        Limpiar();
-                        Habilitar(false);
-                        LimpiarColor(System.Drawing.Color.Orange);
-                        cancelado = true;
+                        var consulta = context.Jugada.Where(x => x.Numero_Jugada == numero && x.Estatus == "Activo").ToList();
+
+                        foreach (var item in consulta)
+                        {
+                            item.Estatus = "Cancelado";
+                            context.SaveChanges();
+                            mensajeOk("Ticket Cancelado");
+                            this.txtBuscar.Text = string.Empty;
+                            Limpiar();
+                            Habilitar(false);
+                            LimpiarColor(System.Drawing.Color.Orange);
+                            cancelado = true;
+                        }
+                        
                     }
                     else
                     {
