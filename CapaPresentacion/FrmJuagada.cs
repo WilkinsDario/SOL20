@@ -13,6 +13,8 @@ namespace Presentacion
 {
     public partial class FrmJuagada : Form
     {
+        #region Variables Globales
+
         string _TipoJuagada = "";
         List<string> Loterias = new List<string>();
         int sub_numero = 0;
@@ -21,6 +23,9 @@ namespace Presentacion
         public string acceso;
         DateTime fecha = DateTime.Now;
         public bool copiarjugada = false;
+
+        #endregion
+
 
         public FrmJuagada()
         {
@@ -37,6 +42,9 @@ namespace Presentacion
             Habilitar(false);
             Habilitar_Loterias();
         }
+
+
+        #region Metodos
 
         public void Limpiar()
         {
@@ -170,37 +178,61 @@ namespace Presentacion
             btnSuperPale.Enabled = true;
         }
 
-        private void txtPago_TextChanged(object sender, EventArgs e)
+        private void EliminarJugada(int numero)
         {
-            try
+            using (CapaDatos.ModeloLocal.Modelo_Local context = new CapaDatos.ModeloLocal.Modelo_Local())
             {
-                if (Convert.ToInt32(this.txtTotalJugada.Text) != 0)
+                try
                 {
-                    double pago = Convert.ToDouble(this.txtPago.Text);
-                    double total = Convert.ToDouble(this.txtTotalJugada.Text);
-                    this.txtDevuelta.Text = (pago - total).ToString();
+                    numero = Convert.ToInt32(txtNumeroJugada.Text);
+
+
+                    string sub;
+                    decimal total = Convert.ToDecimal(txtTotalJugada.Text);
+
+                    if (lbQJugada.SelectedIndex != -1)
+                    {
+                        sub = lbQJugada.SelectedItem.ToString();
+
+                        var consulta = context.Jugada_Temporal.Where(x => x.Jugada == sub && x.Numero_Jugada == numero).FirstOrDefault();
+
+                        txtTotalJugada.Text = (total - consulta.Monto).ToString();
+
+                        context.Jugada_Temporal.Remove(consulta);
+                        context.SaveChanges();
+
+                        lbQJugada.Items.Remove(sub);
+                    }
+                    if (lbPJugada.SelectedIndex != -1)
+                    {
+                        sub = lbPJugada.SelectedItem.ToString();
+
+                        var consulta = context.Jugada_Temporal.Where(x => x.Jugada == sub && x.Numero_Jugada == numero).FirstOrDefault();
+
+                        txtTotalJugada.Text = (total - consulta.Monto).ToString();
+
+                        context.Jugada_Temporal.Remove(consulta);
+                        context.SaveChanges();
+                        lbPJugada.Items.Remove(sub);
+                    }
+                    if (lbTJugada.SelectedIndex != -1)
+                    {
+                        sub = lbTJugada.SelectedItem.ToString();
+
+                        var consulta = context.Jugada_Temporal.Where(x => x.Jugada == sub && x.Numero_Jugada == numero).FirstOrDefault();
+
+                        txtTotalJugada.Text = (total - consulta.Monto).ToString();
+
+                        context.Jugada_Temporal.Remove(consulta);
+                        context.SaveChanges();
+                        lbTJugada.Items.Remove(sub);
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    mensajeInfo("No hay cobros para realizar");
+                    ex.Message.ToString();
                 }
             }
-            catch (Exception)
-            {
-
-            }
-        }
-
-        private void btnSalir_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
-        private void btnCancelar_Click(object sender, EventArgs e)
-        {
-            Limpiar();
-            LimpiarColor(System.Drawing.Color.Orange);
-            Habilitar(false);
         }
 
         private void mensajeOk(string mensaje)
@@ -218,346 +250,6 @@ namespace Presentacion
             MessageBox.Show(mensaje, "SOL20", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
-        private void btnAgregar_Click(object sender, EventArgs e)
-        {
-            int jugada = Convert.ToInt32(this.txtNumeroJugada.Text);
-            using (CapaDatos.ModeloLocal.Modelo_Local context = new CapaDatos.ModeloLocal.Modelo_Local())
-            {
-                CapaDatos.ModeloLocal.Jugada_Temporal _temporal_Jugada = new CapaDatos.ModeloLocal.Jugada_Temporal();
-                var limite = context.Limite.FirstOrDefault();
-                string entrelineaQ = "                  ";
-                string entrelineaP = "          ";
-                string entrelineaT = "     ";
-                try
-                {
-                    if (_TipoJuagada == "Quiniela")
-                    {
-                        if (Validar() == true && txtQuiniela.Text != string.Empty && txtMonto.Text != string.Empty && Convert.ToInt32(txtMonto.Text) <= limite.Quiniela)
-                        {
-                            foreach (var item in Loterias)
-                            {
-                                int quiniela = Convert.ToInt32(txtQuiniela.Text);
-                                if (quiniela >= 0 && quiniela < 100)
-                                {
-                                    _temporal_Jugada.Numero_Jugada = jugada;
-                                    _temporal_Jugada.Loteria = item;
-                                    _temporal_Jugada.Tipo_Jugada = _TipoJuagada;
-                                    _temporal_Jugada.Jugada = item + " " + txtQuiniela.Text + entrelineaQ + "RD$" + txtMonto.Text;
-
-                                    _temporal_Jugada.Monto = Convert.ToDecimal(txtMonto.Text);
-                                    _temporal_Jugada.Quiniela = Convert.ToInt32(txtQuiniela.Text);
-
-                                    if (Validar_Monto(txtQuiniela.Text, _TipoJuagada))
-                                    {
-                                        lbQJugada.Items.Add(item + " " + txtQuiniela.Text + entrelineaQ + "RD$" + txtMonto.Text);
-
-
-                                        double monto = Convert.ToDouble(txtMonto.Text);
-                                        double total = Convert.ToDouble(txtTotalJugada.Text);
-
-                                        txtTotalJugada.Text = (monto + total).ToString();
-
-
-                                        context.Jugada_Temporal.Add(_temporal_Jugada);
-                                        context.SaveChanges();
-
-                                        int cantidad = this.lbQJugada.Items.Count;
-                                        this.lbQJugada.SelectedIndex = cantidad - 1;
-
-                                        this.lbQJugada.ClearSelected();
-
-                                    }
-                                }
-                                else
-                                {
-                                    mensajeError("Revise la Jugada");
-                                }
-                            }
-                            txtQuiniela.Text = string.Empty;
-                            txtMonto.Text = string.Empty;
-                        }
-                    }
-                    else if (_TipoJuagada == "Pale")
-                    {
-                        if (Validar() == true && txtQuiniela.Text != string.Empty && txtMonto.Text != string.Empty && txtPale.Text != string.Empty && Convert.ToInt32(txtMonto.Text) <= limite.Pale && btnSuperPale.BackColor == System.Drawing.Color.Orange)
-                        {
-
-
-                            int quiniela = Convert.ToInt32(txtQuiniela.Text);
-                            int pale = Convert.ToInt32(txtPale.Text);
-
-                            if (txtQuiniela.Text != txtPale.Text && quiniela >= 0 && quiniela < 100 && pale >= 0 && pale < 100)
-                            {
-                                foreach (var item in Loterias)
-                                {
-                                    _temporal_Jugada.Loteria = item;
-                                    _temporal_Jugada.Tipo_Jugada = _TipoJuagada;
-                                    _temporal_Jugada.Monto = Convert.ToDecimal(txtMonto.Text);
-                                    _temporal_Jugada.Numero_Jugada = jugada;
-                                    _temporal_Jugada.Jugada = item + " " + txtQuiniela.Text + " - " + txtPale.Text + entrelineaP + "RD$" + txtMonto.Text;
-                                    _temporal_Jugada.Quiniela = Convert.ToInt32(txtQuiniela.Text);
-                                    _temporal_Jugada.Pale = Convert.ToInt32(txtPale.Text);
-
-                                    if (Validar_Monto(txtQuiniela.Text + " - " + txtPale.Text, _TipoJuagada))
-                                    {
-
-
-                                        context.Jugada_Temporal.Add(_temporal_Jugada);
-                                        context.SaveChanges();
-
-                                        lbPJugada.Items.Add(item + " " + txtQuiniela.Text + " - " + txtPale.Text + entrelineaP + "RD$" + txtMonto.Text);
-
-
-                                        double monto = Convert.ToDouble(txtMonto.Text);
-                                        double total = Convert.ToDouble(txtTotalJugada.Text);
-
-                                        txtTotalJugada.Text = (monto + total).ToString();
-
-                                        int cantidad = this.lbPJugada.Items.Count;
-                                        this.lbPJugada.SelectedIndex = cantidad - 1;
-
-                                        this.lbPJugada.ClearSelected();
-                                    }
-
-                                }
-                            }
-                            else
-                            {
-                                mensajeError("Revise la jugada");
-                            }
-                            txtQuiniela.Text = string.Empty;
-                            txtPale.Text = string.Empty;
-                            txtMonto.Text = string.Empty;
-                        }
-                    }
-                    else if (_TipoJuagada == "Tripleta")
-                    {
-                        if (Validar() == true && _TipoJuagada == "Tripleta" && txtMonto.Text != string.Empty && txtQuiniela.Text != string.Empty && txtPale.Text != string.Empty && txtTripleta.Text != string.Empty && Convert.ToInt32(txtMonto.Text) <= limite.Tripleta)
-                        {
-                            if (txtQuiniela.Text != txtPale.Text && txtQuiniela.Text != txtTripleta.Text && txtPale.Text != txtTripleta.Text && txtTripleta.Text != string.Empty)
-                            {
-                                int quiniela = Convert.ToInt32(txtQuiniela.Text);
-                                int pale = Convert.ToInt32(txtPale.Text);
-                                int tripleta = Convert.ToInt32(txtTripleta.Text);
-                                if (quiniela >= 0 && quiniela < 100 && pale >= 0 && pale < 100 && tripleta >= 0 && tripleta < 100)
-                                {
-                                    if (Loterias.Count > 0)
-                                    {
-
-                                        foreach (var item in Loterias)
-                                        {
-                                            _temporal_Jugada.Loteria = item;
-                                            _temporal_Jugada.Tipo_Jugada = _TipoJuagada;
-                                            _temporal_Jugada.Monto = Convert.ToDecimal(txtMonto.Text);
-                                            _temporal_Jugada.Numero_Jugada = jugada;
-                                            _temporal_Jugada.Jugada = item + " " + txtQuiniela.Text + " - " + txtPale.Text + " - " + txtTripleta.Text + entrelineaT + "RD$" + txtMonto.Text;
-                                            _temporal_Jugada.Quiniela = Convert.ToInt32(txtQuiniela.Text);
-                                            _temporal_Jugada.Pale = Convert.ToInt32(txtPale.Text);
-                                            _temporal_Jugada.Tripleta = Convert.ToInt32(txtTripleta.Text);
-
-                                            if (Validar_Monto(txtQuiniela.Text + " - " + txtPale.Text + " - " + txtTripleta.Text, _TipoJuagada))
-                                            {
-                                                context.Jugada_Temporal.Add(_temporal_Jugada);
-                                                context.SaveChanges();
-
-                                                lbTJugada.Items.Add(item + " " + txtQuiniela.Text + " - " + txtPale.Text + " - " + txtTripleta.Text + entrelineaT + "RD$" + txtMonto.Text);
-
-
-                                                double monto = Convert.ToDouble(txtMonto.Text);
-                                                double total = Convert.ToDouble(txtTotalJugada.Text);
-
-                                                txtTotalJugada.Text = (monto + total).ToString();
-
-                                                int cantidad = this.lbTJugada.Items.Count;
-                                                this.lbTJugada.SelectedIndex = cantidad - 1;
-
-                                                this.lbTJugada.ClearSelected();
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
-                                        mensajeError("Debe seleccionar una Loteria");
-                                    }
-                                }
-                                else
-                                {
-                                    mensajeError("Revise la Jugada");
-                                }
-                                txtQuiniela.Text = string.Empty;
-                                txtPale.Text = string.Empty;
-                                txtMonto.Text = string.Empty;
-                                txtTripleta.Text = string.Empty;
-                            }
-                        }
-                    }
-
-                    else if (_TipoJuagada == "Super") //Super palé
-                    {
-                        if (Validar() == true && txtMonto.Text != string.Empty && txtQuiniela.Text != string.Empty && txtPale.Text != string.Empty && Convert.ToInt32(txtMonto.Text) <= limite.Super_Pale)
-                        {
-                            if (Loterias.Count == 2)
-                            {
-                                string l1 = Loterias[0];
-                                string l2 = Loterias[1];
-                                var t1 = context.Horarios.Where(x => x.Loteria == l1).FirstOrDefault();
-                                var t2 = context.Horarios.Where(x => x.Loteria == l2).FirstOrDefault();
-
-                                if (t1.Tanda == t2.Tanda)
-                                {
-                                    int quiniela = Convert.ToInt32(txtQuiniela.Text);
-                                    int pale = Convert.ToInt32(txtPale.Text);
-
-                                    if (txtQuiniela.Text != txtPale.Text && quiniela > 0 && quiniela < 100 && pale > 0 && pale < 100)
-                                    {
-                                        _temporal_Jugada.Loteria = l1 + "" + l2;
-                                        _temporal_Jugada.Tipo_Jugada = _TipoJuagada;
-                                        _temporal_Jugada.Monto = Convert.ToDecimal(txtMonto.Text);
-                                        _temporal_Jugada.Numero_Jugada = jugada;
-                                        _temporal_Jugada.Jugada = l1 + " " + l2 + "      " + txtQuiniela.Text + " - " + txtPale.Text + entrelineaP + "RD$" + txtMonto.Text;
-                                        _temporal_Jugada.Quiniela = Convert.ToInt32(txtQuiniela.Text);
-                                        _temporal_Jugada.Pale = Convert.ToInt32(txtPale.Text);
-
-                                        if (Validar_Monto(txtQuiniela.Text + " - " + txtPale.Text, _TipoJuagada))
-                                        {
-                                            context.Jugada_Temporal.Add(_temporal_Jugada);
-                                            context.SaveChanges();
-
-                                            lbPJugada.Items.Add(l1 + " " + l2 + "      " + txtQuiniela.Text + " - " + txtPale.Text + entrelineaP + "RD$" + txtMonto.Text);
-
-                                            double monto = Convert.ToDouble(txtMonto.Text);
-                                            double total = Convert.ToDouble(txtTotalJugada.Text);
-
-                                            txtTotalJugada.Text = (monto + total).ToString();
-                                            txtQuiniela.Text = string.Empty;
-                                            txtPale.Text = string.Empty;
-                                            txtMonto.Text = string.Empty;
-
-                                            int cantidad = this.lbPJugada.Items.Count;
-                                            this.lbPJugada.SelectedIndex = cantidad - 1;
-
-                                            this.lbPJugada.ClearSelected();
-                                        }
-                                    }
-                                    else
-                                    {
-                                        mensajeError("Revise la jugada");
-                                    }
-                                }
-                                else
-                                {
-                                    mensajeError("Horario incompatible");
-                                }
-                            }
-                            else
-                            {
-                                mensajeError("Jugada no válida");
-                            }
-                        }
-                    }
-                    txtQuiniela.Text = string.Empty;
-                    txtPale.Text = string.Empty;
-                    txtTripleta.Text = string.Empty;
-                }
-                catch (Exception ex)
-                {
-
-                }
-            }
-        }
-
-
-        private void btnQuinielaA_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (Loterias.Count > 0)
-                {
-                    txtQuiniela.Enabled = true;
-                    txtPale.Enabled = false;
-                    txtPale.Text = string.Empty;
-                    txtTripleta.Enabled = false;
-                    txtTripleta.Text = string.Empty;
-                    txtMonto.Enabled = true;
-                    this._TipoJuagada = "Quiniela";
-
-                    txtQuiniela.Text = new Random().Next(1, 99).ToString();
-                }
-                else
-                {
-                    mensajeError("Seleccione una lotería");
-                }
-            }
-            catch (Exception)
-            {
-
-            }
-        }
-
-        private void btnPaleA_Click(object sender, EventArgs e)
-        {
-            if (Loterias.Count > 0)
-            {
-                txtQuiniela.Enabled = true;
-                txtPale.Enabled = true;
-                txtTripleta.Enabled = false;
-                txtMonto.Enabled = true;
-
-                bool igual = true;
-                txtQuiniela.Text = new Random().Next(1, 99).ToString();
-                while (igual)
-                {
-                    txtPale.Text = new Random().Next(1, 99).ToString();
-                    if (txtPale.Text != txtQuiniela.Text)
-                    {
-                        igual = false;
-                    }
-                }
-                this._TipoJuagada = "Pale";
-            }
-            else
-            {
-                mensajeError("Seleccione una Lotería");
-            }
-        }
-
-        private void btnTripletaA_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (Loterias.Count > 0)
-                {
-                    txtQuiniela.Enabled = true;
-                    txtPale.Enabled = true;
-                    txtTripleta.Enabled = true;
-                    txtMonto.Enabled = true;
-
-                    bool igual = true;
-                    txtQuiniela.Text = new Random().Next(1, 99).ToString();
-                    while (igual)
-                    {
-                        txtPale.Text = new Random().Next(1, 99).ToString();
-                        if (txtPale.Text != txtQuiniela.Text)
-                        {
-                            while (igual)
-                            {
-                                txtTripleta.Text = new Random().Next(1, 99).ToString();
-                                if (txtTripleta.Text != txtPale.Text && txtTripleta.Text != txtQuiniela.Text)
-                                {
-                                    igual = false;
-                                }
-                            }
-                        }
-                    }
-                    this._TipoJuagada = "Tripleta";
-                }
-            }
-            catch (Exception ex)
-            {
-                ex.Message.ToString();
-            }
-        }
-
         private void Numero_Jugada()
         {
             if (this.txtNumeroJugada.Text == string.Empty)
@@ -572,15 +264,39 @@ namespace Presentacion
 
                     ano = ano.Substring(0, ano.Length).Remove(0, 2);
 
+                    int _mes = fecha.Month;
+                    string mes = "";
+
+                    int _dia = fecha.Day;
+                    string dia = "";
+
+                    if (_dia < 10)
+                    {
+                        dia = ("0" + _dia);
+                    }
+                    else
+                    {
+                        dia = _dia.ToString();
+                    }
+
+                    if (_mes < 10)
+                    {
+                        mes = ("0" + _mes);
+                    }
+                    else
+                    {
+                        mes = _mes.ToString();
+                    }
+
                     if (numero.Count != 0)
                     {
                         var mayor = numero.Max(a => a.Sub_Numero + 1);
                         this.sub_numero = Convert.ToInt32(mayor);
-                        this.txtNumeroJugada.Text = fecha.Day.ToString() + ano + mayor.ToString() + fecha.Month.ToString();
+                        this.txtNumeroJugada.Text = dia + ano + mayor.ToString() + mes;
                     }
                     else
                     {
-                        this.txtNumeroJugada.Text = fecha.Day.ToString() + ano + (1).ToString() + fecha.Month.ToString();
+                        this.txtNumeroJugada.Text = dia + ano + (1).ToString() + mes;
                         sub_numero = 1;
                     }
                 }
@@ -613,319 +329,6 @@ namespace Presentacion
                 }
             }
             return Convert.ToInt32(numerojugada);
-        }
-
-        private void btnGanamas_Click(object sender, EventArgs e)
-        {
-            Jugar();
-
-            if (btnGanamas.BackColor == System.Drawing.Color.Orange)
-            {
-                Loterias.Add("GM");
-                this.btnGanamas.BackColor = System.Drawing.Color.Green;
-
-            }
-            else if (btnGanamas.BackColor == System.Drawing.Color.Green)
-            {
-                this.btnGanamas.BackColor = System.Drawing.Color.Orange;
-                Loterias.Remove("GM");
-            }
-        }
-
-        private void btnReal_Click(object sender, EventArgs e)
-        {
-            using (CapaDatos.Modelo.ModelDB context = new CapaDatos.Modelo.ModelDB())
-            {
-                Jugar();
-
-                if (btnReal.BackColor == System.Drawing.Color.Green)
-                {
-                    Loterias.Remove("RL");
-                    this.btnReal.BackColor = System.Drawing.Color.Orange;
-                }
-                else if (btnReal.BackColor == System.Drawing.Color.Orange)
-                {
-                    Loterias.Add("RL");
-                    this.btnReal.BackColor = System.Drawing.Color.Green;
-                }
-            }
-        }
-
-        private void btnQuinielaPale_Click(object sender, EventArgs e)
-        {
-            using (CapaDatos.Modelo.ModelDB context = new CapaDatos.Modelo.ModelDB())
-            {
-                Jugar();
-
-                if (btnQuinielaPale.BackColor == System.Drawing.Color.Green)
-                {
-                    this.btnQuinielaPale.BackColor = System.Drawing.Color.Orange;
-                    Loterias.Remove("QP");
-                }
-                else if (btnQuinielaPale.BackColor == System.Drawing.Color.Orange)
-                {
-                    this.btnQuinielaPale.BackColor = System.Drawing.Color.Green;
-                    Loterias.Add("QP");
-                }
-            }
-        }
-
-        private void btnNacional_Click(object sender, EventArgs e)
-        {
-            Jugar();
-
-            if (btnNacional.BackColor == System.Drawing.Color.Green)
-            {
-                this.btnNacional.BackColor = System.Drawing.Color.Orange;
-                Loterias.Add("NA");
-            }
-            else if (btnNacional.BackColor == System.Drawing.Color.Orange)
-            {
-                this.btnNacional.BackColor = System.Drawing.Color.Green;
-                Loterias.Add("NA");
-            }
-        }
-
-        private void btnLoteka_Click(object sender, EventArgs e)
-        {
-            Jugar();
-
-            if (btnLoteka.BackColor == System.Drawing.Color.Green)
-            {
-                this.btnLoteka.BackColor = System.Drawing.Color.Orange;
-                Loterias.Add("LK");
-            }
-            else if (btnLoteka.BackColor == System.Drawing.Color.Orange)
-            {
-                this.btnLoteka.BackColor = System.Drawing.Color.Green;
-                Loterias.Add("LK");
-            }
-        }
-
-        private void btnLaPrimera_Click(object sender, EventArgs e)
-        {
-            Jugar();
-
-            if (btnLaPrimera.BackColor == System.Drawing.Color.Green)
-            {
-                this.btnLaPrimera.BackColor = System.Drawing.Color.Orange;
-                Loterias.Remove("LP");
-            }
-            else if (btnLaPrimera.BackColor == System.Drawing.Color.Orange)
-            {
-                this.btnLaPrimera.BackColor = System.Drawing.Color.Green;
-                Loterias.Add("LP");
-            }
-        }
-
-        private void btnNewYork_Click(object sender, EventArgs e)
-        {
-            Jugar();
-
-            if (btnNewYork.BackColor == System.Drawing.Color.Green)
-            {
-                this.btnNewYork.BackColor = System.Drawing.Color.Orange;
-                Loterias.Remove("NT");
-            }
-            else if (btnNewYork.BackColor == System.Drawing.Color.Orange)
-            {
-                this.btnNewYork.BackColor = System.Drawing.Color.Green;
-                Loterias.Add("NT");
-
-            }
-        }
-
-        private void btnFlorida_Click(object sender, EventArgs e)
-        {
-            Jugar();
-
-            if (btnFlorida.BackColor == System.Drawing.Color.Green)
-            {
-                this.btnFlorida.BackColor = System.Drawing.Color.Orange;
-                Loterias.Remove("FT");
-            }
-            else if (btnFlorida.BackColor == System.Drawing.Color.Orange)
-            {
-                this.btnFlorida.BackColor = System.Drawing.Color.Green;
-                Loterias.Add("FT");
-            }
-        }
-
-        private void btnSuperPale_Click(object sender, EventArgs e)
-        {
-            this.txtQuiniela.Focus();
-            if (btnSuperPale.BackColor == System.Drawing.Color.Green)
-            {
-                _TipoJuagada = "";
-                this.btnSuperPale.BackColor = System.Drawing.Color.Orange;
-
-                this.txtQuiniela.Enabled = false;
-                this.txtPale.Enabled = false;
-                this.txtTripleta.Enabled = false;
-                txtMonto.Enabled = false;
-            }
-            else if (btnSuperPale.BackColor == System.Drawing.Color.Orange)
-            {
-                this.btnSuperPale.BackColor = System.Drawing.Color.Green;
-                _TipoJuagada = "Super";
-                this.txtQuiniela.Enabled = true;
-                this.txtPale.Enabled = true;
-                this.txtTripleta.Enabled = false;
-                txtMonto.Enabled = true;
-                this.btnQuiniela.BackColor = System.Drawing.Color.Orange;
-                this.btnPale.BackColor = System.Drawing.Color.Orange;
-                this.btnTripleta.BackColor = System.Drawing.Color.Orange;
-            }
-        }
-
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-            lblHora.Text = DateTime.Now.ToString();
-            string fecha = Convert.ToString(DateTime.Now.Minute);
-            if (fecha.Remove(0, 1) == "5" || fecha.Remove(0, 1) == "0")
-            {
-                Habilitar_Loterias();
-            }
-        }
-
-        private void btnQuiniela_Click(object sender, EventArgs e)
-        {
-            this.txtQuiniela.Focus();
-            txtMonto.Enabled = true;
-            this._TipoJuagada = "Quiniela";
-
-            if (btnQuiniela.BackColor == System.Drawing.Color.Orange)
-            {
-                btnQuiniela.BackColor = System.Drawing.Color.Green;
-                btnPale.BackColor = System.Drawing.Color.Orange;
-                btnTripleta.BackColor = System.Drawing.Color.Orange;
-
-                this.txtQuiniela.Enabled = true;
-                this.txtPale.Enabled = false;
-                this.txtTripleta.Enabled = false;
-                this.txtPale.Text = string.Empty;
-                this.txtTripleta.Text = string.Empty;
-                this.btnSuperPale.BackColor = System.Drawing.Color.Orange;
-            }
-            else
-            {
-                btnPale.BackColor = System.Drawing.Color.Orange;
-                btnTripleta.BackColor = System.Drawing.Color.Orange;
-                this.txtPale.Enabled = false;
-                this.txtTripleta.Enabled = false;
-            }
-        }
-
-        private void btnPale_Click(object sender, EventArgs e)
-        {
-            txtMonto.Enabled = true;
-            this._TipoJuagada = "Pale";
-            this.txtQuiniela.Focus();
-            if (btnPale.BackColor == System.Drawing.Color.Orange)
-            {
-                btnQuiniela.BackColor = System.Drawing.Color.Orange;
-                btnPale.BackColor = System.Drawing.Color.Green;
-                btnTripleta.BackColor = System.Drawing.Color.Orange;
-
-                this.txtQuiniela.Enabled = true;
-                this.txtPale.Enabled = true;
-                this.txtTripleta.Enabled = false;
-                this.txtTripleta.Text = string.Empty;
-                this.btnSuperPale.BackColor = System.Drawing.Color.Orange;
-            }
-            else
-            {
-                btnTripleta.BackColor = System.Drawing.Color.Orange;
-                this.txtTripleta.Enabled = false;
-            }
-        }
-
-        private void btnTripleta_Click(object sender, EventArgs e)
-        {
-            txtMonto.Enabled = true;
-            this._TipoJuagada = "Tripleta";
-            this.txtQuiniela.Focus();
-            if (btnTripleta.BackColor == System.Drawing.Color.Orange)
-            {
-                btnQuiniela.BackColor = System.Drawing.Color.Orange;
-                btnPale.BackColor = System.Drawing.Color.Orange;
-                btnTripleta.BackColor = System.Drawing.Color.Green;
-
-                this.txtQuiniela.Enabled = true;
-                this.txtPale.Enabled = true;
-                this.txtTripleta.Enabled = true;
-                this.btnSuperPale.BackColor = System.Drawing.Color.Orange;
-            }
-        }
-
-        private void btnCobrar_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                CapaDatos.ModeloLocal.Jugada _jugada = new CapaDatos.ModeloLocal.Jugada();
-
-                bool rpt = false;
-                using (CapaDatos.ModeloLocal.Modelo_Local context = new CapaDatos.ModeloLocal.Modelo_Local())
-                {
-                    var ticket = Crear_Ticket();
-                    _jugada.Fecha = DateTime.Now;
-                    _jugada.Sub_Numero = this.sub_numero;
-                    _jugada.Total = Convert.ToDecimal(this.txtTotalJugada.Text);
-                    _jugada.Numero_Jugada = Convert.ToInt32(this.txtNumeroJugada.Text);
-                    _jugada.Numero_Ticket = ticket;
-                    _jugada.Estatus = "Activo";
-                    _jugada.Banca = this.banca;
-                    _jugada.Usuario = this.usuario;
-
-
-                    context.Jugada.Add(_jugada);
-
-                    var temporal = context.Jugada_Temporal.ToList();
-
-                    foreach (var item in temporal)
-                    {
-                        if (item.Numero_Jugada == Convert.ToInt32(this.txtNumeroJugada.Text))
-                        {
-                            _jugada.Loteria = item.Loteria;
-                            _jugada.Tipo_Jugada = item.Tipo_Jugada;
-                            _jugada.Jugada1 = item.Jugada;
-                            _jugada.Monto = item.Monto;
-                            _jugada.Quiniela = item.Quiniela;
-                            _jugada.Pale = item.Pale;
-                            _jugada.Tripleta = item.Tripleta;
-
-                            context.Jugada.Add(_jugada);
-                            context.SaveChanges();
-                        }
-                    }
-
-                    rpt = true;
-
-                    if (rpt)
-                    {
-                        printTicket = new PrintDocument();
-                        PrinterSettings ps = new PrinterSettings();
-                        printTicket.PrinterSettings = ps;
-                        printTicket.PrintPage += Imprimir;
-                        printTicket.Print();
-
-                        Borrar_Temporal();
-                        Limpiar();
-                    }
-                    else
-                    {
-                        mensajeError("Jugada Incompleta");
-                    }
-                    this.sub_numero = 0;
-                }
-
-            }
-            catch (Exception)
-            {
-
-            }
-            LimpiarColor(System.Drawing.Color.Orange);
-            Habilitar_Loterias();
         }
 
         public bool Validar()
@@ -997,75 +400,6 @@ namespace Presentacion
             }
         }
 
-        private void txtQuiniela_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && txtQuiniela.MaxLength == 3)
-            {
-                int numero = Convert.ToInt32(txtQuiniela.Text);
-                if (numero > 0 && numero <= 100 && this.txtQuiniela.MaxLength == 3)
-                {
-                    e.Handled = true;
-                }
-
-            }
-        }
-
-        private void txtPale_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
-            {
-                int numero = Convert.ToInt32(txtPale.Text);
-                if (numero > 0 && numero <= 100 && this.txtPale.MaxLength == 3)
-                {
-                    e.Handled = true;
-                }
-            }
-        }
-
-        private void txtTripleta_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
-            {
-                int numero = Convert.ToInt32(txtTripleta.Text);
-                if (numero > 0 && numero <= 100 && this.txtTripleta.MaxLength == 3)
-                {
-                    e.Handled = true;
-                }
-            }
-        }
-
-        private void txtMonto_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
-            {
-                e.Handled = true;
-            }
-        }
-
-        private void Buscar_Jugada()
-        {
-            int max = 1;
-            using (CapaDatos.ModeloLocal.Modelo_Local context = new CapaDatos.ModeloLocal.Modelo_Local())
-            {
-
-                var consulta = context.Jugada.Where(x => x.Fecha == DbFunctions.TruncateTime(fecha)).ToList();
-
-                if (consulta != null)
-                {
-                    foreach (var item in consulta)
-                    {
-                        if (item.Numero_Jugada > max)
-                        {
-                            max = Convert.ToInt32(item.Numero_Jugada);
-                        }
-                    }
-                    max = max + 1;
-                }
-
-                this.txtNumeroJugada.Text = max.ToString();
-            }
-        }
-
         public string Crear_Ticket()
         {
             bool valido = false;
@@ -1126,325 +460,6 @@ namespace Presentacion
             {
 
                 throw;
-            }
-        }
-
-        private void btnEliminar_Click(object sender, EventArgs e)
-        {
-            using (CapaDatos.ModeloLocal.Modelo_Local context = new CapaDatos.ModeloLocal.Modelo_Local())
-            {
-                try
-                {
-                    int numero = Convert.ToInt32(txtNumeroJugada.Text);
-
-
-                    string sub;
-                    decimal total = Convert.ToDecimal(txtTotalJugada.Text);
-
-                    if (lbQJugada.SelectedIndex != -1)
-                    {
-                        sub = lbQJugada.SelectedItem.ToString();
-
-                        var consulta = context.Jugada_Temporal.Where(x => x.Jugada == sub && x.Numero_Jugada == numero).FirstOrDefault();
-
-                        txtTotalJugada.Text = (total - consulta.Monto).ToString();
-
-                        context.Jugada_Temporal.Remove(consulta);
-                        context.SaveChanges();
-
-                        lbQJugada.Items.Remove(sub);
-                    }
-                    if (lbPJugada.SelectedIndex != -1)
-                    {
-                        sub = lbPJugada.SelectedItem.ToString();
-
-                        var consulta = context.Jugada_Temporal.Where(x => x.Jugada == sub && x.Numero_Jugada == numero).FirstOrDefault();
-
-                        txtTotalJugada.Text = (total - consulta.Monto).ToString();
-
-                        context.Jugada_Temporal.Remove(consulta);
-                        context.SaveChanges();
-                        lbPJugada.Items.Remove(sub);
-                    }
-                    if (lbTJugada.SelectedIndex != -1)
-                    {
-                        sub = lbTJugada.SelectedItem.ToString();
-
-                        var consulta = context.Jugada_Temporal.Where(x => x.Jugada == sub && x.Numero_Jugada == numero).FirstOrDefault();
-
-                        txtTotalJugada.Text = (total - consulta.Monto).ToString();
-
-                        context.Jugada_Temporal.Remove(consulta);
-                        context.SaveChanges();
-                        lbTJugada.Items.Remove(sub);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    ex.Message.ToString();
-                }
-            }
-        }
-
-        private void txtNumeroTicketCanc_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
-            {
-                e.Handled = true;
-            }
-        }
-
-        private void btnCancelarTicket_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                bool cancelado = false;
-                using (CapaDatos.ModeloLocal.Modelo_Local context = new CapaDatos.ModeloLocal.Modelo_Local())
-                {
-                    CapaDatos.ModeloLocal.Jugada jugada = new CapaDatos.ModeloLocal.Jugada();
-                    if (txtBuscar.Text != string.Empty)
-                    {
-                        int numero = Convert.ToInt32(txtBuscar.Text);
-
-                        var consulta = context.Jugada.Where(x => x.Numero_Jugada == numero && x.Estatus == "Activo").ToList();
-
-                        foreach (var item in consulta)
-                        {
-                            item.Estatus = "Cancelado";
-                            context.SaveChanges();
-                            mensajeOk("Ticket Cancelado");
-                            this.txtBuscar.Text = string.Empty;
-                            Limpiar();
-                            Habilitar(false);
-                            LimpiarColor(System.Drawing.Color.Orange);
-                            cancelado = true;
-                        }
-                        
-                    }
-                    else
-                    {
-                        mensajeError("Debe digitar un número de jugada");
-                    }
-                    if (!cancelado)
-                    {
-                        mensajeError("Revise el número de jugada");
-                    }
-                }
-                this.txtNumeroJugada.Text = string.Empty;
-            }
-            catch (Exception)
-            {
-
-            }
-            Habilitar_Loterias();
-        }
-
-        private void btnImprimir_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                using (CapaDatos.ModeloLocal.Modelo_Local context = new CapaDatos.ModeloLocal.Modelo_Local())
-                {
-                    #region
-                    if (this.txtBuscar.Text != string.Empty)
-                    {
-                        int numero = Convert.ToInt32(txtBuscar.Text);
-
-                        var consulta = context.Jugada.Where(x => x.Numero_Jugada == numero && x.Fecha.Value.Day == fecha.Day && x.Fecha.Value.Month == fecha.Month).FirstOrDefault();
-                        if (numero > 0 && consulta != null)
-                        {
-                            printTicket = new PrintDocument();
-                            PrinterSettings ps = new PrinterSettings();
-                            printTicket.PrinterSettings = ps;
-                            printTicket.PrintPage += ReImprimir;
-                            printTicket.Print();
-                        }
-                        else
-                        {
-                            mensajeError("Revise el número de Jugada");
-                        }
-
-
-                    }
-                    #endregion
-                }
-                this.txtNumeroJugada.Text = string.Empty;
-                this.txtBuscar.Text = string.Empty;
-            }
-            catch (Exception)
-            {
-
-            }
-        }
-
-        private void Imprimir(object sender, PrintPageEventArgs e)
-        {
-            using (CapaDatos.ModeloLocal.Modelo_Local context = new CapaDatos.ModeloLocal.Modelo_Local())
-            {
-                int numero_jugada = Convert.ToInt32(this.txtNumeroJugada.Text);
-
-                var quiniela = context.Jugada.Where(x => x.Tipo_Jugada == "Quiniela" && x.Numero_Jugada == numero_jugada && x.Fecha.Value.Day == fecha.Day && x.Fecha.Value.Month == fecha.Month && x.Fecha.Value.Year == fecha.Year).ToList();
-                var pale = context.Jugada.Where(x => x.Tipo_Jugada == "Pale" && x.Numero_Jugada == numero_jugada && x.Fecha.Value.Day == fecha.Day && x.Fecha.Value.Month == fecha.Month && x.Fecha.Value.Year == fecha.Year).ToList();
-                var tripleta = context.Jugada.Where(x => x.Tipo_Jugada == "Tripleta" && x.Numero_Jugada == numero_jugada && x.Fecha.Value.Day == fecha.Day && x.Fecha.Value.Month == fecha.Month && x.Fecha.Value.Year == fecha.Year).ToList();
-                var super = context.Jugada.Where(x => x.Tipo_Jugada == "Super" && x.Numero_Jugada == numero_jugada && x.Fecha.Value.Day == fecha.Day && x.Fecha.Value.Month == fecha.Month && x.Fecha.Value.Year == fecha.Year).ToList();
-
-                var ticket = context.Jugada.Where(x => x.Numero_Jugada == numero_jugada && x.Fecha.Value.Day == fecha.Day && x.Fecha.Value.Month == fecha.Month && x.Fecha.Value.Year == fecha.Year).FirstOrDefault();
-
-                Font cabeza = new Font("Arial", 12, FontStyle.Regular, GraphicsUnit.Point);
-                Font fuente = new Font("Arial", 12, FontStyle.Regular, GraphicsUnit.Point);
-                Font eslogan1 = new Font("Arial", 9, FontStyle.Regular, GraphicsUnit.Point);
-
-                int anchohasta = 250;
-                int anchodesde = 0;
-                int lineado = 20;
-                int largo = 50;
-                decimal suma = 0;
-
-                e.Graphics.DrawString("Consorcio de Bancas", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
-                e.Graphics.DrawString("            SOL20", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
-                e.Graphics.DrawString("Donde Garantizamos tu Dinero", eslogan1, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
-                e.Graphics.DrawString(DateTime.Now.ToString(), fuente, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
-                e.Graphics.DrawString(ticket.Numero_Ticket, cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
-                e.Graphics.DrawString("NO. Jugada: " + this.txtNumeroJugada.Text, cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
-
-                if (quiniela.Count != 0)
-                {
-                    e.Graphics.DrawString("----------Quiniela--------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
-
-                    foreach (var item in quiniela)
-                    {
-                        e.Graphics.DrawString(item.Jugada1, cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
-                        suma = suma + Convert.ToDecimal(item.Monto);
-                    }
-                }
-                if (pale.Count != 0)
-                {
-                    e.Graphics.DrawString("----------Palé-------------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
-
-                    foreach (var item in pale)
-                    {
-                        e.Graphics.DrawString(item.Jugada1, cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
-                        suma = suma + Convert.ToDecimal(item.Monto);
-                    }
-                }
-                if (tripleta.Count != 0)
-                {
-                    e.Graphics.DrawString("----------Tripleta---------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
-
-                    foreach (var item in tripleta)
-                    {
-                        e.Graphics.DrawString(item.Jugada1, cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
-                        suma = suma + Convert.ToDecimal(item.Monto);
-                    }
-                }
-                if (super.Count != 0)
-                {
-                    e.Graphics.DrawString("----------Super-----------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
-
-                    foreach (var item in super)
-                    {
-                        e.Graphics.DrawString(item.Jugada1, cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
-                        suma = suma + Convert.ToDecimal(item.Monto);
-                    }
-                }
-
-                e.Graphics.DrawString("-----------------------------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
-                e.Graphics.DrawString("Total RD$: " + suma.ToString(), cabeza, Brushes.Black, new RectangleF(0, lineado += 20, anchohasta, largo));
-                e.Graphics.DrawString(" REVISE SU JUGADA", cabeza, Brushes.Black, new RectangleF(0, lineado += 20, anchohasta, largo));
-            }
-        }
-
-        private void ReImprimir(object sender, PrintPageEventArgs e)
-        {
-            using (CapaDatos.ModeloLocal.Modelo_Local context = new CapaDatos.ModeloLocal.Modelo_Local())
-            {
-                if (this.txtBuscar.Text != string.Empty)
-                {
-                    int numero_jugada = Convert.ToInt32(this.txtBuscar.Text);
-
-                    var consulta = context.Jugada.Where(x => x.Numero_Jugada == numero_jugada).FirstOrDefault();
-
-                    if (consulta != null)
-                    {
-                        var quiniela = context.Jugada.Where(x => x.Tipo_Jugada == "Quiniela" && x.Numero_Jugada == numero_jugada && x.Fecha.Value.Day == fecha.Day && x.Fecha.Value.Month == fecha.Month && x.Fecha.Value.Year == fecha.Year).ToList();
-                        var pale = context.Jugada.Where(x => x.Tipo_Jugada == "Pale" && x.Numero_Jugada == numero_jugada && x.Fecha.Value.Day == fecha.Day && x.Fecha.Value.Month == fecha.Month && x.Fecha.Value.Year == fecha.Year).ToList();
-                        var tripleta = context.Jugada.Where(x => x.Tipo_Jugada == "Tripleta" && x.Numero_Jugada == numero_jugada && x.Fecha.Value.Day == fecha.Day && x.Fecha.Value.Month == fecha.Month && x.Fecha.Value.Year == fecha.Year).ToList();
-                        var super = context.Jugada.Where(x => x.Tipo_Jugada == "Super" && x.Numero_Jugada == numero_jugada && x.Fecha.Value.Day == fecha.Day && x.Fecha.Value.Month == fecha.Month && x.Fecha.Value.Year == fecha.Year).ToList();
-
-                        var ticket = context.Jugada.Where(x => x.Numero_Jugada == numero_jugada && x.Fecha.Value.Day == fecha.Day && x.Fecha.Value.Month == fecha.Month && x.Fecha.Value.Year == fecha.Year).FirstOrDefault();
-
-                        Font cabeza = new Font("Arial", 12, FontStyle.Regular, GraphicsUnit.Point);
-                        Font fuente = new Font("Arial", 12, FontStyle.Regular, GraphicsUnit.Point);
-                        Font eslogan1 = new Font("Arial", 9, FontStyle.Regular, GraphicsUnit.Point);
-
-                        int anchohasta = 250;
-                        int anchodesde = 0;
-                        int lineado = 20;
-                        int largo = 50;
-                        decimal suma = 0;
-
-                        e.Graphics.DrawString("Consorcio de Bancas", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
-                        e.Graphics.DrawString("            SOL20", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
-                        e.Graphics.DrawString("Donde Garantizamos tu Dinero", eslogan1, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
-                        e.Graphics.DrawString(DateTime.Now.ToString(), fuente, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
-                        e.Graphics.DrawString(ticket.Numero_Ticket, cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
-                        e.Graphics.DrawString("NO. Jugada: " + this.txtNumeroJugada.Text, cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
-
-                        if (quiniela.Count != 0)
-                        {
-                            e.Graphics.DrawString("----------Quiniela--------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
-
-                            foreach (var item in quiniela)
-                            {
-                                e.Graphics.DrawString(item.Jugada1, cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
-                                suma = suma + Convert.ToDecimal(item.Monto);
-                            }
-                        }
-                        if (pale.Count != 0)
-                        {
-                            e.Graphics.DrawString("----------Palé-------------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
-
-                            foreach (var item in pale)
-                            {
-                                e.Graphics.DrawString(item.Jugada1, cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
-                                suma = suma + Convert.ToDecimal(item.Monto);
-                            }
-                        }
-                        if (tripleta.Count != 0)
-                        {
-                            e.Graphics.DrawString("----------Tripleta---------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
-
-                            foreach (var item in tripleta)
-                            {
-                                e.Graphics.DrawString(item.Jugada1, cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
-                                suma = suma + Convert.ToDecimal(item.Monto);
-                            }
-                        }
-                        if (super.Count != 0)
-                        {
-                            e.Graphics.DrawString("----------Super-----------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
-
-                            foreach (var item in super)
-                            {
-                                e.Graphics.DrawString(item.Jugada1, cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
-                                suma = suma + Convert.ToDecimal(item.Monto);
-                            }
-                        }
-
-                        e.Graphics.DrawString("-----------------------------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
-                        e.Graphics.DrawString("Total RD$: " + suma.ToString(), cabeza, Brushes.Black, new RectangleF(0, lineado += 20, anchohasta, largo));
-                        e.Graphics.DrawString(" REVISE SU JUGADA", cabeza, Brushes.Black, new RectangleF(0, lineado += 20, anchohasta, largo));
-                        e.Graphics.DrawString("    *REIMPRESO*", cabeza, Brushes.Black, new RectangleF(0, lineado += 20, anchohasta, largo));
-                    }
-                    else
-                    {
-                        mensajeError("Revise el número de jugada");
-                    }
-                }
-                else
-                {
-                    mensajeError("Debe digitar un número de jugada");
-                }
             }
         }
 
@@ -2289,6 +1304,1021 @@ namespace Presentacion
             catch (Exception)
             {
 
+            }
+        }
+
+        #endregion
+
+
+        private void txtPago_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Convert.ToInt32(this.txtTotalJugada.Text) != 0)
+                {
+                    double pago = Convert.ToDouble(this.txtPago.Text);
+                    double total = Convert.ToDouble(this.txtTotalJugada.Text);
+                    this.txtDevuelta.Text = (pago - total).ToString();
+                }
+                else
+                {
+                    mensajeInfo("No hay cobros para realizar");
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+        private void btnSalir_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void btnCancelar_Click(object sender, EventArgs e)
+        {
+            Limpiar();
+            LimpiarColor(System.Drawing.Color.Orange);
+            Habilitar(false);
+        }
+
+        private void btnAgregar_Click(object sender, EventArgs e)
+        {
+            using (CapaDatos.ModeloLocal.Modelo_Local context = new CapaDatos.ModeloLocal.Modelo_Local())
+            {
+                CapaDatos.ModeloLocal.Jugada_Temporal _temporal_Jugada = new CapaDatos.ModeloLocal.Jugada_Temporal();
+                var limite = context.Limite.FirstOrDefault();
+                int jugada = Convert.ToInt32(this.txtNumeroJugada.Text);
+                decimal monto = Convert.ToDecimal(this.txtMonto.Text);
+                string entrelineaQ = "                  ";
+                string entrelineaP = "          ";
+                string entrelineaT = "     ";
+                try
+                {
+                    var consulTemp = context.Jugada_Temporal.Where(x => x.Numero_Jugada == jugada).ToList();
+                    if (_TipoJuagada == "Quiniela")
+                    {
+                        int quiniela = Convert.ToInt32(this.txtQuiniela.Text);
+                        if (consulTemp.Count != 0)
+                        {
+                            foreach (var item in consulTemp)
+                            {
+                                foreach (var lot in Loterias)
+                                {
+                                    if (item.Quiniela == quiniela && item.Loteria == lot)
+                                    {
+                                        mensajeInfo("Esta jugada ya está");
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (Validar() == true && txtQuiniela.Text != string.Empty && txtMonto.Text != string.Empty && Convert.ToInt32(txtMonto.Text) <= limite.Quiniela)
+                            {
+                                foreach (var items in Loterias)
+                                {
+                                    if (quiniela >= 0 && quiniela < 100)
+                                    {
+                                        _temporal_Jugada.Numero_Jugada = jugada;
+                                        _temporal_Jugada.Loteria = items;
+                                        _temporal_Jugada.Tipo_Jugada = _TipoJuagada;
+                                        _temporal_Jugada.Jugada = items + " " + quiniela.ToString() + entrelineaQ + "RD$" + txtMonto.Text;
+
+                                        _temporal_Jugada.Monto = monto;
+                                        _temporal_Jugada.Quiniela = quiniela;
+
+                                        if (Validar_Monto(txtQuiniela.Text, _TipoJuagada))
+                                        {
+                                            lbQJugada.Items.Add(items + " " + quiniela.ToString() + entrelineaQ + "RD$" + monto.ToString());
+
+
+                                            decimal total = Convert.ToDecimal(txtTotalJugada.Text);
+
+                                            txtTotalJugada.Text = (monto + total).ToString();
+
+
+                                            context.Jugada_Temporal.Add(_temporal_Jugada);
+                                            context.SaveChanges();
+
+                                            int cantidad = this.lbQJugada.Items.Count;
+                                            this.lbQJugada.SelectedIndex = cantidad - 1;
+
+                                            this.lbQJugada.ClearSelected();
+
+                                        }
+                                    }
+                                    else
+                                    {
+                                        mensajeError("Revise la Jugada");
+                                    }
+                                }
+                            }
+                        }
+                        this.txtMonto.Text = string.Empty;
+                        txtQuiniela.Text = string.Empty;
+                    }
+                    else if (_TipoJuagada == "Pale")
+                    {
+                        if (Validar() == true && txtQuiniela.Text != string.Empty && txtMonto.Text != string.Empty && txtPale.Text != string.Empty && Convert.ToInt32(txtMonto.Text) <= limite.Pale && btnSuperPale.BackColor == System.Drawing.Color.Orange)
+                        {
+
+
+                            int quiniela = Convert.ToInt32(txtQuiniela.Text);
+                            int pale = Convert.ToInt32(txtPale.Text);
+
+                            if (txtQuiniela.Text != txtPale.Text && quiniela >= 0 && quiniela < 100 && pale >= 0 && pale < 100)
+                            {
+                                foreach (var item in Loterias)
+                                {
+                                    _temporal_Jugada.Loteria = item;
+                                    _temporal_Jugada.Tipo_Jugada = _TipoJuagada;
+                                    _temporal_Jugada.Monto = Convert.ToDecimal(txtMonto.Text);
+                                    _temporal_Jugada.Numero_Jugada = jugada;
+                                    _temporal_Jugada.Jugada = item + " " + txtQuiniela.Text + " - " + txtPale.Text + entrelineaP + "RD$" + txtMonto.Text;
+                                    _temporal_Jugada.Quiniela = Convert.ToInt32(txtQuiniela.Text);
+                                    _temporal_Jugada.Pale = Convert.ToInt32(txtPale.Text);
+
+                                    if (Validar_Monto(txtQuiniela.Text + " - " + txtPale.Text, _TipoJuagada))
+                                    {
+
+
+                                        context.Jugada_Temporal.Add(_temporal_Jugada);
+                                        context.SaveChanges();
+
+                                        lbPJugada.Items.Add(item + " " + txtQuiniela.Text + " - " + txtPale.Text + entrelineaP + "RD$" + txtMonto.Text);
+
+
+                                        decimal total = Convert.ToDecimal(txtTotalJugada.Text);
+
+                                        txtTotalJugada.Text = (monto + total).ToString();
+
+                                        int cantidad = this.lbPJugada.Items.Count;
+                                        this.lbPJugada.SelectedIndex = cantidad - 1;
+
+                                        this.lbPJugada.ClearSelected();
+                                    }
+
+                                }
+                            }
+                            else
+                            {
+                                mensajeError("Revise la jugada");
+                            }
+                            txtQuiniela.Text = string.Empty;
+                            txtPale.Text = string.Empty;
+                            txtMonto.Text = string.Empty;
+                        }
+
+                    }
+                    else if (_TipoJuagada == "Tripleta")
+                    {
+                        if (Validar() == true && _TipoJuagada == "Tripleta" && txtMonto.Text != string.Empty && txtQuiniela.Text != string.Empty && txtPale.Text != string.Empty && txtTripleta.Text != string.Empty && Convert.ToInt32(txtMonto.Text) <= limite.Tripleta)
+                        {
+                            if (txtQuiniela.Text != txtPale.Text && txtQuiniela.Text != txtTripleta.Text && txtPale.Text != txtTripleta.Text && txtTripleta.Text != string.Empty)
+                            {
+                                int quiniela = Convert.ToInt32(txtQuiniela.Text);
+                                int pale = Convert.ToInt32(txtPale.Text);
+                                int tripleta = Convert.ToInt32(txtTripleta.Text);
+                                if (quiniela >= 0 && quiniela < 100 && pale >= 0 && pale < 100 && tripleta >= 0 && tripleta < 100)
+                                {
+                                    if (Loterias.Count > 0)
+                                    {
+
+                                        foreach (var item in Loterias)
+                                        {
+                                            _temporal_Jugada.Loteria = item;
+                                            _temporal_Jugada.Tipo_Jugada = _TipoJuagada;
+                                            _temporal_Jugada.Monto = Convert.ToDecimal(txtMonto.Text);
+                                            _temporal_Jugada.Numero_Jugada = jugada;
+                                            _temporal_Jugada.Jugada = item + " " + txtQuiniela.Text + " - " + txtPale.Text + " - " + txtTripleta.Text + entrelineaT + "RD$" + txtMonto.Text;
+                                            _temporal_Jugada.Quiniela = Convert.ToInt32(txtQuiniela.Text);
+                                            _temporal_Jugada.Pale = Convert.ToInt32(txtPale.Text);
+                                            _temporal_Jugada.Tripleta = Convert.ToInt32(txtTripleta.Text);
+
+                                            if (Validar_Monto(txtQuiniela.Text + " - " + txtPale.Text + " - " + txtTripleta.Text, _TipoJuagada))
+                                            {
+                                                context.Jugada_Temporal.Add(_temporal_Jugada);
+                                                context.SaveChanges();
+
+                                                lbTJugada.Items.Add(item + " " + txtQuiniela.Text + " - " + txtPale.Text + " - " + txtTripleta.Text + entrelineaT + "RD$" + txtMonto.Text);
+
+
+                                                decimal total = Convert.ToDecimal(txtTotalJugada.Text);
+
+                                                txtTotalJugada.Text = (monto + total).ToString();
+
+                                                int cantidad = this.lbTJugada.Items.Count;
+                                                this.lbTJugada.SelectedIndex = cantidad - 1;
+
+                                                this.lbTJugada.ClearSelected();
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        mensajeError("Debe seleccionar una Loteria");
+                                    }
+                                }
+                                else
+                                {
+                                    mensajeError("Revise la Jugada");
+                                }
+                                txtQuiniela.Text = string.Empty;
+                                txtPale.Text = string.Empty;
+                                txtMonto.Text = string.Empty;
+                                txtTripleta.Text = string.Empty;
+                            }
+                        }
+                    }
+
+                    else if (_TipoJuagada == "Super") //Super palé
+                    {
+                        if (Validar() == true && txtMonto.Text != string.Empty && txtQuiniela.Text != string.Empty && txtPale.Text != string.Empty && Convert.ToInt32(txtMonto.Text) <= limite.Super_Pale)
+                        {
+                            if (Loterias.Count == 2)
+                            {
+                                string l1 = Loterias[0];
+                                string l2 = Loterias[1];
+                                var t1 = context.Horarios.Where(x => x.Loteria == l1).FirstOrDefault();
+                                var t2 = context.Horarios.Where(x => x.Loteria == l2).FirstOrDefault();
+
+                                if (t1.Tanda == t2.Tanda)
+                                {
+                                    int quiniela = Convert.ToInt32(txtQuiniela.Text);
+                                    int pale = Convert.ToInt32(txtPale.Text);
+
+                                    if (txtQuiniela.Text != txtPale.Text && quiniela > 0 && quiniela < 100 && pale > 0 && pale < 100)
+                                    {
+                                        _temporal_Jugada.Loteria = l1 + "" + l2;
+                                        _temporal_Jugada.Tipo_Jugada = _TipoJuagada;
+                                        _temporal_Jugada.Monto = Convert.ToDecimal(txtMonto.Text);
+                                        _temporal_Jugada.Numero_Jugada = jugada;
+                                        _temporal_Jugada.Jugada = l1 + " " + l2 + "      " + txtQuiniela.Text + " - " + txtPale.Text + entrelineaP + "RD$" + txtMonto.Text;
+                                        _temporal_Jugada.Quiniela = Convert.ToInt32(txtQuiniela.Text);
+                                        _temporal_Jugada.Pale = Convert.ToInt32(txtPale.Text);
+
+                                        if (Validar_Monto(txtQuiniela.Text + " - " + txtPale.Text, _TipoJuagada))
+                                        {
+                                            context.Jugada_Temporal.Add(_temporal_Jugada);
+                                            context.SaveChanges();
+
+                                            lbPJugada.Items.Add(l1 + " " + l2 + "      " + txtQuiniela.Text + " - " + txtPale.Text + entrelineaP + "RD$" + txtMonto.Text);
+
+                                            decimal total = Convert.ToDecimal(txtTotalJugada.Text);
+
+                                            txtTotalJugada.Text = (monto + total).ToString();
+                                            txtQuiniela.Text = string.Empty;
+                                            txtPale.Text = string.Empty;
+                                            txtMonto.Text = string.Empty;
+
+                                            int cantidad = this.lbPJugada.Items.Count;
+                                            this.lbPJugada.SelectedIndex = cantidad - 1;
+
+                                            this.lbPJugada.ClearSelected();
+                                        }
+                                    }
+                                    else
+                                    {
+                                        mensajeError("Revise la jugada");
+                                    }
+                                }
+                                else
+                                {
+                                    mensajeError("Horario incompatible");
+                                }
+                            }
+                            else
+                            {
+                                mensajeError("Jugada no válida");
+                            }
+                        }
+                    }
+                    txtQuiniela.Text = string.Empty;
+                    txtPale.Text = string.Empty;
+                    txtTripleta.Text = string.Empty;
+                }
+                catch (Exception ex)
+                {
+
+                }
+            }
+        }
+
+        private void btnQuinielaA_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Loterias.Count > 0)
+                {
+                    txtQuiniela.Enabled = true;
+                    txtPale.Enabled = false;
+                    txtPale.Text = string.Empty;
+                    txtTripleta.Enabled = false;
+                    txtTripleta.Text = string.Empty;
+                    txtMonto.Enabled = true;
+                    this._TipoJuagada = "Quiniela";
+
+                    txtQuiniela.Text = new Random().Next(1, 99).ToString();
+                }
+                else
+                {
+                    mensajeError("Seleccione una lotería");
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+        private void btnPaleA_Click(object sender, EventArgs e)
+        {
+            if (Loterias.Count > 0)
+            {
+                txtQuiniela.Enabled = true;
+                txtPale.Enabled = true;
+                txtTripleta.Enabled = false;
+                txtMonto.Enabled = true;
+
+                bool igual = true;
+                txtQuiniela.Text = new Random().Next(1, 99).ToString();
+                while (igual)
+                {
+                    txtPale.Text = new Random().Next(1, 99).ToString();
+                    if (txtPale.Text != txtQuiniela.Text)
+                    {
+                        igual = false;
+                    }
+                }
+                this._TipoJuagada = "Pale";
+            }
+            else
+            {
+                mensajeError("Seleccione una Lotería");
+            }
+        }
+
+        private void btnTripletaA_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Loterias.Count > 0)
+                {
+                    txtQuiniela.Enabled = true;
+                    txtPale.Enabled = true;
+                    txtTripleta.Enabled = true;
+                    txtMonto.Enabled = true;
+
+                    bool igual = true;
+                    txtQuiniela.Text = new Random().Next(1, 99).ToString();
+                    while (igual)
+                    {
+                        txtPale.Text = new Random().Next(1, 99).ToString();
+                        if (txtPale.Text != txtQuiniela.Text)
+                        {
+                            while (igual)
+                            {
+                                txtTripleta.Text = new Random().Next(1, 99).ToString();
+                                if (txtTripleta.Text != txtPale.Text && txtTripleta.Text != txtQuiniela.Text)
+                                {
+                                    igual = false;
+                                }
+                            }
+                        }
+                    }
+                    this._TipoJuagada = "Tripleta";
+                }
+            }
+            catch (Exception ex)
+            {
+                ex.Message.ToString();
+            }
+        }
+
+        private void btnGanamas_Click(object sender, EventArgs e)
+        {
+            Jugar();
+
+            if (btnGanamas.BackColor == System.Drawing.Color.Orange)
+            {
+                Loterias.Add("GM");
+                this.btnGanamas.BackColor = System.Drawing.Color.Green;
+
+            }
+            else if (btnGanamas.BackColor == System.Drawing.Color.Green)
+            {
+                this.btnGanamas.BackColor = System.Drawing.Color.Orange;
+                Loterias.Remove("GM");
+            }
+        }
+
+        private void btnReal_Click(object sender, EventArgs e)
+        {
+            using (CapaDatos.Modelo.ModelDB context = new CapaDatos.Modelo.ModelDB())
+            {
+                Jugar();
+
+                if (btnReal.BackColor == System.Drawing.Color.Green)
+                {
+                    Loterias.Remove("RL");
+                    this.btnReal.BackColor = System.Drawing.Color.Orange;
+                }
+                else if (btnReal.BackColor == System.Drawing.Color.Orange)
+                {
+                    Loterias.Add("RL");
+                    this.btnReal.BackColor = System.Drawing.Color.Green;
+                }
+            }
+        }
+
+        private void btnQuinielaPale_Click(object sender, EventArgs e)
+        {
+            using (CapaDatos.Modelo.ModelDB context = new CapaDatos.Modelo.ModelDB())
+            {
+                Jugar();
+
+                if (btnQuinielaPale.BackColor == System.Drawing.Color.Green)
+                {
+                    this.btnQuinielaPale.BackColor = System.Drawing.Color.Orange;
+                    Loterias.Remove("QP");
+                }
+                else if (btnQuinielaPale.BackColor == System.Drawing.Color.Orange)
+                {
+                    this.btnQuinielaPale.BackColor = System.Drawing.Color.Green;
+                    Loterias.Add("QP");
+                }
+            }
+        }
+
+        private void btnNacional_Click(object sender, EventArgs e)
+        {
+            Jugar();
+
+            if (btnNacional.BackColor == System.Drawing.Color.Green)
+            {
+                this.btnNacional.BackColor = System.Drawing.Color.Orange;
+                Loterias.Add("NA");
+            }
+            else if (btnNacional.BackColor == System.Drawing.Color.Orange)
+            {
+                this.btnNacional.BackColor = System.Drawing.Color.Green;
+                Loterias.Add("NA");
+            }
+        }
+
+        private void btnLoteka_Click(object sender, EventArgs e)
+        {
+            Jugar();
+
+            if (btnLoteka.BackColor == System.Drawing.Color.Green)
+            {
+                this.btnLoteka.BackColor = System.Drawing.Color.Orange;
+                Loterias.Add("LK");
+            }
+            else if (btnLoteka.BackColor == System.Drawing.Color.Orange)
+            {
+                this.btnLoteka.BackColor = System.Drawing.Color.Green;
+                Loterias.Add("LK");
+            }
+        }
+
+        private void btnLaPrimera_Click(object sender, EventArgs e)
+        {
+            Jugar();
+
+            if (btnLaPrimera.BackColor == System.Drawing.Color.Green)
+            {
+                this.btnLaPrimera.BackColor = System.Drawing.Color.Orange;
+                Loterias.Remove("LP");
+            }
+            else if (btnLaPrimera.BackColor == System.Drawing.Color.Orange)
+            {
+                this.btnLaPrimera.BackColor = System.Drawing.Color.Green;
+                Loterias.Add("LP");
+            }
+        }
+
+        private void btnNewYork_Click(object sender, EventArgs e)
+        {
+            Jugar();
+
+            if (btnNewYork.BackColor == System.Drawing.Color.Green)
+            {
+                this.btnNewYork.BackColor = System.Drawing.Color.Orange;
+                Loterias.Remove("NT");
+            }
+            else if (btnNewYork.BackColor == System.Drawing.Color.Orange)
+            {
+                this.btnNewYork.BackColor = System.Drawing.Color.Green;
+                Loterias.Add("NT");
+
+            }
+        }
+
+        private void btnFlorida_Click(object sender, EventArgs e)
+        {
+            Jugar();
+
+            if (btnFlorida.BackColor == System.Drawing.Color.Green)
+            {
+                this.btnFlorida.BackColor = System.Drawing.Color.Orange;
+                Loterias.Remove("FT");
+            }
+            else if (btnFlorida.BackColor == System.Drawing.Color.Orange)
+            {
+                this.btnFlorida.BackColor = System.Drawing.Color.Green;
+                Loterias.Add("FT");
+            }
+        }
+
+        private void btnSuperPale_Click(object sender, EventArgs e)
+        {
+            this.txtQuiniela.Focus();
+            if (btnSuperPale.BackColor == System.Drawing.Color.Green)
+            {
+                _TipoJuagada = "";
+                this.btnSuperPale.BackColor = System.Drawing.Color.Orange;
+
+                this.txtQuiniela.Enabled = false;
+                this.txtPale.Enabled = false;
+                this.txtTripleta.Enabled = false;
+                txtMonto.Enabled = false;
+            }
+            else if (btnSuperPale.BackColor == System.Drawing.Color.Orange)
+            {
+                this.btnSuperPale.BackColor = System.Drawing.Color.Green;
+                _TipoJuagada = "Super";
+                this.txtQuiniela.Enabled = true;
+                this.txtPale.Enabled = true;
+                this.txtTripleta.Enabled = false;
+                txtMonto.Enabled = true;
+                this.btnQuiniela.BackColor = System.Drawing.Color.Orange;
+                this.btnPale.BackColor = System.Drawing.Color.Orange;
+                this.btnTripleta.BackColor = System.Drawing.Color.Orange;
+            }
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            lblHora.Text = DateTime.Now.ToString();
+            string fecha = Convert.ToString(DateTime.Now.Minute);
+            if (fecha.Remove(0, 1) == "5" || fecha.Remove(0, 1) == "0")
+            {
+                Habilitar_Loterias();
+            }
+        }
+
+        private void btnQuiniela_Click(object sender, EventArgs e)
+        {
+            this.txtQuiniela.Focus();
+            txtMonto.Enabled = true;
+            this._TipoJuagada = "Quiniela";
+
+            if (btnQuiniela.BackColor == System.Drawing.Color.Orange)
+            {
+                btnQuiniela.BackColor = System.Drawing.Color.Green;
+                btnPale.BackColor = System.Drawing.Color.Orange;
+                btnTripleta.BackColor = System.Drawing.Color.Orange;
+
+                this.txtQuiniela.Enabled = true;
+                this.txtPale.Enabled = false;
+                this.txtTripleta.Enabled = false;
+                this.txtPale.Text = string.Empty;
+                this.txtTripleta.Text = string.Empty;
+                this.btnSuperPale.BackColor = System.Drawing.Color.Orange;
+            }
+            else
+            {
+                btnPale.BackColor = System.Drawing.Color.Orange;
+                btnTripleta.BackColor = System.Drawing.Color.Orange;
+                this.txtPale.Enabled = false;
+                this.txtTripleta.Enabled = false;
+            }
+        }
+
+        private void btnPale_Click(object sender, EventArgs e)
+        {
+            txtMonto.Enabled = true;
+            this._TipoJuagada = "Pale";
+            this.txtQuiniela.Focus();
+            if (btnPale.BackColor == System.Drawing.Color.Orange)
+            {
+                btnQuiniela.BackColor = System.Drawing.Color.Orange;
+                btnPale.BackColor = System.Drawing.Color.Green;
+                btnTripleta.BackColor = System.Drawing.Color.Orange;
+
+                this.txtQuiniela.Enabled = true;
+                this.txtPale.Enabled = true;
+                this.txtTripleta.Enabled = false;
+                this.txtTripleta.Text = string.Empty;
+                this.btnSuperPale.BackColor = System.Drawing.Color.Orange;
+            }
+            else
+            {
+                btnTripleta.BackColor = System.Drawing.Color.Orange;
+                this.txtTripleta.Enabled = false;
+            }
+        }
+
+        private void btnTripleta_Click(object sender, EventArgs e)
+        {
+            txtMonto.Enabled = true;
+            this._TipoJuagada = "Tripleta";
+            this.txtQuiniela.Focus();
+            if (btnTripleta.BackColor == System.Drawing.Color.Orange)
+            {
+                btnQuiniela.BackColor = System.Drawing.Color.Orange;
+                btnPale.BackColor = System.Drawing.Color.Orange;
+                btnTripleta.BackColor = System.Drawing.Color.Green;
+
+                this.txtQuiniela.Enabled = true;
+                this.txtPale.Enabled = true;
+                this.txtTripleta.Enabled = true;
+                this.btnSuperPale.BackColor = System.Drawing.Color.Orange;
+            }
+        }
+
+        private void btnCobrar_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                CapaDatos.ModeloLocal.Jugada _jugada = new CapaDatos.ModeloLocal.Jugada();
+
+                bool rpt = false;
+                using (CapaDatos.ModeloLocal.Modelo_Local context = new CapaDatos.ModeloLocal.Modelo_Local())
+                {
+                    var ticket = Crear_Ticket();
+                    _jugada.Fecha = DateTime.Now;
+                    _jugada.Sub_Numero = this.sub_numero;
+                    _jugada.Total = Convert.ToDecimal(this.txtTotalJugada.Text);
+                    _jugada.Numero_Jugada = Convert.ToInt32(this.txtNumeroJugada.Text);
+                    _jugada.Numero_Ticket = ticket;
+                    _jugada.Estatus = "Activo";
+                    _jugada.Banca = this.banca;
+                    _jugada.Usuario = this.usuario;
+
+
+                    context.Jugada.Add(_jugada);
+
+                    var temporal = context.Jugada_Temporal.ToList();
+
+                    foreach (var item in temporal)
+                    {
+                        if (item.Numero_Jugada == Convert.ToInt32(this.txtNumeroJugada.Text))
+                        {
+                            _jugada.Loteria = item.Loteria;
+                            _jugada.Tipo_Jugada = item.Tipo_Jugada;
+                            _jugada.Jugada1 = item.Jugada;
+                            _jugada.Monto = item.Monto;
+                            _jugada.Quiniela = item.Quiniela;
+                            _jugada.Pale = item.Pale;
+                            _jugada.Tripleta = item.Tripleta;
+
+                            context.Jugada.Add(_jugada);
+                            context.SaveChanges();
+                        }
+                    }
+
+                    rpt = true;
+
+                    if (rpt)
+                    {
+                        printTicket = new PrintDocument();
+                        PrinterSettings ps = new PrinterSettings();
+                        printTicket.PrinterSettings = ps;
+                        printTicket.PrintPage += Imprimir;
+                        printTicket.Print();
+
+                        Borrar_Temporal();
+                        Limpiar();
+                    }
+                    else
+                    {
+                        mensajeError("Jugada Incompleta");
+                    }
+                    this.sub_numero = 0;
+                }
+
+            }
+            catch (Exception)
+            {
+
+            }
+            LimpiarColor(System.Drawing.Color.Orange);
+            Habilitar_Loterias();
+        }
+
+        private void txtQuiniela_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && txtQuiniela.MaxLength == 3)
+            {
+                int numero = Convert.ToInt32(txtQuiniela.Text);
+                if (numero > 0 && numero <= 100 && this.txtQuiniela.MaxLength == 3)
+                {
+                    e.Handled = true;
+                }
+
+            }
+        }
+
+        private void txtPale_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                int numero = Convert.ToInt32(txtPale.Text);
+                if (numero > 0 && numero <= 100 && this.txtPale.MaxLength == 3)
+                {
+                    e.Handled = true;
+                }
+            }
+        }
+
+        private void txtTripleta_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                int numero = Convert.ToInt32(txtTripleta.Text);
+                if (numero > 0 && numero <= 100 && this.txtTripleta.MaxLength == 3)
+                {
+                    e.Handled = true;
+                }
+            }
+        }
+
+        private void txtMonto_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void btnEliminar_Click(object sender, EventArgs e)
+        {
+            EliminarJugada(Convert.ToInt32(this.txtNumeroJugada.Text));
+        }
+
+        private void txtNumeroTicketCanc_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void btnCancelarTicket_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                bool cancelado = false;
+                using (CapaDatos.ModeloLocal.Modelo_Local context = new CapaDatos.ModeloLocal.Modelo_Local())
+                {
+                    CapaDatos.ModeloLocal.Jugada jugada = new CapaDatos.ModeloLocal.Jugada();
+                    if (txtBuscar.Text != string.Empty)
+                    {
+                        int numero = Convert.ToInt32(txtBuscar.Text);
+
+                        var consulta = context.Jugada.Where(x => x.Numero_Jugada == numero && x.Estatus == "Activo").ToList();
+
+                        foreach (var item in consulta)
+                        {
+                            item.Estatus = "Cancelado";
+                            context.SaveChanges();
+                            mensajeOk("Ticket Cancelado");
+                            this.txtBuscar.Text = string.Empty;
+                            Limpiar();
+                            Habilitar(false);
+                            LimpiarColor(System.Drawing.Color.Orange);
+                            cancelado = true;
+                        }
+
+                    }
+                    else
+                    {
+                        mensajeError("Debe digitar un número de jugada");
+                    }
+                    if (!cancelado)
+                    {
+                        mensajeError("Revise el número de jugada");
+                    }
+                }
+                this.txtNumeroJugada.Text = string.Empty;
+            }
+            catch (Exception)
+            {
+
+            }
+            Habilitar_Loterias();
+        }
+
+        private void btnImprimir_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                using (CapaDatos.ModeloLocal.Modelo_Local context = new CapaDatos.ModeloLocal.Modelo_Local())
+                {
+                    #region
+                    if (this.txtBuscar.Text != string.Empty)
+                    {
+                        int numero = Convert.ToInt32(txtBuscar.Text);
+
+                        var consulta = context.Jugada.Where(x => x.Numero_Jugada == numero && x.Fecha.Value.Day == fecha.Day && x.Fecha.Value.Month == fecha.Month).FirstOrDefault();
+                        if (numero > 0 && consulta != null)
+                        {
+                            printTicket = new PrintDocument();
+                            PrinterSettings ps = new PrinterSettings();
+                            printTicket.PrinterSettings = ps;
+                            printTicket.PrintPage += ReImprimir;
+                            printTicket.Print();
+                        }
+                        else
+                        {
+                            mensajeError("Revise el número de Jugada");
+                        }
+
+
+                    }
+                    #endregion
+                }
+                this.txtNumeroJugada.Text = string.Empty;
+                this.txtBuscar.Text = string.Empty;
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+
+        private void Imprimir(object sender, PrintPageEventArgs e)
+        {
+            using (CapaDatos.ModeloLocal.Modelo_Local context = new CapaDatos.ModeloLocal.Modelo_Local())
+            {
+                int numero_jugada = Convert.ToInt32(this.txtNumeroJugada.Text);
+
+                var quiniela = context.Jugada.Where(x => x.Tipo_Jugada == "Quiniela" && x.Numero_Jugada == numero_jugada && x.Fecha.Value.Day == fecha.Day && x.Fecha.Value.Month == fecha.Month && x.Fecha.Value.Year == fecha.Year).ToList();
+                var pale = context.Jugada.Where(x => x.Tipo_Jugada == "Pale" && x.Numero_Jugada == numero_jugada && x.Fecha.Value.Day == fecha.Day && x.Fecha.Value.Month == fecha.Month && x.Fecha.Value.Year == fecha.Year).ToList();
+                var tripleta = context.Jugada.Where(x => x.Tipo_Jugada == "Tripleta" && x.Numero_Jugada == numero_jugada && x.Fecha.Value.Day == fecha.Day && x.Fecha.Value.Month == fecha.Month && x.Fecha.Value.Year == fecha.Year).ToList();
+                var super = context.Jugada.Where(x => x.Tipo_Jugada == "Super" && x.Numero_Jugada == numero_jugada && x.Fecha.Value.Day == fecha.Day && x.Fecha.Value.Month == fecha.Month && x.Fecha.Value.Year == fecha.Year).ToList();
+
+                var ticket = context.Jugada.Where(x => x.Numero_Jugada == numero_jugada && x.Fecha.Value.Day == fecha.Day && x.Fecha.Value.Month == fecha.Month && x.Fecha.Value.Year == fecha.Year).FirstOrDefault();
+
+                Font cabeza = new Font("Arial", 12, FontStyle.Regular, GraphicsUnit.Point);
+                Font fuente = new Font("Arial", 12, FontStyle.Regular, GraphicsUnit.Point);
+                Font eslogan1 = new Font("Arial", 9, FontStyle.Regular, GraphicsUnit.Point);
+
+                int anchohasta = 250;
+                int anchodesde = 0;
+                int lineado = 20;
+                int largo = 50;
+                decimal suma = 0;
+
+                e.Graphics.DrawString("Consorcio de Bancas", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                e.Graphics.DrawString("            SOL20", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                e.Graphics.DrawString("Donde Garantizamos tu Dinero", eslogan1, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                e.Graphics.DrawString(DateTime.Now.ToString(), fuente, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                e.Graphics.DrawString(ticket.Numero_Ticket, cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                e.Graphics.DrawString("NO. Jugada: " + this.txtNumeroJugada.Text, cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+
+                if (quiniela.Count != 0)
+                {
+                    e.Graphics.DrawString("----------Quiniela--------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+
+                    foreach (var item in quiniela)
+                    {
+                        e.Graphics.DrawString(item.Jugada1, cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                        suma = suma + Convert.ToDecimal(item.Monto);
+                    }
+                }
+                if (pale.Count != 0)
+                {
+                    e.Graphics.DrawString("----------Palé-------------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+
+                    foreach (var item in pale)
+                    {
+                        e.Graphics.DrawString(item.Jugada1, cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                        suma = suma + Convert.ToDecimal(item.Monto);
+                    }
+                }
+                if (tripleta.Count != 0)
+                {
+                    e.Graphics.DrawString("----------Tripleta---------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+
+                    foreach (var item in tripleta)
+                    {
+                        e.Graphics.DrawString(item.Jugada1, cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                        suma = suma + Convert.ToDecimal(item.Monto);
+                    }
+                }
+                if (super.Count != 0)
+                {
+                    e.Graphics.DrawString("----------Super-----------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+
+                    foreach (var item in super)
+                    {
+                        e.Graphics.DrawString(item.Jugada1, cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                        suma = suma + Convert.ToDecimal(item.Monto);
+                    }
+                }
+
+                e.Graphics.DrawString("-----------------------------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                e.Graphics.DrawString("Total RD$: " + suma.ToString(), cabeza, Brushes.Black, new RectangleF(0, lineado += 20, anchohasta, largo));
+                e.Graphics.DrawString(" REVISE SU JUGADA", cabeza, Brushes.Black, new RectangleF(0, lineado += 20, anchohasta, largo));
+            }
+        }
+
+        private void ReImprimir(object sender, PrintPageEventArgs e)
+        {
+            using (CapaDatos.ModeloLocal.Modelo_Local context = new CapaDatos.ModeloLocal.Modelo_Local())
+            {
+                if (this.txtBuscar.Text != string.Empty)
+                {
+                    int numero_jugada = Convert.ToInt32(this.txtBuscar.Text);
+
+                    var consulta = context.Jugada.Where(x => x.Numero_Jugada == numero_jugada).FirstOrDefault();
+
+                    if (consulta != null)
+                    {
+                        var quiniela = context.Jugada.Where(x => x.Tipo_Jugada == "Quiniela" && x.Numero_Jugada == numero_jugada && x.Fecha.Value.Day == fecha.Day && x.Fecha.Value.Month == fecha.Month && x.Fecha.Value.Year == fecha.Year).ToList();
+                        var pale = context.Jugada.Where(x => x.Tipo_Jugada == "Pale" && x.Numero_Jugada == numero_jugada && x.Fecha.Value.Day == fecha.Day && x.Fecha.Value.Month == fecha.Month && x.Fecha.Value.Year == fecha.Year).ToList();
+                        var tripleta = context.Jugada.Where(x => x.Tipo_Jugada == "Tripleta" && x.Numero_Jugada == numero_jugada && x.Fecha.Value.Day == fecha.Day && x.Fecha.Value.Month == fecha.Month && x.Fecha.Value.Year == fecha.Year).ToList();
+                        var super = context.Jugada.Where(x => x.Tipo_Jugada == "Super" && x.Numero_Jugada == numero_jugada && x.Fecha.Value.Day == fecha.Day && x.Fecha.Value.Month == fecha.Month && x.Fecha.Value.Year == fecha.Year).ToList();
+
+                        var ticket = context.Jugada.Where(x => x.Numero_Jugada == numero_jugada && x.Fecha.Value.Day == fecha.Day && x.Fecha.Value.Month == fecha.Month && x.Fecha.Value.Year == fecha.Year).FirstOrDefault();
+
+                        Font cabeza = new Font("Arial", 12, FontStyle.Regular, GraphicsUnit.Point);
+                        Font fuente = new Font("Arial", 12, FontStyle.Regular, GraphicsUnit.Point);
+                        Font eslogan1 = new Font("Arial", 9, FontStyle.Regular, GraphicsUnit.Point);
+
+                        int anchohasta = 250;
+                        int anchodesde = 0;
+                        int lineado = 20;
+                        int largo = 50;
+                        decimal suma = 0;
+
+                        e.Graphics.DrawString("Consorcio de Bancas", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                        e.Graphics.DrawString("            SOL20", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                        e.Graphics.DrawString("Donde Garantizamos tu Dinero", eslogan1, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                        e.Graphics.DrawString(DateTime.Now.ToString(), fuente, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                        e.Graphics.DrawString(ticket.Numero_Ticket, cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                        e.Graphics.DrawString("NO. Jugada: " + this.txtNumeroJugada.Text, cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+
+                        if (quiniela.Count != 0)
+                        {
+                            e.Graphics.DrawString("----------Quiniela--------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+
+                            foreach (var item in quiniela)
+                            {
+                                e.Graphics.DrawString(item.Jugada1, cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                                suma = suma + Convert.ToDecimal(item.Monto);
+                            }
+                        }
+                        if (pale.Count != 0)
+                        {
+                            e.Graphics.DrawString("----------Palé-------------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+
+                            foreach (var item in pale)
+                            {
+                                e.Graphics.DrawString(item.Jugada1, cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                                suma = suma + Convert.ToDecimal(item.Monto);
+                            }
+                        }
+                        if (tripleta.Count != 0)
+                        {
+                            e.Graphics.DrawString("----------Tripleta---------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+
+                            foreach (var item in tripleta)
+                            {
+                                e.Graphics.DrawString(item.Jugada1, cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                                suma = suma + Convert.ToDecimal(item.Monto);
+                            }
+                        }
+                        if (super.Count != 0)
+                        {
+                            e.Graphics.DrawString("----------Super-----------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+
+                            foreach (var item in super)
+                            {
+                                e.Graphics.DrawString(item.Jugada1, cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                                suma = suma + Convert.ToDecimal(item.Monto);
+                            }
+                        }
+
+                        e.Graphics.DrawString("-----------------------------------", cabeza, Brushes.Black, new RectangleF(anchodesde, lineado += 20, anchohasta, largo));
+                        e.Graphics.DrawString("Total RD$: " + suma.ToString(), cabeza, Brushes.Black, new RectangleF(0, lineado += 20, anchohasta, largo));
+                        e.Graphics.DrawString(" REVISE SU JUGADA", cabeza, Brushes.Black, new RectangleF(0, lineado += 20, anchohasta, largo));
+                        e.Graphics.DrawString("    *REIMPRESO*", cabeza, Brushes.Black, new RectangleF(0, lineado += 20, anchohasta, largo));
+                    }
+                    else
+                    {
+                        mensajeError("Revise el número de jugada");
+                    }
+                }
+                else
+                {
+                    mensajeError("Debe digitar un número de jugada");
+                }
             }
         }
 

@@ -195,7 +195,7 @@ namespace CapaPresentacion
                                 foreach (var item in listajugada)
                                 {
                                     var loteria = context.Ganadores.Where(x => x.Loteria == item.Loteria && x.Fecha.Value.Day == item.Fecha.Value.Day && x.Fecha.Value.Month == item.Fecha.Value.Month && x.Fecha.Value.Year == item.Fecha.Value.Year).FirstOrDefault();
-
+                                    
                                     if (loteria != null)
                                     {
                                         if (item.Tipo_Jugada == "Quiniela")
@@ -205,18 +205,21 @@ namespace CapaPresentacion
                                                 if (item.Quiniela == loteria.Primera)
                                                 {
                                                     premio = premio + Convert.ToDecimal(item.Monto * valor.Primera);
+                                                    cont = 1;
                                                 }
                                                 if (item.Quiniela == loteria.Segunda)
                                                 {
                                                     premio = premio + Convert.ToDecimal(item.Monto * valor.Segunda);
+                                                    cont = 1;
                                                 }
                                                 if (item.Quiniela == loteria.Tercera)
                                                 {
                                                     premio = premio + Convert.ToDecimal(item.Monto * valor.Tercera);
+                                                    cont = 1;
                                                 }
                                             }
                                         }
-                                        if (item.Tipo_Jugada == "Pale")  // Pale1
+                                        else if (item.Tipo_Jugada == "Pale")  // Pale1
                                         {
                                             bool pale1 = false;
                                             if (item.Loteria == loteria.Loteria)
@@ -226,6 +229,7 @@ namespace CapaPresentacion
                                                     if (item.Quiniela == loteria.Segunda || item.Pale == loteria.Segunda)
                                                     {
                                                         premio = premio + Convert.ToDecimal(item.Monto * valor.Pale_Uno);
+                                                        cont = 1;
                                                     }
                                                 }
                                                 if (!pale1)
@@ -235,12 +239,13 @@ namespace CapaPresentacion
                                                         if (item.Pale == loteria.Segunda || item.Pale == loteria.Tercera)
                                                         {
                                                             premio = premio + Convert.ToDecimal(item.Monto * valor.Pale_Dos);
+                                                            cont = 1;
                                                         }
                                                     }
                                                 }
                                             }
                                         }
-                                        if (item.Tipo_Jugada == "Tripleta") // Tripleta
+                                        else if (item.Tipo_Jugada == "Tripleta") // Tripleta
                                         {
                                             bool tripleta1 = false;
                                             if (item.Loteria == loteria.Loteria)
@@ -252,6 +257,7 @@ namespace CapaPresentacion
                                                         if (item.Tripleta == loteria.Primera || item.Tripleta == loteria.Segunda || item.Tripleta == loteria.Tercera)
                                                         {
                                                             premio = premio + Convert.ToDecimal(item.Monto * valor.Tripleta);
+                                                            cont = 1;
                                                             tripleta1 = true;
                                                         }
                                                     }
@@ -274,35 +280,30 @@ namespace CapaPresentacion
                                                     if (con == 2)
                                                     {
                                                         premio = premio + Convert.ToDecimal(item.Monto * valor.Tripleta);
+                                                        cont = 1;
                                                     }
 
                                                 }
                                             }
-                                        }
-                                        if (item.Tipo_Jugada == "Super")
+                                        }                                       
+
+                                    }
+                                    else if (item.Tipo_Jugada == "Super")
+                                    {
+                                        string l1 = item.Loteria.Substring(0, 2);
+                                        string l2 = item.Loteria.Remove(0, 2);
+
+                                        var lot1 = context.Ganadores.Where(x => x.Loteria == l1).FirstOrDefault();
+                                        var lot2 = context.Ganadores.Where(x => x.Loteria == l2).FirstOrDefault();
+
+                                        if (lot1.Primera == item.Quiniela || lot1.Primera == item.Quiniela)
                                         {
-                                            string l1 = item.Loteria.Substring(0, 2);
-                                            string l2 = item.Loteria.Remove(0, 2);
-
-                                            var lot1 = context.Ganadores.Where(x => x.Loteria == l1).FirstOrDefault();
-                                            var lot2 = context.Ganadores.Where(x => x.Loteria == l2).FirstOrDefault();
-
-                                            if (lot1.Primera == item.Quiniela || lot1.Primera == item.Quiniela)
+                                            if (lot2.Primera == item.Pale || lot2.Primera == item.Pale)
                                             {
-                                                if (lot2.Primera == item.Pale || lot2.Primera == item.Pale)
-                                                {
-                                                    premio = premio + Convert.ToDecimal(item.Monto * valor.Super_Pale);
-                                                }
+                                                premio = premio + Convert.ToDecimal(item.Monto * valor.Super_Pale);
+                                                cont = 1;
                                             }
                                         }
-
-                                        if (premio != 0)
-                                        {
-                                            this.txtPremio.Text = premio.ToString();
-
-                                            cont = cont + 1;
-                                        }
-
                                     }
                                     else
                                     {
@@ -310,18 +311,27 @@ namespace CapaPresentacion
                                         break;
                                     }
                                 }
+                                if (premio != 0)
+                                {
+                                    this.txtPremio.Text = premio.ToString();
+                                }
                             }
                             else
                             {
                                 var consulta = context.Jugada.Where(x => x.Numero_Jugada == jugada).FirstOrDefault();
-                                if (consulta.Estatus == "Pagado")
+
+                                if (consulta != null)
                                 {
-                                    mensajeOk("Este Ticket fue pagado");
+                                    if (consulta.Estatus == "Pagado")
+                                    {
+                                        mensajeOk("Este Ticket fue pagado");
+                                    }
+                                    else
+                                    {
+                                        mensajeError("Verifique el Número");
+                                    }
                                 }
-                                else
-                                {
-                                    mensajeError("Verifique el Número");
-                                }
+                                
                             }
 
                         }

@@ -37,7 +37,6 @@ namespace Presentacion
             this.label2 = new System.Windows.Forms.Label();
             this.btnAgregar = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
-            this.txtTotalJugada = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.ckbImprimir = new System.Windows.Forms.CheckBox();
             this.btnCobrar = new System.Windows.Forms.Button();
@@ -53,6 +52,7 @@ namespace Presentacion
             this.txtQuiniela = new System.Windows.Forms.TextBox();
             this.txtPale = new System.Windows.Forms.TextBox();
             this.gbJugada = new System.Windows.Forms.GroupBox();
+            this.txtTotalJugada = new System.Windows.Forms.TextBox();
             this.btnMostrarJugadas = new System.Windows.Forms.Button();
             this.btnMostrarValores = new System.Windows.Forms.Button();
             this.txtNumeroJugada = new System.Windows.Forms.TextBox();
@@ -166,18 +166,6 @@ namespace Presentacion
             this.label3.Size = new System.Drawing.Size(158, 22);
             this.label3.TabIndex = 7;
             this.label3.Text = "Total Jugada: $RD";
-            // 
-            // txtTotalJugada
-            // 
-            this.txtTotalJugada.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtTotalJugada.Location = new System.Drawing.Point(755, 81);
-            this.txtTotalJugada.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.txtTotalJugada.Name = "txtTotalJugada";
-            this.txtTotalJugada.ReadOnly = true;
-            this.txtTotalJugada.Size = new System.Drawing.Size(140, 30);
-            this.txtTotalJugada.TabIndex = 8;
-            this.txtTotalJugada.Text = "0.00";
-            this.txtTotalJugada.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // label4
             // 
@@ -335,6 +323,7 @@ namespace Presentacion
             // 
             // gbJugada
             // 
+            this.gbJugada.Controls.Add(this.txtTotalJugada);
             this.gbJugada.Controls.Add(this.btnMostrarJugadas);
             this.gbJugada.Controls.Add(this.btnMostrarValores);
             this.gbJugada.Controls.Add(this.txtNumeroJugada);
@@ -344,7 +333,6 @@ namespace Presentacion
             this.gbJugada.Controls.Add(this.txtPale);
             this.gbJugada.Controls.Add(this.btnSuperPale);
             this.gbJugada.Controls.Add(this.txtQuiniela);
-            this.gbJugada.Controls.Add(this.txtTotalJugada);
             this.gbJugada.Controls.Add(this.label3);
             this.gbJugada.Controls.Add(this.btnAgregar);
             this.gbJugada.Controls.Add(this.txtMonto);
@@ -358,6 +346,18 @@ namespace Presentacion
             this.gbJugada.Size = new System.Drawing.Size(1184, 121);
             this.gbJugada.TabIndex = 24;
             this.gbJugada.TabStop = false;
+            // 
+            // txtTotalJugada
+            // 
+            this.txtTotalJugada.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtTotalJugada.Location = new System.Drawing.Point(755, 80);
+            this.txtTotalJugada.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txtTotalJugada.Name = "txtTotalJugada";
+            this.txtTotalJugada.ReadOnly = true;
+            this.txtTotalJugada.Size = new System.Drawing.Size(151, 30);
+            this.txtTotalJugada.TabIndex = 50;
+            this.txtTotalJugada.Text = "0";
+            this.txtTotalJugada.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // btnMostrarJugadas
             // 
@@ -944,7 +944,6 @@ namespace Presentacion
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button btnAgregar;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox txtTotalJugada;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.CheckBox ckbImprimir;
         private System.Windows.Forms.Button btnCobrar;
@@ -1003,6 +1002,7 @@ namespace Presentacion
         private System.Windows.Forms.Button btnAng10;
         private System.Windows.Forms.Button btnMostrarJugadas;
         private System.Windows.Forms.Button btnCopiarJugada;
+        private System.Windows.Forms.TextBox txtTotalJugada;
     }
 }
 
