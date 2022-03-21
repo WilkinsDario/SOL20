@@ -889,7 +889,7 @@ namespace Presentacion
                     {
                         foreach (var item in consulta)
                         {
-                            if (item.Loteria == "GM")
+                            if (item.Loteria == "GM" && item.Tanda == "Domingo")
                             {
                                 if (item.Estatus == "Activo")
                                 {
@@ -913,7 +913,7 @@ namespace Presentacion
                                     btnGanamas.BackColor = System.Drawing.Color.Gray;
                                 }
                             }
-                            if (item.Loteria == "LS")
+                            if (item.Loteria == "LS" && item.Tanda == "Domingo")
                             {
                                 if (item.Estatus == "Activo")
                                 {
@@ -937,7 +937,7 @@ namespace Presentacion
                                     btnLasuerte.BackColor = System.Drawing.Color.Gray;
                                 }
                             }
-                            if (item.Loteria == "RL")
+                            if (item.Loteria == "RL" && item.Tanda == "Domingo")
                             {
                                 if (item.Estatus == "Activo")
                                 {
@@ -961,18 +961,18 @@ namespace Presentacion
                                     btnReal.BackColor = System.Drawing.Color.Gray;
                                 }
                             }
-                            if (item.Loteria == "QP")
+                            if (item.Loteria == "QP" && item.Tanda == "Domingo")
                             {
                                 if (item.Estatus == "Activo")
                                 {
-                                    if (fecha.Hour > 15 || DateTime.Now.Hour > item.Hora || DateTime.Now.Hour > item.Hora)
+                                    if (DateTime.Now.Hour > item.Hora)
                                     {
                                         btnQuinielaPale.Enabled = false;
                                         btnQuinielaPale.BackColor = System.Drawing.Color.Gray;
                                     }
-                                    else if (fecha.Hour == 17)
+                                    else if (fecha.Hour == item.Hora)
                                     {
-                                        if (fecha.Minute >= 45)
+                                        if (fecha.Minute >= item.Minutos)
                                         {
                                             btnQuinielaPale.Enabled = false;
                                             btnQuinielaPale.BackColor = System.Drawing.Color.Gray;
@@ -1037,14 +1037,14 @@ namespace Presentacion
                             {
                                 if (item.Estatus == "Activo")
                                 {
-                                    if (fecha.Hour > 17)
+                                    if (fecha.Hour > item.Hora)
                                     {
                                         btnNewYorkNoche.Enabled = false;
                                         btnNewYorkNoche.BackColor = System.Drawing.Color.Gray;
                                     }
-                                    else if (fecha.Hour == 17)
+                                    else if (fecha.Hour == item.Hora)
                                     {
-                                        if (fecha.Minute >= 45)
+                                        if (fecha.Minute >= item.Minutos)
                                         {
                                             btnNewYorkNoche.Enabled = false;
                                             btnNewYorkNoche.BackColor = System.Drawing.Color.Gray;
@@ -1061,14 +1061,14 @@ namespace Presentacion
                             {
                                 if (item.Estatus == "Activo")
                                 {
-                                    if (fecha.Hour > 17)
+                                    if (fecha.Hour > item.Hora)
                                     {
                                         btnNacional.Enabled = false;
                                         btnNacional.BackColor = System.Drawing.Color.Gray;
                                     }
-                                    else if (fecha.Hour == 17)
+                                    else if (fecha.Hour == item.Hora)
                                     {
-                                        if (fecha.Minute >= 55)
+                                        if (fecha.Minute >= item.Minutos)
                                         {
                                             btnNacional.Enabled = false;
                                             btnNacional.BackColor = System.Drawing.Color.Gray;
@@ -1085,14 +1085,14 @@ namespace Presentacion
                             {
                                 if (item.Estatus == "Activo")
                                 {
-                                    if (fecha.Hour > 17)
+                                    if (fecha.Hour > item.Hora)
                                     {
                                         btnLoteka.Enabled = false;
                                         btnLoteka.BackColor = System.Drawing.Color.Gray;
                                     }
-                                    else if (fecha.Hour == 17)
+                                    else if (fecha.Hour == item.Hora)
                                     {
-                                        if (fecha.Minute >= 45)
+                                        if (fecha.Minute >= item.Minutos)
                                         {
                                             btnLoteka.Enabled = false;
                                             btnLoteka.BackColor = System.Drawing.Color.Gray;
@@ -1133,14 +1133,14 @@ namespace Presentacion
                             {
                                 if (item.Estatus == "Activo")
                                 {
-                                    if (fecha.Hour > 17 || DateTime.Now.Hour > item.Hora)
+                                    if (fecha.Hour > item.Hora)
                                     {
                                         btnFloridaNoche.Enabled = false;
                                         btnFloridaNoche.BackColor = System.Drawing.Color.Gray;
                                     }
-                                    else if (fecha.Hour == 17)
+                                    else if (fecha.Hour == item.Hora)
                                     {
-                                        if (fecha.Minute >= 45)
+                                        if (fecha.Minute >= item.Minutos)
                                         {
                                             btnFloridaNoche.Enabled = false;
                                             btnFloridaNoche.BackColor = System.Drawing.Color.Gray;
@@ -1181,12 +1181,12 @@ namespace Presentacion
                             {
                                 if (item.Estatus == "Activo")
                                 {
-                                    if (DateTime.Now.Hour > 17)
+                                    if (DateTime.Now.Hour > item.Hora)
                                     {
                                         btnKingNoche.Enabled = false;
                                         btnKingNoche.BackColor = System.Drawing.Color.Gray;
                                     }
-                                    else if (DateTime.Now.Hour == 17)
+                                    else if (DateTime.Now.Hour == item.Hora)
                                     {
                                         if (DateTime.Now.Minute >= item.Minutos)
                                         {
@@ -1277,14 +1277,14 @@ namespace Presentacion
                             {
                                 if (item.Estatus == "Activo")
                                 {
-                                    if (fecha.Hour > 17)
+                                    if (fecha.Hour > item.Hora)
                                     {
                                         btnAng9.Enabled = false;
                                         btnAng9.BackColor = System.Drawing.Color.Gray;
                                     }
-                                    else if (fecha.Hour == 17)
+                                    else if (fecha.Hour == item.Hora)
                                     {
-                                        if (fecha.Minute >= 45)
+                                        if (fecha.Minute >= item.Minutos)
                                         {
                                             btnAng9.Enabled = false;
                                             btnAng9.BackColor = System.Drawing.Color.Gray;
@@ -1360,62 +1360,48 @@ namespace Presentacion
                     if (_TipoJuagada == "Quiniela")
                     {
                         int quiniela = Convert.ToInt32(this.txtQuiniela.Text);
-                        if (consulTemp.Count != 0)
+
+                        if (Validar() == true && txtQuiniela.Text != string.Empty && txtMonto.Text != string.Empty && Convert.ToInt32(txtMonto.Text) <= limite.Quiniela)
                         {
-                            foreach (var item in consulTemp)
+                            foreach (var items in Loterias)
                             {
-                                foreach (var lot in Loterias)
+                                if (quiniela >= 0 && quiniela < 100)
                                 {
-                                    if (item.Quiniela == quiniela && item.Loteria == lot)
+                                    _temporal_Jugada.Numero_Jugada = jugada;
+                                    _temporal_Jugada.Loteria = items;
+                                    _temporal_Jugada.Tipo_Jugada = _TipoJuagada;
+                                    _temporal_Jugada.Jugada = items + " " + quiniela.ToString() + entrelineaQ + "RD$" + txtMonto.Text;
+
+                                    _temporal_Jugada.Monto = monto;
+                                    _temporal_Jugada.Quiniela = quiniela;
+
+                                    if (Validar_Monto(txtQuiniela.Text, _TipoJuagada))
                                     {
-                                        mensajeInfo("Esta jugada ya está");
+                                        lbQJugada.Items.Add(items + " " + quiniela.ToString() + entrelineaQ + "RD$" + monto.ToString());
+
+
+                                        decimal total = Convert.ToDecimal(txtTotalJugada.Text);
+
+                                        txtTotalJugada.Text = (monto + total).ToString();
+
+
+                                        context.Jugada_Temporal.Add(_temporal_Jugada);
+                                        context.SaveChanges();
+
+                                        int cantidad = this.lbQJugada.Items.Count;
+                                        this.lbQJugada.SelectedIndex = cantidad - 1;
+
+                                        this.lbQJugada.ClearSelected();
+
                                     }
+                                }
+                                else
+                                {
+                                    mensajeError("Revise la Jugada");
                                 }
                             }
                         }
-                        else
-                        {
-                            if (Validar() == true && txtQuiniela.Text != string.Empty && txtMonto.Text != string.Empty && Convert.ToInt32(txtMonto.Text) <= limite.Quiniela)
-                            {
-                                foreach (var items in Loterias)
-                                {
-                                    if (quiniela >= 0 && quiniela < 100)
-                                    {
-                                        _temporal_Jugada.Numero_Jugada = jugada;
-                                        _temporal_Jugada.Loteria = items;
-                                        _temporal_Jugada.Tipo_Jugada = _TipoJuagada;
-                                        _temporal_Jugada.Jugada = items + " " + quiniela.ToString() + entrelineaQ + "RD$" + txtMonto.Text;
 
-                                        _temporal_Jugada.Monto = monto;
-                                        _temporal_Jugada.Quiniela = quiniela;
-
-                                        if (Validar_Monto(txtQuiniela.Text, _TipoJuagada))
-                                        {
-                                            lbQJugada.Items.Add(items + " " + quiniela.ToString() + entrelineaQ + "RD$" + monto.ToString());
-
-
-                                            decimal total = Convert.ToDecimal(txtTotalJugada.Text);
-
-                                            txtTotalJugada.Text = (monto + total).ToString();
-
-
-                                            context.Jugada_Temporal.Add(_temporal_Jugada);
-                                            context.SaveChanges();
-
-                                            int cantidad = this.lbQJugada.Items.Count;
-                                            this.lbQJugada.SelectedIndex = cantidad - 1;
-
-                                            this.lbQJugada.ClearSelected();
-
-                                        }
-                                    }
-                                    else
-                                    {
-                                        mensajeError("Revise la Jugada");
-                                    }
-                                }
-                            }
-                        }
                         this.txtMonto.Text = string.Empty;
                         txtQuiniela.Text = string.Empty;
                     }

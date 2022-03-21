@@ -103,14 +103,15 @@ namespace CapaPresentacion
             // 
             this.cbTanda.FormattingEnabled = true;
             this.cbTanda.Items.AddRange(new object[] {
-            "Tarde",
-            "Noche"});
-            this.cbTanda.Location = new System.Drawing.Point(373, 78);
+            "Semana",
+            "Domingo"});
+            this.cbTanda.Location = new System.Drawing.Point(340, 29);
             this.cbTanda.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cbTanda.Name = "cbTanda";
             this.cbTanda.Size = new System.Drawing.Size(136, 30);
             this.cbTanda.TabIndex = 10;
             this.cbTanda.Text = "Seleccione";
+            this.cbTanda.SelectedIndexChanged += new System.EventHandler(this.cbTanda_SelectedIndexChanged);
             // 
             // btnActualizarHorario
             // 
@@ -129,7 +130,7 @@ namespace CapaPresentacion
             this.cbEstatusHorario.Items.AddRange(new object[] {
             "Activo",
             "Inactivo"});
-            this.cbEstatusHorario.Location = new System.Drawing.Point(373, 32);
+            this.cbEstatusHorario.Location = new System.Drawing.Point(340, 74);
             this.cbEstatusHorario.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cbEstatusHorario.Name = "cbEstatusHorario";
             this.cbEstatusHorario.Size = new System.Drawing.Size(136, 30);
@@ -236,7 +237,6 @@ namespace CapaPresentacion
             this.cbLoteria.Size = new System.Drawing.Size(196, 30);
             this.cbLoteria.TabIndex = 0;
             this.cbLoteria.Text = "Seleccione Lotería";
-            this.cbLoteria.SelectedIndexChanged += new System.EventHandler(this.cbLoteria_SelectedIndexChanged);
             // 
             // dtgListado
             // 
