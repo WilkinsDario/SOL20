@@ -468,11 +468,12 @@ namespace Presentacion
             try
             {
                 using (CapaDatos.ModeloLocal.Modelo_Local context = new CapaDatos.ModeloLocal.Modelo_Local())
-                {
-                    var consulta = context.Horarios.ToList();
+                {                   
 
                     if (fecha.DayOfWeek != 0)
                     {
+                        var consulta = context.Horarios.Where(x => x.Tanda == "Semana").ToList();
+
                         foreach (var item in consulta)
                         {
                             if (item.Loteria == "GM")
@@ -887,9 +888,11 @@ namespace Presentacion
                     }
                     else
                     {
+                        var consulta = context.Horarios.Where(x => x.Tanda == "Domingo").ToList();
+
                         foreach (var item in consulta)
                         {
-                            if (item.Loteria == "GM" && item.Tanda == "Domingo")
+                            if (item.Loteria == "GM")
                             {
                                 if (item.Estatus == "Activo")
                                 {
@@ -913,7 +916,12 @@ namespace Presentacion
                                     btnGanamas.BackColor = System.Drawing.Color.Gray;
                                 }
                             }
-                            if (item.Loteria == "LS" && item.Tanda == "Domingo")
+                            else
+                            {
+                                btnGanamas.Enabled = false;
+                                btnGanamas.BackColor = System.Drawing.Color.Gray;
+                            }
+                            if (item.Loteria == "LS")
                             {
                                 if (item.Estatus == "Activo")
                                 {
@@ -937,7 +945,12 @@ namespace Presentacion
                                     btnLasuerte.BackColor = System.Drawing.Color.Gray;
                                 }
                             }
-                            if (item.Loteria == "RL" && item.Tanda == "Domingo")
+                            else
+                            {
+                                btnLasuerte.Enabled = false;
+                                btnLasuerte.BackColor = System.Drawing.Color.Gray;
+                            }
+                            if (item.Loteria == "RL")
                             {
                                 if (item.Estatus == "Activo")
                                 {
@@ -961,7 +974,12 @@ namespace Presentacion
                                     btnReal.BackColor = System.Drawing.Color.Gray;
                                 }
                             }
-                            if (item.Loteria == "QP" && item.Tanda == "Domingo")
+                            else
+                            {
+                                btnReal.Enabled = false;
+                                btnReal.BackColor = System.Drawing.Color.Gray;
+                            }
+                            if (item.Loteria == "QP")
                             {
                                 if (item.Estatus == "Activo")
                                 {
@@ -984,6 +1002,11 @@ namespace Presentacion
                                     btnQuinielaPale.Enabled = false;
                                     btnQuinielaPale.BackColor = System.Drawing.Color.Gray;
                                 }
+                            }
+                            else
+                            {
+                                btnQuinielaPale.Enabled = false;
+                                btnQuinielaPale.BackColor = System.Drawing.Color.Gray;
                             }
                             if (item.Loteria == "LP")
                             {
@@ -1009,6 +1032,11 @@ namespace Presentacion
                                     btnLaPrimera.BackColor = System.Drawing.Color.Gray;
                                 }
                             }
+                            else
+                            {
+                                btnLaPrimera.Enabled = false;
+                                btnLaPrimera.BackColor = System.Drawing.Color.Gray;
+                            }
                             if (item.Loteria == "NT")
                             {
                                 if (item.Estatus == "Activo")
@@ -1032,6 +1060,11 @@ namespace Presentacion
                                     btnNewYork.Enabled = false;
                                     btnNewYork.BackColor = System.Drawing.Color.Gray;
                                 }
+                            }
+                            else
+                            {
+                                btnNewYork.Enabled = false;
+                                btnNewYork.BackColor = System.Drawing.Color.Gray;
                             }
                             if (item.Loteria == "NN")
                             {
@@ -1057,6 +1090,11 @@ namespace Presentacion
                                     btnNewYorkNoche.BackColor = System.Drawing.Color.Gray;
                                 }
                             }
+                            else
+                            {
+                                btnNewYorkNoche.Enabled = false;
+                                btnNewYorkNoche.BackColor = System.Drawing.Color.Gray;
+                            }
                             if (item.Loteria == "NA")
                             {
                                 if (item.Estatus == "Activo")
@@ -1080,6 +1118,11 @@ namespace Presentacion
                                     btnNacional.Enabled = false;
                                     btnNacional.BackColor = System.Drawing.Color.Gray;
                                 }
+                            }
+                            else
+                            {
+                                btnNacional.Enabled = false;
+                                btnNacional.BackColor = System.Drawing.Color.Gray;
                             }
                             if (item.Loteria == "LK")
                             {
@@ -1105,6 +1148,11 @@ namespace Presentacion
                                     btnLoteka.BackColor = System.Drawing.Color.Gray;
                                 }
                             }
+                            else
+                            {
+                                btnLoteka.Enabled = false;
+                                btnLoteka.BackColor = System.Drawing.Color.Gray;
+                            }
                             if (item.Loteria == "FT")
                             {
                                 if (item.Estatus == "Activo")
@@ -1128,6 +1176,11 @@ namespace Presentacion
                                     btnFlorida.Enabled = false;
                                     btnFlorida.BackColor = System.Drawing.Color.Gray;
                                 }
+                            }
+                            else
+                            {
+                                btnFlorida.Enabled = false;
+                                btnFlorida.BackColor = System.Drawing.Color.Gray;
                             }
                             if (item.Loteria == "FN")
                             {
@@ -1153,6 +1206,11 @@ namespace Presentacion
                                     btnFloridaNoche.BackColor = System.Drawing.Color.Gray;
                                 }
                             }
+                            else
+                            {
+                                btnFloridaNoche.Enabled = false;
+                                btnFloridaNoche.BackColor = System.Drawing.Color.Gray;
+                            }
                             if (item.Loteria == "KT")
                             {
                                 if (item.Estatus == "Activo")
@@ -1176,6 +1234,11 @@ namespace Presentacion
                                     btnKingTarde.Enabled = false;
                                     btnKingTarde.BackColor = System.Drawing.Color.Gray;
                                 }
+                            }
+                            else
+                            {
+                                btnKingTarde.Enabled = false;
+                                btnKingTarde.BackColor = System.Drawing.Color.Gray;
                             }
                             if (item.Loteria == "KN")
                             {
@@ -1201,6 +1264,11 @@ namespace Presentacion
                                     btnKingNoche.BackColor = System.Drawing.Color.Gray;
                                 }
                             }
+                            else
+                            {
+                                btnKingNoche.Enabled = false;
+                                btnKingNoche.BackColor = System.Drawing.Color.Gray;
+                            }
                             if (item.Loteria == "AD")
                             {
                                 if (item.Estatus == "Activo")
@@ -1224,6 +1292,11 @@ namespace Presentacion
                                     btnAng10.Enabled = false;
                                     btnAng10.BackColor = System.Drawing.Color.Gray;
                                 }
+                            }
+                            else
+                            {
+                                btnAng10.Enabled = false;
+                                btnAng10.BackColor = System.Drawing.Color.Gray;
                             }
                             if (item.Loteria == "AU")
                             {
@@ -1249,6 +1322,11 @@ namespace Presentacion
                                     btnAng1.BackColor = System.Drawing.Color.Gray;
                                 }
                             }
+                            else
+                            {
+                                btnAng1.Enabled = false;
+                                btnAng1.BackColor = System.Drawing.Color.Gray;
+                            }
                             if (item.Loteria == "AC")
                             {
                                 if (item.Estatus == "Activo")
@@ -1273,6 +1351,11 @@ namespace Presentacion
                                     btnAng5.BackColor = System.Drawing.Color.Gray;
                                 }
                             }
+                            else
+                            {
+                                btnAng5.Enabled = false;
+                                btnAng5.BackColor = System.Drawing.Color.Gray;
+                            }
                             if (item.Loteria == "AN")
                             {
                                 if (item.Estatus == "Activo")
@@ -1296,6 +1379,11 @@ namespace Presentacion
                                     btnAng9.Enabled = false;
                                     btnAng9.BackColor = System.Drawing.Color.Gray;
                                 }
+                            }
+                            else
+                            {
+                                btnAng9.Enabled = false;
+                                btnAng9.BackColor = System.Drawing.Color.Gray;
                             }
                         }
                     }
