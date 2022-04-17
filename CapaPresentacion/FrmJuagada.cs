@@ -66,6 +66,24 @@ namespace Presentacion
 
         }
 
+        public string Agregar_Cero(int numero)
+        {
+            string jugada;
+            if (numero < 10 && numero >= 1)
+            {
+                jugada = "0" + Convert.ToString(numero);
+            }
+            else if (numero < 1)
+            {
+                jugada = "00";
+            }
+            else
+            {
+                jugada = Convert.ToString(numero);
+            }
+            return jugada;
+        }
+
         private void LimpiarColor(System.Drawing.Color color)
         {
             btnQuiniela.BackColor = color;
@@ -916,11 +934,6 @@ namespace Presentacion
                                     btnGanamas.BackColor = System.Drawing.Color.Gray;
                                 }
                             }
-                            else
-                            {
-                                btnGanamas.Enabled = false;
-                                btnGanamas.BackColor = System.Drawing.Color.Gray;
-                            }
                             if (item.Loteria == "LS")
                             {
                                 if (item.Estatus == "Activo")
@@ -944,11 +957,6 @@ namespace Presentacion
                                     btnLasuerte.Enabled = false;
                                     btnLasuerte.BackColor = System.Drawing.Color.Gray;
                                 }
-                            }
-                            else
-                            {
-                                btnLasuerte.Enabled = false;
-                                btnLasuerte.BackColor = System.Drawing.Color.Gray;
                             }
                             if (item.Loteria == "RL")
                             {
@@ -974,11 +982,6 @@ namespace Presentacion
                                     btnReal.BackColor = System.Drawing.Color.Gray;
                                 }
                             }
-                            else
-                            {
-                                btnReal.Enabled = false;
-                                btnReal.BackColor = System.Drawing.Color.Gray;
-                            }
                             if (item.Loteria == "QP")
                             {
                                 if (item.Estatus == "Activo")
@@ -1002,11 +1005,6 @@ namespace Presentacion
                                     btnQuinielaPale.Enabled = false;
                                     btnQuinielaPale.BackColor = System.Drawing.Color.Gray;
                                 }
-                            }
-                            else
-                            {
-                                btnQuinielaPale.Enabled = false;
-                                btnQuinielaPale.BackColor = System.Drawing.Color.Gray;
                             }
                             if (item.Loteria == "LP")
                             {
@@ -1032,11 +1030,6 @@ namespace Presentacion
                                     btnLaPrimera.BackColor = System.Drawing.Color.Gray;
                                 }
                             }
-                            else
-                            {
-                                btnLaPrimera.Enabled = false;
-                                btnLaPrimera.BackColor = System.Drawing.Color.Gray;
-                            }
                             if (item.Loteria == "NT")
                             {
                                 if (item.Estatus == "Activo")
@@ -1060,11 +1053,6 @@ namespace Presentacion
                                     btnNewYork.Enabled = false;
                                     btnNewYork.BackColor = System.Drawing.Color.Gray;
                                 }
-                            }
-                            else
-                            {
-                                btnNewYork.Enabled = false;
-                                btnNewYork.BackColor = System.Drawing.Color.Gray;
                             }
                             if (item.Loteria == "NN")
                             {
@@ -1090,11 +1078,6 @@ namespace Presentacion
                                     btnNewYorkNoche.BackColor = System.Drawing.Color.Gray;
                                 }
                             }
-                            else
-                            {
-                                btnNewYorkNoche.Enabled = false;
-                                btnNewYorkNoche.BackColor = System.Drawing.Color.Gray;
-                            }
                             if (item.Loteria == "NA")
                             {
                                 if (item.Estatus == "Activo")
@@ -1118,11 +1101,6 @@ namespace Presentacion
                                     btnNacional.Enabled = false;
                                     btnNacional.BackColor = System.Drawing.Color.Gray;
                                 }
-                            }
-                            else
-                            {
-                                btnNacional.Enabled = false;
-                                btnNacional.BackColor = System.Drawing.Color.Gray;
                             }
                             if (item.Loteria == "LK")
                             {
@@ -1148,11 +1126,6 @@ namespace Presentacion
                                     btnLoteka.BackColor = System.Drawing.Color.Gray;
                                 }
                             }
-                            else
-                            {
-                                btnLoteka.Enabled = false;
-                                btnLoteka.BackColor = System.Drawing.Color.Gray;
-                            }
                             if (item.Loteria == "FT")
                             {
                                 if (item.Estatus == "Activo")
@@ -1176,11 +1149,6 @@ namespace Presentacion
                                     btnFlorida.Enabled = false;
                                     btnFlorida.BackColor = System.Drawing.Color.Gray;
                                 }
-                            }
-                            else
-                            {
-                                btnFlorida.Enabled = false;
-                                btnFlorida.BackColor = System.Drawing.Color.Gray;
                             }
                             if (item.Loteria == "FN")
                             {
@@ -1206,11 +1174,6 @@ namespace Presentacion
                                     btnFloridaNoche.BackColor = System.Drawing.Color.Gray;
                                 }
                             }
-                            else
-                            {
-                                btnFloridaNoche.Enabled = false;
-                                btnFloridaNoche.BackColor = System.Drawing.Color.Gray;
-                            }
                             if (item.Loteria == "KT")
                             {
                                 if (item.Estatus == "Activo")
@@ -1234,11 +1197,6 @@ namespace Presentacion
                                     btnKingTarde.Enabled = false;
                                     btnKingTarde.BackColor = System.Drawing.Color.Gray;
                                 }
-                            }
-                            else
-                            {
-                                btnKingTarde.Enabled = false;
-                                btnKingTarde.BackColor = System.Drawing.Color.Gray;
                             }
                             if (item.Loteria == "KN")
                             {
@@ -1264,11 +1222,6 @@ namespace Presentacion
                                     btnKingNoche.BackColor = System.Drawing.Color.Gray;
                                 }
                             }
-                            else
-                            {
-                                btnKingNoche.Enabled = false;
-                                btnKingNoche.BackColor = System.Drawing.Color.Gray;
-                            }
                             if (item.Loteria == "AD")
                             {
                                 if (item.Estatus == "Activo")
@@ -1292,11 +1245,6 @@ namespace Presentacion
                                     btnAng10.Enabled = false;
                                     btnAng10.BackColor = System.Drawing.Color.Gray;
                                 }
-                            }
-                            else
-                            {
-                                btnAng10.Enabled = false;
-                                btnAng10.BackColor = System.Drawing.Color.Gray;
                             }
                             if (item.Loteria == "AU")
                             {
@@ -1322,11 +1270,6 @@ namespace Presentacion
                                     btnAng1.BackColor = System.Drawing.Color.Gray;
                                 }
                             }
-                            else
-                            {
-                                btnAng1.Enabled = false;
-                                btnAng1.BackColor = System.Drawing.Color.Gray;
-                            }
                             if (item.Loteria == "AC")
                             {
                                 if (item.Estatus == "Activo")
@@ -1351,11 +1294,6 @@ namespace Presentacion
                                     btnAng5.BackColor = System.Drawing.Color.Gray;
                                 }
                             }
-                            else
-                            {
-                                btnAng5.Enabled = false;
-                                btnAng5.BackColor = System.Drawing.Color.Gray;
-                            }
                             if (item.Loteria == "AN")
                             {
                                 if (item.Estatus == "Activo")
@@ -1379,11 +1317,6 @@ namespace Presentacion
                                     btnAng9.Enabled = false;
                                     btnAng9.BackColor = System.Drawing.Color.Gray;
                                 }
-                            }
-                            else
-                            {
-                                btnAng9.Enabled = false;
-                                btnAng9.BackColor = System.Drawing.Color.Gray;
                             }
                         }
                     }
@@ -1458,14 +1391,15 @@ namespace Presentacion
                                     _temporal_Jugada.Numero_Jugada = jugada;
                                     _temporal_Jugada.Loteria = items;
                                     _temporal_Jugada.Tipo_Jugada = _TipoJuagada;
-                                    _temporal_Jugada.Jugada = items + " " + quiniela.ToString() + entrelineaQ + "RD$" + txtMonto.Text;
+                                    _temporal_Jugada.Jugada = items + " " + Agregar_Cero(quiniela) + entrelineaQ + "RD$" + txtMonto.Text;
 
                                     _temporal_Jugada.Monto = monto;
                                     _temporal_Jugada.Quiniela = quiniela;
 
                                     if (Validar_Monto(txtQuiniela.Text, _TipoJuagada))
                                     {
-                                        lbQJugada.Items.Add(items + " " + quiniela.ToString() + entrelineaQ + "RD$" + monto.ToString());
+                                        
+                                        lbQJugada.Items.Add(items + " " + Agregar_Cero(quiniela) + entrelineaQ + "RD$" + monto.ToString());
 
 
                                         decimal total = Convert.ToDecimal(txtTotalJugada.Text);
@@ -1497,8 +1431,6 @@ namespace Presentacion
                     {
                         if (Validar() == true && txtQuiniela.Text != string.Empty && txtMonto.Text != string.Empty && txtPale.Text != string.Empty && Convert.ToInt32(txtMonto.Text) <= limite.Pale && btnSuperPale.BackColor == System.Drawing.Color.Orange)
                         {
-
-
                             int quiniela = Convert.ToInt32(txtQuiniela.Text);
                             int pale = Convert.ToInt32(txtPale.Text);
 
@@ -1510,7 +1442,7 @@ namespace Presentacion
                                     _temporal_Jugada.Tipo_Jugada = _TipoJuagada;
                                     _temporal_Jugada.Monto = Convert.ToDecimal(txtMonto.Text);
                                     _temporal_Jugada.Numero_Jugada = jugada;
-                                    _temporal_Jugada.Jugada = item + " " + txtQuiniela.Text + " - " + txtPale.Text + entrelineaP + "RD$" + txtMonto.Text;
+                                    _temporal_Jugada.Jugada = item + " " + Agregar_Cero(quiniela) + " - " + Agregar_Cero(pale) + entrelineaP + "RD$" + txtMonto.Text;
                                     _temporal_Jugada.Quiniela = Convert.ToInt32(txtQuiniela.Text);
                                     _temporal_Jugada.Pale = Convert.ToInt32(txtPale.Text);
 
@@ -1521,7 +1453,7 @@ namespace Presentacion
                                         context.Jugada_Temporal.Add(_temporal_Jugada);
                                         context.SaveChanges();
 
-                                        lbPJugada.Items.Add(item + " " + txtQuiniela.Text + " - " + txtPale.Text + entrelineaP + "RD$" + txtMonto.Text);
+                                        lbPJugada.Items.Add(item + " " + Agregar_Cero(quiniela) + " - " + Agregar_Cero(pale) + entrelineaP + "RD$" + txtMonto.Text); ;
 
 
                                         decimal total = Convert.ToDecimal(txtTotalJugada.Text);
@@ -1566,7 +1498,7 @@ namespace Presentacion
                                             _temporal_Jugada.Tipo_Jugada = _TipoJuagada;
                                             _temporal_Jugada.Monto = Convert.ToDecimal(txtMonto.Text);
                                             _temporal_Jugada.Numero_Jugada = jugada;
-                                            _temporal_Jugada.Jugada = item + " " + txtQuiniela.Text + " - " + txtPale.Text + " - " + txtTripleta.Text + entrelineaT + "RD$" + txtMonto.Text;
+                                            _temporal_Jugada.Jugada = item + " " + Agregar_Cero(quiniela) + " - " + Agregar_Cero(pale) + " - " + Agregar_Cero(tripleta) + entrelineaT + "RD$" + txtMonto.Text;
                                             _temporal_Jugada.Quiniela = Convert.ToInt32(txtQuiniela.Text);
                                             _temporal_Jugada.Pale = Convert.ToInt32(txtPale.Text);
                                             _temporal_Jugada.Tripleta = Convert.ToInt32(txtTripleta.Text);
@@ -1576,8 +1508,7 @@ namespace Presentacion
                                                 context.Jugada_Temporal.Add(_temporal_Jugada);
                                                 context.SaveChanges();
 
-                                                lbTJugada.Items.Add(item + " " + txtQuiniela.Text + " - " + txtPale.Text + " - " + txtTripleta.Text + entrelineaT + "RD$" + txtMonto.Text);
-
+                                                lbTJugada.Items.Add(item + " " + Agregar_Cero(quiniela) + " - " + Agregar_Cero(pale) + " - " + Agregar_Cero(tripleta) + entrelineaT + "RD$" + txtMonto.Text);
 
                                                 decimal total = Convert.ToDecimal(txtTotalJugada.Text);
 
@@ -1629,7 +1560,7 @@ namespace Presentacion
                                         _temporal_Jugada.Tipo_Jugada = _TipoJuagada;
                                         _temporal_Jugada.Monto = Convert.ToDecimal(txtMonto.Text);
                                         _temporal_Jugada.Numero_Jugada = jugada;
-                                        _temporal_Jugada.Jugada = l1 + " " + l2 + "      " + txtQuiniela.Text + " - " + txtPale.Text + entrelineaP + "RD$" + txtMonto.Text;
+                                        _temporal_Jugada.Jugada = l1 + " " + l2 + "      " + Agregar_Cero(quiniela) + " - " + Agregar_Cero(pale) + entrelineaP + "RD$" + txtMonto.Text;
                                         _temporal_Jugada.Quiniela = Convert.ToInt32(txtQuiniela.Text);
                                         _temporal_Jugada.Pale = Convert.ToInt32(txtPale.Text);
 
@@ -1638,7 +1569,7 @@ namespace Presentacion
                                             context.Jugada_Temporal.Add(_temporal_Jugada);
                                             context.SaveChanges();
 
-                                            lbPJugada.Items.Add(l1 + " " + l2 + "      " + txtQuiniela.Text + " - " + txtPale.Text + entrelineaP + "RD$" + txtMonto.Text);
+                                            lbPJugada.Items.Add(l1 + " " + l2 + "      " + Agregar_Cero(quiniela) + " - " + Agregar_Cero(pale) + entrelineaP + "RD$" + txtMonto.Text);
 
                                             decimal total = Convert.ToDecimal(txtTotalJugada.Text);
 

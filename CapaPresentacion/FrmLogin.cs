@@ -67,55 +67,48 @@ namespace Presentacion
                         }
                         else
                         {
-                            if (fecha.Hour >= 9) //fecha.Hour >= 9
+                            if (this.txtUsuario.Text == "admin" && this.txtContraseña.Text == "221219860831")
                             {
-                                if (this.txtUsuario.Text == "admin" && this.txtContraseña.Text == "221219860831")
-                                {
-                                    FrmActualizarUsuario frmActualizarUsuario = new FrmActualizarUsuario();
-                                    frmActualizarUsuario.Show();
-                                    this.Hide();
-                                }
-                                else
-                                {
-                                    usuario = txtUsuario.Text;
-                                    contrasena = txtContraseña.Text;
-
-                                    var consulta = context.Usuarios.Where(x => x.Usuario == usuario && x.Estatus == "Activo").SingleOrDefault();
-
-                                    if (consulta != null)
-                                    {
-                                        if (consulta.Contrasena == contrasena)
-                                        {
-                                            MDIMenuPrincipal mDIMenuPrincipal = new MDIMenuPrincipal();
-                                            mDIMenuPrincipal.usuario = usuario;
-                                            mDIMenuPrincipal.banca = consulta.Banca;
-                                            mDIMenuPrincipal.acceso = consulta.Acceso;
-                                            mensajeOk("Acceso Concedido");
-                                            mDIMenuPrincipal.Show();
-                                            this.Hide();
-                                        }
-                                        else
-                                        {
-                                            mensajeError("Constraseña incorrecta");
-                                            this.txtContraseña.Text = string.Empty;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        mensajeError("Usuario incorrecto");
-                                        this.txtUsuario.Text = string.Empty;
-                                    }
-
-
-                                }
+                                FrmActualizarUsuario frmActualizarUsuario = new FrmActualizarUsuario();
+                                frmActualizarUsuario.Show();
+                                this.Hide();
                             }
                             else
                             {
-                                mensajeError("Verifique la conección a internet");
+                                usuario = txtUsuario.Text;
+                                contrasena = txtContraseña.Text;
+
+                                var consulta = context.Usuarios.Where(x => x.Usuario == usuario && x.Estatus == "Activo").SingleOrDefault();
+
+                                if (consulta != null)
+                                {
+                                    if (consulta.Contrasena == contrasena)
+                                    {
+                                        MDIMenuPrincipal mDIMenuPrincipal = new MDIMenuPrincipal();
+                                        mDIMenuPrincipal.usuario = usuario;
+                                        mDIMenuPrincipal.banca = consulta.Banca;
+                                        mDIMenuPrincipal.acceso = consulta.Acceso;
+                                        mensajeOk("Acceso Concedido");
+                                        mDIMenuPrincipal.Show();
+                                        this.Hide();
+                                    }
+                                    else
+                                    {
+                                        mensajeError("Constraseña incorrecta");
+                                        this.txtContraseña.Text = string.Empty;
+                                    }
+                                }
+                                else
+                                {
+                                    mensajeError("Usuario incorrecto");
+                                    this.txtUsuario.Text = string.Empty;
+                                }
+
+
                             }
                         }
                     }
-                    
+
                 }
             }
             catch (Exception ex)
