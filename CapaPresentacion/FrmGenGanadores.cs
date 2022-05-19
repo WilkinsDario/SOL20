@@ -287,6 +287,10 @@ namespace CapaPresentacion
                                             {
                                                 premio = premio + Convert.ToDecimal(item.Monto * valor.Pale_Uno);
                                             }
+                                            else if (item.Quiniela == loterias.Tercera || item.Pale == loterias.Tercera)
+                                            {
+                                                premio = premio + Convert.ToDecimal(item.Monto * valor.Pale_Uno);
+                                            }
                                         }
                                         if (!pale1)
                                         {
